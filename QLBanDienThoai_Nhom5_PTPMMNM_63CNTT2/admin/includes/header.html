@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Trang quản trị viên</title>
+    <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
+
+    <!-- Fonts and icons -->
+
+
+    <!-- CSS Files -->
+
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Public/css/bootstrap.min.css">
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Public/css/azzara.css">
+
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css" integrity="sha512-SnH5WK+bZxgPHs44uWIX+LLJAJ9/2PkPKZ5QiAj6Ta86w+fsb2TkcmfRyVX3pBnMFcV7oQPJkl9QevSCWr3W6A==" crossorigin="anonymous" referrerpolicy="no-referrer" />
+    <!-- daterange picker -->
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/daterangepicker/daterangepicker.css">
+    <!-- iCheck for checkboxes and radio inputs -->
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/icheck-bootstrap/icheck-bootstrap.min.css">
+    <!-- Bootstrap Color Picker -->
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/bootstrap-colorpicker/css/bootstrap-colorpicker.min.css">
+    <!-- Tempusdominus Bootstrap 4 -->
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/tempusdominus-bootstrap-4/css/tempusdominus-bootstrap-4.min.css">
+    <!-- Select2 -->
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/select2/css/select2.min.css">
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/select2-bootstrap4-theme/select2-bootstrap4.min.css">
+    <!-- Bootstrap4 Duallistbox -->
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/bootstrap4-duallistbox/bootstrap-duallistbox.min.css">
+    <!-- BS Stepper -->
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/bs-stepper/css/bs-stepper.min.css">
+    <!-- dropzonejs -->
+    <link rel="stylesheet" href="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/plugins/dropzone/min/dropzone.min.css">
+
+</head>
+<!---->
+<!--@{-->
+<!--var user = (MEGATECH.Models.EF.NhanVien)HttpContext.Current.Session["user"];-->
+<!--}-->
+
+<body>
+<style>
+    .logo-header .logo_container a {
+        font-size: 24px;
+        color: #1e1e27;
+        font-weight: 700;
+        text-transform: uppercase;
+        text-decoration: none;
+    }
+
+    .logo-header .logo_container span {
+        color: #0300d0;
+    }
+    a:hover {
+        text-decoration: none;
+    }
+
+    .card{
+        height: 250px;
+    }
+</style>
+
+
+<div class="wrap">
+    <div class="main-header" data-background-color="light-blue">
+        <!-- Logo Header -->
+        <div class="logo-header">
+            <div class="logo_container">
+                <a href="/admin" class="logo">MEGA<span>TECH</span></a>
+            </div>
+            <button class="navbar-toggler sidenav-toggler ml-auto" type="button" data-toggle="collapse" data-target="collapse" aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon">
+                        <i class="fa fa-bars"></i>
+                    </span>
+            </button>
+            <button class="topbar-toggler more"><i class="fa fa-ellipsis-v"></i></button>
+            <div class="navbar-minimize">
+                <button class="btn btn-minimize btn-rounded">
+                    <i class="fa fa-bars"></i>
+                </button>
+            </div>
+        </div>
+        <!-- End Logo Header -->
+        <!-- Navbar Header -->
+        <nav class="navbar navbar-header navbar-expand-lg">
+
+            <div class="container-fluid">
+                <ul class="navbar-nav topbar-nav ml-md-auto align-items-center">
+                    <li class="nav-item dropdown hidden-caret">
+                        <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
+                            <div class="d-flex justify-content-between">
+                                <div class="mt-2">
+                                    <!--                                    @if (user != null)-->
+                                    <!--                                    {-->
+                                    <span class="text-white" style="font-weight: bold;">Chào mừng: </span>
+                                    <!--                                    }-->
+                                </div>
+                                <div class="avatar-sm">
+                                    <!--                                    @if (user != null)-->
+                                    <!--                                    {-->
+                                    <!--                                    if (user.Image != null)-->
+                                    <!--                                    {-->
+                                    <!--                                    <img src="@user.Image" class="avatar-img rounded-circle">-->
+                                    <!--                                    }-->
+                                    <!--                                    else-->
+                                    <!--                                    {-->
+                                    <img src="http://localhost/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Content/clients/dist/img/avatar5.png" class="avatar-img rounded-circle">
+                                    <!--                                    }-->
+                                    <!--                                    }-->
+                                </div>
+                            </div>
+                        </a>
+                    </li>
+
+                </ul>
+            </div>
+        </nav>
+        <!-- End Navbar -->
+    </div>
+</div>
