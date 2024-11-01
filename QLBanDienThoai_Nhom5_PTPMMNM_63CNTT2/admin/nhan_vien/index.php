@@ -1,6 +1,6 @@
 
 <?php
-$base_url = "/htdocs/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
+$base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 ?>
 
 <?php
