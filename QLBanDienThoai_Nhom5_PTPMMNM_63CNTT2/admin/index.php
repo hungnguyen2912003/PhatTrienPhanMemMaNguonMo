@@ -14,3 +14,4 @@ include('includes/header.html');
 </div>
 
 <?php include 'includes/footer.html'; ?>
+<p>Hihihihi</p>
