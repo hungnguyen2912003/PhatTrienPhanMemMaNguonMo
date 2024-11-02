@@ -7,6 +7,16 @@
     <meta content='width=device-width, initial-scale=1.0, shrink-to-fit=no' name='viewport' />
 
     <!-- Fonts and icons -->
+    <script src="<?php echo $base_url; ?>/Public/js/plugin/webfont/webfont.min.js"></script>
+    <script>
+        WebFont.load({
+            google: { "families": ["Open+Sans:300,400,600,700"] },
+            custom: { "families": ["Flaticon", "Font Awesome 5 Solid", "Font Awesome 5 Regular", "Font Awesome 5 Brands"], urls: ['<?php echo $base_url; ?>/Public/css/fonts.css'] },
+            active: function () {
+                sessionStorage.fonts = true;
+            }
+        });
+    </script>
 
     <link rel="stylesheet" href="<?php echo $base_url; ?>/Public/css/bootstrap.min.css">
     <link rel="stylesheet" href="<?php echo $base_url; ?>/Public/css/azzara.css">
@@ -22,10 +32,6 @@
     <link rel="stylesheet" href="<?php echo $base_url; ?>/Content/clients/plugins/dropzone/min/dropzone.min.css">
 
 </head>
-<!---->
-<!--@{-->
-<!--var user = (MEGATECH.Models.EF.NhanVien)HttpContext.Current.Session["user"];-->
-<!--}-->
 
 <body>
 <style>
@@ -79,23 +85,11 @@
                         <a class="dropdown-toggle profile-pic" data-toggle="dropdown" href="#" aria-expanded="false">
                             <div class="d-flex justify-content-between">
                                 <div class="mt-2">
-                                    <!--                                    @if (user != null)-->
-                                    <!--                                    {-->
-                                    <span class="text-white" style="font-weight: bold;">Chào mừng: </span>
-                                    <!--                                    }-->
+                                    <span class="text-white" style="font-weight: bold;">Chào mừng: <?php if(isset($_SESSION['username'])) echo $_SESSION['username']?>
+                                    </span>
                                 </div>
                                 <div class="avatar-sm">
-                                    <!--                                    @if (user != null)-->
-                                    <!--                                    {-->
-                                    <!--                                    if (user.Image != null)-->
-                                    <!--                                    {-->
-                                    <!--                                    <img src="@user.Image" class="avatar-img rounded-circle">-->
-                                    <!--                                    }-->
-                                    <!--                                    else-->
-                                    <!--                                    {-->
                                     <img src="<?php echo $base_url; ?>/Content/clients/dist/img/avatar5.png" class="avatar-img rounded-circle">
-                                    <!--                                    }-->
-                                    <!--                                    }-->
                                 </div>
                             </div>
                         </a>

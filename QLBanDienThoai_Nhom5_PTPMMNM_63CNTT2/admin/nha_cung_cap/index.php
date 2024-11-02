@@ -1,109 +1,100 @@
-
 <?php
 include '../checkSession.php';
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
-?>
-
-<?php
 include('../includes/header.html');
-?>
-
-<!-- Sidebar -->
-<?php
 include ('../_PartialSideBar.html');
-?>
-
-<div class="main-panel">
-    <?php
-    include('../nha_cung_cap/home.html');
-    ?>
-</div>
-<!-- /.content -->
-<!--<script>-->
-<!--    $(document).ready(function () {-->
-<!--        $('#export').click(function () {-->
-<!--            // Clone the table to prevent modification of the original table-->
-<!--            var tableClone = $('.tableSupplier').clone();-->
-<!---->
-<!--            // Remove the "Chức năng" column from the cloned table-->
-<!--            tableClone.find('th:nth-child(3), td:nth-child(3), th:nth-child(7), td:nth-child(7)').remove();-->
-<!---->
-<!--            // Create a workbook and add a worksheet-->
-<!--            var wb = XLSX.utils.book_new();-->
-<!--            var ws = XLSX.utils.table_to_sheet(tableClone[0]);-->
-<!---->
-<!--            // Adjust column widths-->
-<!--            var colWidths = [];-->
-<!--            tableClone.find('tr').eq(0).find('th').each(function () {-->
-<!--                colWidths.push($(this).width() / 8); // Divide by 8 to approximate width adjustment for Excel-->
-<!--            });-->
-<!--            ws['!cols'] = colWidths.map(function (width) { return { width: width }; });-->
-<!---->
-<!--            // Add worksheet to workbook-->
-<!--            XLSX.utils.book_append_sheet(wb, ws, 'Sheet1');-->
-<!---->
-<!--            // Save workbook as Excel file-->
-<!--            XLSX.writeFile(wb, 'Danh sách nhà cung cấp MEGATECH.xlsx');-->
-<!--        });-->
-<!---->
-<!--        $('body').on('click', '#BtnTrashAll', function (e) {-->
-<!--            e.preventDefault();-->
-<!---->
-<!--            var checkbox = $(this).parents('.card').find('tr td input:checkbox');-->
-<!--            var checkedCheckbox = checkbox.filter(':checked');-->
-<!---->
-<!--            // Kiểm tra xem có checkbox nào được chọn không-->
-<!--            if (checkedCheckbox.length === 0) {-->
-<!--                // Hiển thị cảnh báo-->
-<!--                alert('Bạn cần phải tích vào Checkbox của ít nhất một danh mục để sử dụng chức năng này!');-->
-<!--                return;-->
-<!--            }-->
-<!---->
-<!--            var str = "";-->
-<!--            var i = 0;-->
-<!--            checkbox.each(function () {-->
-<!--                if (this.checked) {-->
-<!--                    var _id = $(this).val();-->
-<!--                    str += (i === 0 ? _id : "," + _id);-->
-<!--                    i++;-->
-<!--                }-->
-<!--            });-->
-<!--            if (str.length > 0) {-->
-<!--                var conf = confirm('Bạn có muốn đưa các bản ghi này vào thùng rác hay không?');-->
-<!--                if (conf === true) {-->
-<!--                    $.ajax({-->
-<!--                        url: '@Url.Action("GoToTrashAll", "Supplier")',-->
-<!--                        type: 'POST',-->
-<!--                        data: { ids: str },-->
-<!--                        success: function (rs) {-->
-<!--                            if (rs.success) {-->
-<!--                                location.reload();-->
-<!--                            }-->
-<!--                        }-->
-<!--                    });-->
-<!--                }-->
-<!--            }-->
-<!--        });-->
-<!---->
-<!--        $('body').on('change', '#SelectAll', function () {-->
-<!--            var checkStatus = this.checked;-->
-<!--            var checkbox = $(this).parents('.card-body').find('tr td input:checkbox');-->
-<!--            checkbox.each(function () {-->
-<!--                this.checked = checkStatus;-->
-<!--            });-->
-<!--        });-->
-<!---->
-<!--        // Hàm để ẩn thông báo sau 5 giây-->
-<!--        function hideMessage() {-->
-<!--            $('.message-container').fadeOut(); // Ẩn thông báo-->
-<!--        }-->
-<!---->
-<!--        // Nếu có thông báo, thiết lập timeout để tự động ẩn sau 5 giây-->
-<!--        if ($('.message-container').length) {-->
-<!--            setTimeout(hideMessage, 5000); // 5000 milliseconds = 5 seconds-->
-<!--        }-->
-<!--    });-->
-<!--</script>-->
-<?php
 include('../includes/footer.html');
 ?>
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Quản lý nhà cung cấp</title>
+    <style>
+        .custom-textbox {
+            height: 50px;
+            border: 2px solid #0094ff;
+        }
+    </style>
+</head>
+<body>
+<div class="main-panel">
+    <!-- Main content -->
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="page-title">Danh sách nhà cung cấp</h4>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <ul class="breadcrumbs">
+                                <li class="nav-home">
+                                    <a href="<?php echo $base_url?>/admin/index.php">
+                                        <i class="flaticon-home"></i>
+                                    </a>
+                                </li>
+                                <li class="separator">
+                                    <i class="flaticon-right-arrow"></i>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php">Danh mục nhà cung cấp</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-md-12">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card-tools">
+                                    <a href="#" class="btn btn-rounded btn-primary">Thêm mới</a>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhà cung cấp bạn muốn tìm kiếm">
+                                    <span class="input-group-append">
+                                        <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-md-3 text-right">
+                                <a href="#" class="btn btn-rounded btn-danger"><i class="fa fa-trash" style="font-size: 15px;"></i> Thùng rác</a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-body">
+                        <div class="table-responsive">
+                            <table id="multi-filter-select" class="display table table-striped table-hover tableSupplier">
+                                <thead>
+                                <tr class="text-center">
+                                    <th><input type="checkbox" id="SelectAll" /></th>
+                                    <th>#</th>
+                                    <th>Hình ảnh</th>
+                                    <th>Tên nhà cung cấp</th>
+                                    <th>Số điện thoại</th>
+                                    <th>Email</th>
+                                    <th>Chức năng</th>
+                                </tr>
+                                </thead>
+                                <tbody>
+                                <!-- Dữ liệu nhà cung cấp sẽ được thêm vào đây -->
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <!-- /.content -->
+</div>
+</body>
+</html>
+

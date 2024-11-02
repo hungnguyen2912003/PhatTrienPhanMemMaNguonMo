@@ -22,8 +22,10 @@ if (isset($_POST['dangNhap'])) {
         $result = mysqli_query($connect, $query);
 
         if (mysqli_num_rows($result) == 1) {
+            $user_data = mysqli_fetch_assoc($result);
             //Đăng nhập thành công
             $_SESSION['logged'] = true;
+            $_SESSION['username'] = $user_data['tenHienThi'];
             header("Location: index.php");
             exit;
         } else {
