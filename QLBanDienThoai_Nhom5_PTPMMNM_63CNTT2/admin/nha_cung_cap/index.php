@@ -53,7 +53,7 @@ include('../includes/footer.html');
                         <div class="row">
                             <div class="col-md-4">
                                 <div class="card-tools">
-                                    <a href="#" class="btn btn-rounded btn-primary">Thêm mới</a>
+                                    <a href="<?php echo $base_url?>/admin/nha_cung_cap/create.php" class="btn btn-rounded btn-primary">Thêm mới</a>
                                 </div>
                             </div>
                             <div class="col-md-5">

@@ -47,7 +47,7 @@ include('../includes/footer.html');
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card" style="height: 100%">
                     <form action="" method="post">
                         <div class="card-body">
                             <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">

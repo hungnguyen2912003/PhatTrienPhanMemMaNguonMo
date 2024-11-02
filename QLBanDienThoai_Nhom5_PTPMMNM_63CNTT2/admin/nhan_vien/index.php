@@ -67,7 +67,7 @@ include('../includes/footer.html');
                             </div>
                             <div class="col-md-3">
                                 <div class="card-tools text-right">
-                                    <a href="#" class="btn btn-rounded btn-danger"><i class="fa fa-trash" style="font-size: 15px;"></i> Thùng rác</a>
+                                    <a href="<?php echo $base_url?>/admin/nhan_vien/trash.php" class="btn btn-rounded btn-danger"><i class="fa fa-trash" style="font-size: 15px;"></i> Thùng rác</a>
                                 </div>
                             </div>
 
