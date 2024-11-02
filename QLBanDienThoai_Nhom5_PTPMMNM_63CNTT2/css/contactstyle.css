@@ -13,7 +13,7 @@ section {
     position: relative;
     text-align: center;
     color: #fff;
-    background-image: url('/Images/bg.png'); 
+    background-image: url('../Images/bg.png');
     background-size: cover;
     background-position: center;
     height: 300px; 
