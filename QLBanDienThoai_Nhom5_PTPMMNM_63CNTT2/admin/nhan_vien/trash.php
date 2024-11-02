@@ -9,15 +9,14 @@ include('../includes/footer.html');
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Thêm mới nhân viên</title>
-    <link href="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <title>Xóa nhân viên</title>
 </head>
 <body>
 <div class="main-panel">
     <div class="page-inner">
         <div class="page-header">
             <div class="col-md-12">
-                <div class="row">
+                <div class="row" style="margin-top: 55px">
                     <div class="col-md-6">
                         <h4 class="page-title">Thùng rác nhân viên</h4>
                     </div>
@@ -47,7 +46,7 @@ include('../includes/footer.html');
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card" style="height: 100%">
+                <div class="card">
                     <div class="card-header">
                         <div class="row justify-content-between align-items-center">
                             <div class="col-md-6">
@@ -61,7 +60,6 @@ include('../includes/footer.html');
                             </div>
                         </div>
                     </div>
-
 
                     <div class="card-body">
                         <div class="table-responsive">

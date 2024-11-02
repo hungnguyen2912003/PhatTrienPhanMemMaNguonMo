@@ -27,7 +27,7 @@ include('../includes/footer.html');
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="page-title">Danh sách nhà cung cấp</h4>
+                            <h4 class="page-title">Danh mục nhà cung cấp</h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <ul class="breadcrumbs">
@@ -58,15 +58,18 @@ include('../includes/footer.html');
                             </div>
                             <div class="col-md-5">
                                 <div class="input-group input-group-sm">
-                                    <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhà cung cấp bạn muốn tìm kiếm">
+                                    <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhân viên bạn muốn tìm kiếm">
                                     <span class="input-group-append">
                                         <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
-                                    </span>
+                                  </span>
                                 </div>
                             </div>
-                            <div class="col-md-3 text-right">
-                                <a href="#" class="btn btn-rounded btn-danger"><i class="fa fa-trash" style="font-size: 15px;"></i> Thùng rác</a>
+                            <div class="col-md-3">
+                                <div class="card-tools text-right">
+                                    <a href="<?php echo $base_url?>/admin/nha_cung_cap/trash.php" class="btn btn-rounded btn-danger"><i class="fa fa-trash" style="font-size: 15px;"></i> Thùng rác</a>
+                                </div>
                             </div>
+
                         </div>
                     </div>
                     <div class="card-body">
