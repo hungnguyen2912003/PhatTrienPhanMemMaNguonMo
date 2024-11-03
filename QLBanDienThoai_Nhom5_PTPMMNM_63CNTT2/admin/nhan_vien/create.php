@@ -9,7 +9,31 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
+$msg = "";
+$hoTen = "";
+$ngaySinh = "";
+$gioiTinh = "";
+$hinhAnh = "";
+$diaChi = "";
+$email = "";
+$soDienThoai = "";
 
+if(isset($_POST["themMoi"])){
+    //Kiểm tra các trường nhập bắt buộc có để trống hay không?
+    if(!empty($_POST["hoTen"]) && !empty($_POST["ngaySinh"]) && !empty($_POST["gioiTinh"]) && !empty($_POST["diaChi"]) && !empty($_POST["email"]) && !empty($_POST["soDienThoai"]) && !empty($_POST["hinhAnh"])){
+        $hoTen = $_POST["hoTen"];
+        $ngaySinh = $_POST["ngaySinh"];
+        $gioiTinh = $_POST["gioiTinh"];
+        $diaChi = $_POST["diaChi"];
+        $email = $_POST["email"];
+        $soDienThoai = $_POST["soDienThoai"];
+        $hinhAnh = $_POST["hinhAnh"];
+        //Kiểm tra ngày sinh đúng định dạng chưa
+        //Kiểm tra số điện thoại đúng định dạng chưa
+    }
+    else
+        $msg = "Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin";
+}
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -83,11 +107,11 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
                                                     <label>Giới tính <span class="text-danger">*</span></label>
                                                     <div class="d-flex align-items-center ml-2">
                                                         <div class="form-check mr-3">
-                                                            <input type="radio" name="gioiTinh" value="Nam" class="form-check-input">
+                                                            <input type="radio" name="gioiTinh" value="Nam" class="form-check-input" <?php if(isset($_POST['gioiTinh'])&&($_POST['gioiTinh'])=="Nam") echo 'checked="checked"'?>>
                                                             <label style="margin-top: -20px" class="form-check-label">Nam</label>
                                                         </div>
                                                         <div class="form-check" >
-                                                            <input  type="radio" name="gioiTinh" value="Nữ" class="form-check-input">
+                                                            <input  type="radio" name="gioiTinh" value="Nữ" class="form-check-input" <?php if(isset($_POST['gioiTinh'])&&($_POST['gioiTinh'])=="Nữ") echo 'checked="checked"'?>>
                                                             <label  style="margin-top: -20px" class="form-check-label" >Nữ</label>
                                                         </div>
                                                     </div>
@@ -97,7 +121,7 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
-                                            <label>Hình ảnh nhân viên</label>
+                                            <label>Hình ảnh nhân viên <span class="text-danger">*</span></label>
                                             <div class="input-group ">
                                                 <div class="custom-file">
                                                     <input type="file" class="form-control" style="text-align: center;" id="customFile" name="hinhAnh" value="<?php echo $hinhAnh; ?>" readonly/>
@@ -126,6 +150,9 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
                                 <div class="form-group text-center">
                                     <button type="submit" name="themMoi" class="btn btn-success btnCreate">Thêm mới</button>
                                     <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
+                                </div>
+                                <div class="form-group text-center">
+                                    <span class="text-danger font-weight-bold"><?php echo $msg?></span>
                                 </div>
                             </div>
                         </div>
