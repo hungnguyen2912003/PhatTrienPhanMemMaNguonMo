@@ -29,10 +29,27 @@ if(isset($_POST["themMoi"])){
         $soDienThoai = $_POST["soDienThoai"];
         $hinhAnh = $_POST["hinhAnh"];
         //Kiểm tra ngày sinh đúng định dạng chưa
+        if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $ngaySinh)) {
+            $msg = "<span class='text-danger font-weight-bold'>Ngày sinh phải đúng định dạng YYYY-MM-DD.</span>";
+        }
         //Kiểm tra số điện thoại đúng định dạng chưa
+        elseif (!preg_match("/^\d{10}$/", $soDienThoai)) {
+            $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm 10 chữ số.</span>";
+        } else {
+            //Mã nhân viên sinh ngẫu nhiên 8 chữ số
+            $maNV = rand(10000000, 99999999);
+            //Truy vấn thêm mới nhân viên
+            $sql = "INSERT INTO nhan_vien (id, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoTen', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
+            if(mysqli_query($connect, $sql)){
+                mysqli_query($connect, $sql);
+                $msg = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $hoTen thành công!</span>";
+            }
+            else
+                $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+        }
     }
     else
-        $msg = "Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin";
+        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
 }
 ?>
 <!DOCTYPE html>
@@ -93,13 +110,8 @@ if(isset($_POST["themMoi"])){
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
-<<<<<<< HEAD
-                                                    <label>Ngày sinh<span class="text-danger">*</span></label>
-                                                    <input type="text" name="ngSinh" class="form-control picker" placeholder="Nhập ngày sinh nhân viên" autocomplete="off"/>
-=======
                                                     <label>Ngày sinh <span class="text-danger">*</span></label>
                                                     <input type="text" name="ngSinh" class="form-control picker" placeholder="Nhập ngày sinh nhân viên" autocomplete="off" <?php echo $ngaySinh; ?>/>
->>>>>>> origin/main
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -107,11 +119,11 @@ if(isset($_POST["themMoi"])){
                                                     <label>Giới tính <span class="text-danger">*</span></label>
                                                     <div class="d-flex align-items-center ml-2">
                                                         <div class="form-check mr-3">
-                                                            <input type="radio" name="gioiTinh" value="Nam" class="form-check-input" <?php if(isset($_POST['gioiTinh'])&&($_POST['gioiTinh'])=="Nam") echo 'checked="checked"'?>>
+                                                            <input type="radio" name="gioiTinh" value="1" class="form-check-input" <?php if(isset($_POST['gioiTinh'])&&($_POST['gioiTinh'])=="1") echo 'checked="checked"'?>>
                                                             <label style="margin-top: -20px" class="form-check-label">Nam</label>
                                                         </div>
                                                         <div class="form-check" >
-                                                            <input  type="radio" name="gioiTinh" value="Nữ" class="form-check-input" <?php if(isset($_POST['gioiTinh'])&&($_POST['gioiTinh'])=="Nữ") echo 'checked="checked"'?>>
+                                                            <input  type="radio" name="gioiTinh" value="0" class="form-check-input" <?php if(isset($_POST['gioiTinh'])&&($_POST['gioiTinh'])=="0") echo 'checked="checked"'?>>
                                                             <label  style="margin-top: -20px" class="form-check-label" >Nữ</label>
                                                         </div>
                                                     </div>
@@ -152,7 +164,7 @@ if(isset($_POST["themMoi"])){
                                     <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
                                 </div>
                                 <div class="form-group text-center">
-                                    <span class="text-danger font-weight-bold"><?php echo $msg?></span>
+                                    <?php echo $msg?>
                                 </div>
                             </div>
                         </div>
@@ -181,7 +193,7 @@ if(isset($_POST["themMoi"])){
             autoclose: true,
             timepicker: false,
             datepicker: true,
-            format: "d/m/Y",
+            format: "Y-m-d",
             weeks: true
         });
         $.datetimepicker.setLocale('vi');
