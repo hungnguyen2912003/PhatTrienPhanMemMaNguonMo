@@ -25,6 +25,7 @@ include('../includes/footer.html');
         <div class="page-inner">
             <div class="page-header">
                 <div class="col-md-12">
+
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="page-title">Danh sách khách hàng</h4>
@@ -48,13 +49,11 @@ include('../includes/footer.html');
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="card">
+                <div class="card" style="height: 100%">
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-4">
-                                <div class="card-tools">
-                                    <a href="#" class="btn btn-rounded btn-primary">Thêm mới</a>
-                                </div>
+
                             </div>
                             <div class="col-md-5">
                                 <div class="input-group input-group-sm">
@@ -64,11 +63,7 @@ include('../includes/footer.html');
                                 </span>
                                 </div>
                             </div>
-                            <div class="col-md-3">
-                                <div class="card-tools text-right">
-                                    <a href="#" class="btn btn-rounded btn-danger"><i class="fa fa-trash" style="font-size: 15px;"></i> Thùng rác</a>
-                                </div>
-                            </div>
+
                         </div>
                     </div>
                     <div class="card-body">

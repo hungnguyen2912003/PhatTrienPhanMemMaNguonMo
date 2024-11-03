@@ -29,12 +29,49 @@ $result = mysqli_query($connect, $sql);
     <div class="content">
         <div class="page-inner">
             <div class="page-header">
-                <!-- Nội dung header -->
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="page-title">Danh sách nhân viên</h4>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <ul class="breadcrumbs">
+                                <li class="nav-home">
+                                    <a href="<?php echo $base_url?>/admin/index.php">
+                                        <i class="flaticon-home"></i>
+                                    </a>
+                                </li>
+                                <li class="separator">
+                                    <i class="flaticon-right-arrow"></i>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?php echo $base_url?>/admin/nhan_vien/index.php">Danh sách nhân viên</a>
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
             </div>
             <div class="col-md-12">
-                <div class="card">
+                <div class="card" style="height: 100%">
                     <div class="card-header">
-                        <!-- Nội dung card-header -->
+                        <div class="row">
+                            <div class="col-md-4">
+                                <div class="card-tools">
+                                    <a href="<?php echo $base_url?>/admin/nhan_vien/create.php" class="btn btn-rounded btn-primary">Thêm mới</a>
+                                </div>
+                            </div>
+                            <div class="col-md-5">
+                                <div class="input-group input-group-sm">
+                                    <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhân viên bạn muốn tìm kiếm">
+                                    <span class="input-group-append">
+                                        <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
+                                  </span>
+                                </div>
+                            </div>
+
+
+                        </div>
                     </div>
                     <div class="card-body">
                         <div class="message-container">
