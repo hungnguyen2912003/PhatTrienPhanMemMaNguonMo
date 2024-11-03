@@ -25,7 +25,8 @@ if (isset($_POST['dangNhap'])) {
             $user_data = mysqli_fetch_assoc($result);
             //Đăng nhập thành công
             $_SESSION['logged'] = true;
-            $_SESSION['username'] = $user_data['tenHienThi'];
+            $_SESSION['username'] = $user_data['tenTaiKhoan'];
+            $_SESSION['tenhienthi'] = $user_data['tenHienThi'];
             header("Location: index.php");
             exit;
         } else {
@@ -103,6 +104,12 @@ if (isset($_POST['dangNhap'])) {
                     <!-- /.col -->
                 </fieldset>
             </form>
+            <!-- /.col -->
+            <div class="col-12 mt-3 text-center">
+                <span>Bạn chưa có tài khoản?</span>
+                <a href="<?php echo $base_url; ?>/admin/register.php" type="submit">Đăng ký ngay</a>
+            </div>
+            <!-- /.col -->
         </div>
         <!-- /.login-card-body -->
     </div>

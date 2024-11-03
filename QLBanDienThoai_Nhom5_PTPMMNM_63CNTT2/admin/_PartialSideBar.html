@@ -16,8 +16,8 @@
                 <div class="info">
                     <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
                         <span>
-                            Chỗ này hiện tên nhân viên sở hữu tài khoản
-                            <span class="user-level"><?php if(isset($_SESSION['username'])) echo $_SESSION['username']?></span>
+                            <span><?php if(isset($_SESSION['tenhienthi'])) echo $_SESSION['tenhienthi']; ?></span>
+                            <span class="user-level"><?php if(isset($_SESSION['username'])) echo $_SESSION['username']; ?></span>
                             <span class="caret"></span>
                         </span>
                     </a>
