@@ -21,6 +21,8 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $ngaySinh = $_POST['ngaySinh'];
     $gioiTinh = $_POST['gioiTinh'];
     $soDienThoai = $_POST['soDienThoai'];
+    $diaChi = $_POST['diaChi']; // Lấy địa chỉ
+    $email = $_POST['email']; // Lấy email
 
     // Xử lý hình ảnh
     $imagePath = $_POST['current_image']; // Giữ lại đường dẫn hình ảnh hiện tại
@@ -32,7 +34,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 
     // Cập nhật thông tin nhân viên
-    $sql = "UPDATE nhan_vien SET hoTen='$hoTen', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', Images='$imagePath' WHERE id='$id'";
+    $sql = "UPDATE nhan_vien SET hoTen='$hoTen', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$imagePath' WHERE id='$id'";
 
     if (mysqli_query($connect, $sql)) {
         // Chuyển hướng về danh sách nhân viên sau khi cập nhật thành công
@@ -96,34 +98,58 @@ $row = mysqli_fetch_assoc($result);
                             <form action="" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                                 <input type="hidden" name="current_image" value="<?php echo $row['Images']; ?>">
-                                <div class="form-group">
-                                    <label>Họ tên nhân viên</label>
-                                    <input type="text" name="hoTen" class="form-control" value="<?php echo $row['hoTen']; ?>" required>
+                                <div class="row">
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Họ tên nhân viên</label>
+                                            <input type="text" name="hoTen" class="form-control" value="<?php echo $row['hoTen']; ?>" required>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Ngày sinh</label>
+                                                    <input type="date" name="ngaySinh" class="form-control" value="<?php echo $row['ngaySinh']; ?>" required>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Giới tính</label><br>
+                                                    <label style="display: inline-block; margin-right: 10px;">
+                                                        <input type="radio" name="gioiTinh" value="1" <?php echo $row['gioiTinh'] == 1 ? 'checked' : ''; ?>> Nam
+                                                    </label>
+                                                    <label style="display: inline-block;">
+                                                        <input type="radio" name="gioiTinh" value="0" <?php echo $row['gioiTinh'] == 0 ? 'checked' : ''; ?>> Nữ
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Hình ảnh nhân viên</label><br>
+                                            <?php if ($row['Images']): ?>
+                                                <img src="<?php echo $base_url; ?>/Images/<?php echo $row['Images']; ?>" alt="Hình ảnh đại diện" width="200" class="img-fluid">
+                                            <?php endif; ?>
+                                            <input type="file" name="image" class="form-control" accept="image/*">
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Số điện thoại</label>
+                                            <input type="text" name="soDienThoai" class="form-control" value="<?php echo $row['soDienThoai']; ?>" required>
+                                        </div>
+                                        <div class="form-group form-group-default">
+                                            <label>Địa chỉ</label>
+                                            <input type="text" name="diaChi" class="form-control" value="<?php echo $row['diaChi']; ?>" required>
+                                        </div>
+                                        <div class="form-group form-group-default">
+                                            <label>Email</label>
+                                            <input type="email" name="email" class="form-control" value="<?php echo $row['email']; ?>" required>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="form-group">
-                                    <label>Ngày sinh</label>
-                                    <input type="date" name="ngaySinh" class="form-control" value="<?php echo $row['ngaySinh']; ?>" required>
+                                <div class="form-group text-center">
+                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                    <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
                                 </div>
-                                <div class="form-group">
-                                    <label>Giới tính</label>
-                                    <select name="gioiTinh" class="form-control" required>
-                                        <option value="1" <?php echo $row['gioiTinh'] == 1 ? 'selected' : ''; ?>>Nam</option>
-                                        <option value="0" <?php echo $row['gioiTinh'] == 0 ? 'selected' : ''; ?>>Nữ</option>
-                                    </select>
-                                </div>
-                                <div class="form-group">
-                                    <label>Số điện thoại</label>
-                                    <input type="text" name="soDienThoai" class="form-control" value="<?php echo $row['soDienThoai']; ?>" required>
-                                </div>
-                                <div class="form-group">
-                                    <label>Hình ảnh nhân viên</label><br>
-                                    <?php if ($row['Images']): ?>
-                                        <img src="<?php echo $base_url; ?>/Images/<?php echo $row['Images']; ?>" alt="Hình ảnh đại diện" width="200" class="img-fluid">
-                                    <?php endif; ?>
-                                    <input type="file" name="image" class="form-control" accept="image/*">
-                                </div>
-                                <button type="submit" class="btn btn-primary">Cập nhật</button>
-                                <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-secondary">Quay lại</a>
                             </form>
                         </div>
                     </div>
@@ -162,7 +188,7 @@ $row = mysqli_fetch_assoc($result);
     function BrowseServer(field) {
         var finder = new CKFinder();
         finder.selectActionFunction = function (fileUrl) {
-            document.getElementById(field).value = fileUrl;
+            field.value = fileUrl;
         };
         finder.popup();
     }
