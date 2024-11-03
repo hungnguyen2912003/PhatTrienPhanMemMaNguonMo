@@ -5,10 +5,14 @@ include('../includes/header.html');
 include ('../_PartialSideBar.html');
 include('../includes/footer.html');
 
+//Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
+//Truy vấn toàn bộ thông tin từ bảng nhan_Vien
 $sql = "SELECT * FROM nhan_vien";
+
+//Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
 ?>
 
@@ -69,8 +73,6 @@ $result = mysqli_query($connect, $sql);
                                   </span>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                     <div class="card-body">
@@ -78,10 +80,9 @@ $result = mysqli_query($connect, $sql);
                             <!-- Hiển thị dòng thông báo -->
                         </div>
                         <div class="table-responsive">
-                            <table id="multi-filter-select" class="display table table-striped table-hover table-bordered tableNhanVien">
+                            <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
                                 <thead>
                                 <tr class="text-center">
-                                    <th><input type="checkbox" id="SelectAll" /></th>
                                     <th>STT</th>
                                     <th>Mã nhân viên</th>
                                     <th>Họ tên nhân viên</th>
@@ -95,9 +96,9 @@ $result = mysqli_query($connect, $sql);
                                 <tbody>
                                 <?php
                                 $stt = 1;
+                                //mysqli_fetch_assoc lấy một hàng dữ liệu từ kết quả truy vấn ($result) dưới dạng mảng kết hợp. Mỗi lần while lặp, nó sẽ lấy một hàng mới cho đến khi hết dữ liệu
                                 while($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
-                                    echo "<td class='text-center'><input type='checkbox' /></td>";
                                     echo "<td class='text-center'>$stt</td>";
                                     echo "<td class='text-center'>{$row['id']}</td>";
                                     echo "<td class='text-center'>{$row['hoTen']}</td>";
