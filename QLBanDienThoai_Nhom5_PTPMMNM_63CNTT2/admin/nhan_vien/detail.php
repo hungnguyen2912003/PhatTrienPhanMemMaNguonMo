@@ -116,7 +116,7 @@ include('../includes/footer.html');
                             </div>
                         </div>
                         <div class="form-group text-center">
-                            <a href="/admin/nhanvien/edit/@Model.ID" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                            <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php" class="btn btn-primary">Vào trang chỉnh sửa</a>
                             <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
                         </div>
                     </div>
