@@ -18,38 +18,34 @@ $diaChi = "";
 $email = "";
 $soDienThoai = "";
 
-if(isset($_POST["themMoi"])){
-    //Kiểm tra các trường nhập bắt buộc có để trống hay không?
-    if(!empty($_POST["hoTen"]) && !empty($_POST["ngaySinh"]) && !empty($_POST["gioiTinh"]) && !empty($_POST["diaChi"]) && !empty($_POST["email"]) && !empty($_POST["soDienThoai"]) && !empty($_POST["hinhAnh"])){
-        $hoTen = $_POST["hoTen"];
-        $ngaySinh = $_POST["ngaySinh"];
-        $gioiTinh = $_POST["gioiTinh"];
-        $diaChi = $_POST["diaChi"];
-        $email = $_POST["email"];
-        $soDienThoai = $_POST["soDienThoai"];
-        $hinhAnh = $_POST["hinhAnh"];
-        //Kiểm tra ngày sinh đúng định dạng chưa
+if (isset($_POST["themMoi"])) {
+    $hoTen = $_POST["hoTen"];
+    $ngaySinh = $_POST["ngaySinh"];
+    $gioiTinh = $_POST["gioiTinh"];
+    $diaChi = $_POST["diaChi"];
+    $email = $_POST["email"];
+    $soDienThoai = $_POST["soDienThoai"];
+    $hinhAnh = $_POST['hinhAnh'];
+
+    // Check required fields
+    if (!empty($hoTen) && !empty($ngaySinh) && !empty($gioiTinh) && !empty($diaChi) && !empty($email) && !empty($soDienThoai) && !empty($hinhAnh)) {
+        // Validate date and phone format
         if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $ngaySinh)) {
             $msg = "<span class='text-danger font-weight-bold'>Ngày sinh phải đúng định dạng YYYY-MM-DD.</span>";
-        }
-        //Kiểm tra số điện thoại đúng định dạng chưa
-        elseif (!preg_match("/^\d{10}$/", $soDienThoai)) {
+        } elseif (!preg_match("/^\d{10}$/", $soDienThoai)) {
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm 10 chữ số.</span>";
         } else {
-            //Mã nhân viên sinh ngẫu nhiên 8 chữ số
             $maNV = rand(10000000, 99999999);
-            //Truy vấn thêm mới nhân viên
             $sql = "INSERT INTO nhan_vien (id, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoTen', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
-            if(mysqli_query($connect, $sql)){
-                mysqli_query($connect, $sql);
+            if (mysqli_query($connect, $sql)) {
                 $msg = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $hoTen thành công!</span>";
-            }
-            else
+            } else {
                 $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+            }
         }
-    }
-    else
+    } else {
         $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
+    }
 }
 ?>
 <!DOCTYPE html>
@@ -58,6 +54,16 @@ if(isset($_POST["themMoi"])){
     <meta charset="UTF-8">
     <title>Thêm mới nhân viên</title>
     <link href="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <script>
+        function chonHinhanh(event) {
+            // Lấy file đã chọn
+            const fileInput = document.getElementById('fileInput');
+            const filePath = fileInput.value.split('\\').pop(); // Lấy tên file từ đường dẫn
+
+            // Hiển thị tên file trong ô input hinhAnh
+            document.getElementById('hinhAnh').value = filePath;
+        }
+    </script>
 </head>
 <body>
 <div class="main-panel">
@@ -95,7 +101,7 @@ if(isset($_POST["themMoi"])){
         <div class="row">
             <div class="col-md-12">
                 <div class="card h-100" >
-                    <form action="" method="post">
+                    <form action="" method="post" enctype="multipart/form-data">
                         <div class="card-body">
                             <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                                 <div class="row">
@@ -111,7 +117,7 @@ if(isset($_POST["themMoi"])){
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Ngày sinh <span class="text-danger">*</span></label>
-                                                    <input type="text" name="ngSinh" class="form-control picker" placeholder="Nhập ngày sinh nhân viên" autocomplete="off" <?php echo $ngaySinh; ?>/>
+                                                    <input type="text" name="ngaySinh" class="form-control picker" placeholder="Nhập ngày sinh nhân viên" autocomplete="off" value="<?php echo $ngaySinh; ?>"/>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -134,10 +140,10 @@ if(isset($_POST["themMoi"])){
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Hình ảnh nhân viên <span class="text-danger">*</span></label>
-                                            <div class="input-group ">
-                                                <div class="custom-file">
-                                                    <input type="file" class="form-control" style="text-align: center;" id="customFile" name="hinhAnh" value="<?php echo $hinhAnh; ?>" readonly/>
-                                                </div>
+                                            <div class="input-group">
+                                                <input type="text" id="hinhAnh" name="hinhAnh" readonly style="width: 80%;" />
+                                                <input type="file" id="fileInput" style="display:none;" onchange="chonHinhanh(event)" />
+                                                <button style="width: 80px;" type="button" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
                                             </div>
                                         </div>
                                         <div class="form-group form-group-default">
