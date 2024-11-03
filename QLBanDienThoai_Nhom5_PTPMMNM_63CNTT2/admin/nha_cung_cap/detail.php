@@ -2,9 +2,26 @@
 include '../checkSession.php';
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
-include ('../_PartialSideBar.html');
+include('../_PartialSideBar.html');
 include('../includes/footer.html');
+
+// Kết nối cơ sở dữ liệu
+$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
+
+// Lấy mã nhân viên từ URL
+$manv = isset($_GET['manv']) ? intval($_GET['manv']) : 0;
+
+// Truy vấn thông tin nhân viên
+$sql = "SELECT * FROM nha_cung_cap WHERE id = $manv";
+$result = mysqli_query($connect, $sql);
+$nhanVien = mysqli_fetch_assoc($result);
+
+if (!$nhanVien) {
+    echo "<h4>Không tìm thấy thông tin nhân viên.</h4>";
+    exit;
+}
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
