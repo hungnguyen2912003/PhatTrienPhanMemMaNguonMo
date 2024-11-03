@@ -23,11 +23,14 @@ if (isset($_POST['dangNhap'])) {
 
         if (mysqli_num_rows($result) == 1) {
             $user_data = mysqli_fetch_assoc($result);
-            //Đăng nhập thành công
             $_SESSION['logged'] = true;
             $_SESSION['username'] = $user_data['tenTaiKhoan'];
             $_SESSION['tenhienthi'] = $user_data['tenHienThi'];
-            header("Location: index.php");
+
+            // Redirect to the originally intended page or to a default page (e.g., index.php)
+            $redirect_to = isset($_SESSION['redirect_to']) ? $_SESSION['redirect_to'] : 'index.php';
+            unset($_SESSION['redirect_to']); // Clear the redirect session variable
+            header("Location: $redirect_to");
             exit;
         } else {
             //Sai tài khoản hoặc mật khẩu

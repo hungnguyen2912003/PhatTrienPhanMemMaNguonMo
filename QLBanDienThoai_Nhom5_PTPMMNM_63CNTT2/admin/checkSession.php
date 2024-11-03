@@ -3,9 +3,9 @@ session_start();
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/admin";
 define('SESSION_TIMEOUT', 600);
 
-// Check if the user is logged in
 if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
-    header("Location: $base_url/login.php");
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI']; // Save intended page
+    header("Location: $base_url/login.php"); // Redirect to login
     exit;
 }
 
