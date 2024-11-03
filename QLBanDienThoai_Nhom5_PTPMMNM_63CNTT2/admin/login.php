@@ -1,11 +1,13 @@
 <?php
-session_start();
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
+//Khởi động phiên làm việc (session) để lưu trữ thông tin đăng nhập nếu người dùng đăng nhập thành công.
+session_start();
 
+//Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-
+//Kiểm tra đã login chưa?
 if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
     header("Location: index.php");
     exit;
@@ -14,22 +16,32 @@ if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
 $error = "";
 
 if (isset($_POST['dangNhap'])) {
+    //Kiểm tra tên đăng nhập và mật khẩu không được để trống
     if(!empty($_POST['username']) && !empty($_POST['password'])) {
-        $user = $_POST['username'];
-        $pass = $_POST['password'];
+        //Gán giá trị từ sticky form vào các biến $user và $pass
+        $user = mysqli_real_escape_string($connect, $_POST['username']);
+        $pass = mysqli_real_escape_string($connect, $_POST['password']);
         //Truy vấn tài khoản và mật khẩu
-        $query = "SELECT * FROM tai_khoan WHERE tenTaiKhoan = '$user' AND matKhau = '$pass' LIMIT 1";
+        $query = "SELECT * FROM tai_khoan WHERE tenTaiKhoan = '$user' AND matKhau = '$pass'";
+
+        //Gửi truy vấn đến cơ sở dữ liệu, và kết quả được lưu vào $result
         $result = mysqli_query($connect, $query);
 
+        //Kiểm tra nếu có một dòng kết quả (tức là tài khoản và mật khẩu khớp với một tài khoản trong cơ sở dữ liệu).
         if (mysqli_num_rows($result) == 1) {
+
+            //mysqli_fetch_assoc: lấy một hàng dữ liệu từ kết quả của truy vấn
             $user_data = mysqli_fetch_assoc($result);
             $_SESSION['logged'] = true;
             $_SESSION['username'] = $user_data['tenTaiKhoan'];
             $_SESSION['tenhienthi'] = $user_data['tenHienThi'];
 
-            // Redirect to the originally intended page or to a default page (e.g., index.php)
+            //Kiểm tra xem có biến phiên redirect_to không?
+            //Nếu có, sẽ chuyển hướng đến trang mà người dùng muốn truy cập trước khi đăng nhập;
+            //Nếu không, chuyển hướng mặc định đến index.php
             $redirect_to = isset($_SESSION['redirect_to']) ? $_SESSION['redirect_to'] : 'index.php';
-            unset($_SESSION['redirect_to']); // Clear the redirect session variable
+            //Xóa biến redirect_to để tránh ảnh hưởng đến các lần đăng nhập tiếp theo.
+            unset($_SESSION['redirect_to']);
             header("Location: $redirect_to");
             exit;
         } else {

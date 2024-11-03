@@ -66,7 +66,7 @@ include('../includes/footer.html');
                     </div>
                     <div class="card-body">
                         <div class="table-responsive">
-                            <table id="multi-filter-select" class="display table table-striped table-hover tableHoaDon">
+                            <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
                                 <thead>
                                 <tr class="text-center">
                                     <th>#</th>
