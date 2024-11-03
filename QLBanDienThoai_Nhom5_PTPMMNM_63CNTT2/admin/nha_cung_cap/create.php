@@ -55,10 +55,7 @@ include('../includes/footer.html');
                                         <label>Tên nhà cung cấp <span class="text-danger">*</span></label>
                                         <input type="text" name="tenNhaCungCap" placeholder="Nhập tên nhà cung cấp" class="form-control"/>
                                     </div>
-                                    <div class="form-group form-group-default">
-                                        <label>Alias</label>
-                                        <input type="text" name="alias" placeholder="Nhập alias" class="form-control"/>
-                                    </div>
+
                                     <div class="form-group form-group-default">
                                         <label>Số điện thoại <span class="text-danger">*</span></label>
                                         <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại" class="form-control"/>
@@ -76,18 +73,6 @@ include('../includes/footer.html');
                                                 <input type="file" class="custom-file-input form-control" id="customFile" readonly/>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="form-group form-group-default">
-                                        <label>Seo Title</label>
-                                        <input type="text" name="seoTitle" placeholder="Nhập Seo Title" class="form-control"/>
-                                    </div>
-                                    <div class="form-group form-group-default">
-                                        <label>Seo Description</label>
-                                        <input type="text" name="seoDescription" placeholder="Nhập Seo Description" class="form-control"/>
-                                    </div>
-                                    <div class="form-group form-group-default">
-                                        <label>Seo Keywords</label>
-                                        <input type="text" name="seoKeywords" placeholder="Nhập Seo Keywords" class="form-control"/>
                                     </div>
                                 </div>
                             </div>

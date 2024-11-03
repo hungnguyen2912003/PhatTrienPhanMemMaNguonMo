@@ -63,28 +63,38 @@ include('../includes/footer.html');
                                             <label>Họ tên nhân viên <span class="text-danger">*</span></label>
                                             <input type="text" name="hoTen" placeholder="Nhập họ tên nhân viên" class="form-control"/>
                                         </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Ngày sinh <span class="text-danger">* Nhân viên phải có độ tuổi từ 18 đến 40.</span></label>
-                                            <input type="text" name="ngSinh" class="form-control picker" placeholder="Nhập ngày sinh nhân viên" autocomplete="off"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default" style="height: 200px;">
-                                            <label>Hình ảnh nhân viên</label>
-                                            <div class="input-group mt-5">
-                                                <div class="custom-file">
-                                                    <input type="file" class="custom-file-input form-control" style="text-align: center;" id="customFile" readonly/>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Ngày sinh</label>
+                                                    <input type="text" name="ngSinh" class="form-control picker" placeholder="Nhập ngày sinh nhân viên" autocomplete="off"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Giới tính <span class="text-danger">*</span></label>
+                                                    <div class="d-flex align-items-center ml-2">
+                                                        <div class="form-check mr-3">
+                                                            <input type="radio" name="gioiTinh" value="Nam" class="form-check-input" id="gioiTinhNam">
+                                                            <label style="margin-top: -20px" class="form-check-label" for="gioiTinhNam">Nam</label>
+                                                        </div>
+                                                        <div class="form-check" >
+                                                            <input  type="radio" name="gioiTinh" value="Nữ" class="form-check-input" id="gioiTinhNu">
+                                                            <label  style="margin-top: -20px" class="form-check-label" for="gioiTinhNu">Nữ</label>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
-                                            <label>Giới tính <span class="text-danger">*</span></label>
-                                            <select name="gioiTinh" class="form-control">
-                                                <option value="Nam">Nam</option>
-                                                <option value="Nữ">Nữ</option>
-                                            </select>
+                                            <label>Hình ảnh nhân viên</label>
+                                            <div class="input-group ">
+                                                <div class="custom-file">
+                                                    <input type="file" class=" form-control" style="text-align: center;" id="customFile" readonly/>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Địa chỉ <span class="text-danger">*</span></label>
@@ -96,25 +106,13 @@ include('../includes/footer.html');
                                             <label>Số điện thoại <span class="text-danger">*</span></label>
                                             <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhân viên" class="form-control"/>
                                         </div>
+                                    </div>
+                                    <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Email <span class="text-danger">*</span></label>
                                             <input type="email" name="email" placeholder="Nhập email nhân viên" class="form-control"/>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <h4 class="m-3" style="font-weight: bold;">THÔNG TIN TÀI KHOẢN</h4>
-                                        <div class="form-group form-group-default">
-                                            <label>Tên đăng nhập <span class="text-danger">*</span></label>
-                                            <input type="text" name="tenTaiKhoan" placeholder="Nhập tên đăng nhập tài khoản nhân viên" class="form-control"/>
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Mật khẩu <span class="text-danger">*</span></label>
-                                            <input type="password" name="matKhau" placeholder="Nhập mật khẩu tài khoản nhân viên" class="form-control"/>
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Tên hiển thị tài khoản <span class="text-danger">*</span></label>
-                                            <input type="text" name="tenhienThi" placeholder="Nhập tên hiển thị tài khoản nhân viên" class="form-control"/>
-                                        </div>
+
                                     </div>
                                 </div>
                                 <div class="form-group text-center">
