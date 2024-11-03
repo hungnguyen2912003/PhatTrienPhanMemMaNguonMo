@@ -47,7 +47,7 @@ include('../includes/footer.html');
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card" style="height: 100%">
+                <div class="card h-100" >
                     <form action="" method="post">
                         <div class="card-body">
                             <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
@@ -66,7 +66,7 @@ include('../includes/footer.html');
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
-                                                    <label>Ngày sinh</label>
+                                                    <label>Ngày sinh<span class="text-danger">*</span></label>
                                                     <input type="text" name="ngSinh" class="form-control picker" placeholder="Nhập ngày sinh nhân viên" autocomplete="off"/>
                                                 </div>
                                             </div>

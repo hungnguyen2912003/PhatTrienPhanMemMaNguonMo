@@ -63,7 +63,8 @@ include('../includes/footer.html');
                                                     <input type="text" name="hoTen" placeholder="Nhập tên sản phẩm" class="form-control"/>
                                                 </div>
                                                 <div class="form-group form-group-default">
-                                                    <label for="SupplierID">Chọn nhà cung cấp</label>
+                                                    <label for="SupplierID">Chọn nhà cung cấp<span class="text-danger">*</span>
+                                                    </label>
                                                     <select id="SupplierID" name="SupplierID" class="form-control select">
                                                         <option value="">Chọn nhà cung cấp</option>
                                                     </select>
@@ -83,9 +84,6 @@ include('../includes/footer.html');
                                                         </div>
                                                     </div>
                                                 </div>
-
-
-
                                             </div>
 
                                             <div class="col-md-6">
