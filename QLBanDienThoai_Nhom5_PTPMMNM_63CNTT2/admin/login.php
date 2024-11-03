@@ -98,7 +98,7 @@ if (isset($_POST['dangNhap'])) {
                             </div>
                             <div>
                                 <label>
-                                    <a href="#" class="link float-right">Quên mật khẩu?</a>
+                                    <a href="<?php echo $base_url; ?>/admin/changepassword.php" class="link float-right">Quên mật khẩu?</a>
                                 </label>
                             </div>
                         </div>
