@@ -46,7 +46,7 @@ include('../includes/footer.html');
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card" style="height: 100%">
+                <div class="card h-100" >
                     <div class="card-body">
                         <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                             <div class="row">
@@ -70,7 +70,7 @@ include('../includes/footer.html');
                                         <label>Hình ảnh nhà cung cấp</label>
                                         <div class="input-group mt-5">
                                             <div class="custom-file">
-                                                <input type="file" class="custom-file-input form-control" id="customFile" readonly/>
+                                                <input type="file" class=" form-control" id="customFile" readonly/>
                                             </div>
                                         </div>
                                     </div>

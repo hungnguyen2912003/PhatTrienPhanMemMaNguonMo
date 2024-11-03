@@ -57,7 +57,7 @@ $result = mysqli_query($connect, $sql);
                 </div>
             </div>
             <div class="col-md-12">
-                <div class="card" style="height: 100%">
+                <div class="card h-100" >
                     <div class="card-header">
                         <div class="row">
                             <div class="col-md-4">
@@ -107,8 +107,8 @@ $result = mysqli_query($connect, $sql);
                                     echo "<td class='text-center'>" . ($row['gioiTinh'] == 1 ? 'Nam' : 'Nữ') . "</td>";
                                     echo "<td class='text-center'>{$row['soDienThoai']}</td>";
                                     echo "<td class='text-center'>
-                                                <a href='$base_url/admin/nhanvien/detail?manv={$row['id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
-                                                <a href='$base_url/admin/nhanvien/edit?manv={$row['id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
+                                                <a href='$base_url/admin/nhan_vien/detail.php?manv={$row['id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
+                                                <a href='$base_url/admin/nhan_vien/edit.php?manv={$row['id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
                                                 <a href='$base_url/admin/nhanvien/delete?manv={$row['id']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
                                               </td>";
                                     echo "</tr>";
