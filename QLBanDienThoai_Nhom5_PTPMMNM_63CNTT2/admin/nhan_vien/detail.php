@@ -12,7 +12,10 @@ $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Kh
 $manv = isset($_GET['manv']) ? intval($_GET['manv']) : 0;
 
 // Truy vấn thông tin nhân viên
-$sql = "SELECT * FROM nhan_vien WHERE id = $manv";
+$sql = "SELECT nv.*, tk.tenTaiKhoan, tk.matKhau, tk.tenHienThi 
+        FROM nhan_vien nv 
+        JOIN tai_khoan tk ON nv.idTaiKhoan = tk.idTaiKhoan 
+        WHERE nv.id = $manv";
 $result = mysqli_query($connect, $sql);
 $nhanVien = mysqli_fetch_assoc($result);
 
@@ -110,17 +113,25 @@ if (!$nhanVien) {
                                             <?php endif; ?>
                                         </div>
                                         <label class="mb-3" style="font-weight: bold;">TÀI KHOẢN</label>
-                                        <div class="form-group form-group-default">
-                                            <label>Tên tài khoản</label>
-                                            <span class="form-control"><?php echo $nhanVien['tenDangNhap']; ?></span>
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Mật khẩu tài khoản</label>
-                                            <span class="form-control"><?php echo $nhanVien['matKhau']; ?></span>
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Tên hiển thị tài khoản</label>
-                                            <span class="form-control"><?php echo $nhanVien['tenHienThi']; ?></span>
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group form-group-default">
+                                                    <label>Tên tài khoản</label>
+                                                    <span class="form-control"><?php echo $nhanVien['tenTaiKhoan']; ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group form-group-default">
+                                                    <label>Mật khẩu tài khoản</label>
+                                                    <span class="form-control"><?php echo $nhanVien['matKhau']; ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group form-group-default">
+                                                    <label>Tên hiển thị tài khoản</label>
+                                                    <span class="form-control"><?php echo $nhanVien['tenHienThi']; ?></span>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
