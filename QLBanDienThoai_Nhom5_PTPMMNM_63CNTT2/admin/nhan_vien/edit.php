@@ -32,7 +32,7 @@ if (isset($_POST['capNhat']))
             // Định dạng số điện thoại
         } elseif (!preg_match("/^\d{10,11}$/", $soDienThoai)) {
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 10 đến 11 chữ số.</span>";
-            // Hợp lệ nhập liệu: Tiến hành thêm mới
+            // Hợp lệ nhập liệu: Tiến hành chỉnh sửa
         } else {
             // Cập nhật thông tin nhân viên
             $sql = "UPDATE nhan_vien SET hoTen='$hoTen', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$id'";
