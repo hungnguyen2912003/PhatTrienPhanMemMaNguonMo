@@ -50,7 +50,7 @@ if (!$nhacungcap) {
                                 <i class="flaticon-right-arrow"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php">Danh mục nhà cung ấp</a>
+                                <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php">Danh mục nhà cung ccấp</a>
                             </li>
                             <li class="separator">
                                 <i class="flaticon-right-arrow"></i>
@@ -65,7 +65,7 @@ if (!$nhacungcap) {
         </div>
         <div class="row">
             <div class="col-md-12">
-                <div class="card">
+                <div class="card h-100">
                     <div class="card-body">
                         <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                             <div class="row">
@@ -84,8 +84,6 @@ if (!$nhacungcap) {
                                             </div>
                                         </div>
                                     </div>
-
-
                                     <div class="form-group form-group-default">
                                         <label>Số điện thoại</label>
                                         <span class="form-control"><?php if(isset($nhacungcap['soDienThoai'])) echo $nhacungcap['soDienThoai']; ?></span>

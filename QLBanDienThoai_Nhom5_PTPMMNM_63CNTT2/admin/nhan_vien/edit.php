@@ -116,7 +116,7 @@ $row = mysqli_fetch_assoc($result);
 
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
-                                                    <label>Giới tính <span class="text-danger">*</span></label>
+                                                    <label>Giới tính</label>
                                                     <div class="d-flex align-items-center ml-2">
                                                         <div class="form-check mr-3">
                                                             <input type="radio" name="gioiTinh" value="1" class="form-check-input"
