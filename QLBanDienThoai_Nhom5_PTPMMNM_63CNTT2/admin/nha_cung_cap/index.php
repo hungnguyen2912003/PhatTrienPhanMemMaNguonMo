@@ -4,6 +4,17 @@ $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include ('../_PartialSideBar.html');
 include('../includes/footer.html');
+
+//Kết nối cơ sở dữ liệu
+$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
+OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
+
+//Truy vấn toàn bộ thông tin từ bảng nhan_Vien
+$sql = "SELECT * FROM nha_cung_cap";
+
+//Gửi truy vấn đến cơ sở dữ liệu
+$result = mysqli_query($connect, $sql);
+
 ?>
 
 <!DOCTYPE html>
@@ -73,17 +84,36 @@ include('../includes/footer.html');
                             <table id="multi-filter-select" class="display table table-striped table-hover tableSupplier">
                                 <thead>
                                 <tr class="text-center">
-                                    <th><input type="checkbox" id="SelectAll" /></th>
-                                    <th>#</th>
-                                    <th>Hình ảnh</th>
+                                    <th>STT</th>
+                                    <th>Mã nhà cung cấp</th>
                                     <th>Tên nhà cung cấp</th>
+                                    <th>Hình ảnh</th>
                                     <th>Số điện thoại</th>
                                     <th>Email</th>
                                     <th>Chức năng</th>
                                 </tr>
                                 </thead>
                                 <tbody>
-                                <!-- Dữ liệu nhà cung cấp sẽ được thêm vào đây -->
+                                <?php
+                                $stt = 1;
+                                // Lặp qua các hàng dữ liệu từ kết quả truy vấn
+                                while($row = mysqli_fetch_assoc($result)) {
+                                    echo "<tr>";
+                                    echo "<td class='text-center'>$stt</td>";
+                                    echo "<td class='text-center'>{$row['id']}</td>";
+                                    echo "<td class='text-center'>{$row['tenNCC']}</td>";
+                                    echo "<td class='text-center'><img width='80' src='$base_url/Images/{$row['hinhAnh']}'/></td>";
+                                    echo "<td class='text-center'>{$row['soDienThoai']}</td>";
+                                    echo "<td class='text-center'>{$row['email']}</td>";
+                                    echo "<td class='text-center'>
+                                                <a href='$base_url/admin/nha_cung_cap/detail.php?id={$row['id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
+                                                <a href='$base_url/admin/nha_cung_cap/edit.php?id={$row['id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
+                                                <a href='$base_url/admin/nha_cung_cap/delete.php?id={$row['id']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
+                                              </td>";
+                                    echo "</tr>";
+                                    $stt++;
+                                }
+                                ?>
                                 </tbody>
                             </table>
                         </div>

@@ -128,7 +128,7 @@ mysqli_close($connect);
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Ngày sinh <span class="text-danger">*</span></label>
-                                                    <input type="text" name="ngaySinh" class="form-control picker" placeholder="Nhập ngày sinh nhân viên" autocomplete="off" value="<?php echo $ngaySinh; ?>"/>
+                                                    <input type="text" name="ngaySinh" class="form-control picker" placeholder="dd/mm/yyyy" autocomplete="off" value="<?php echo $ngaySinh; ?>"/>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
@@ -210,7 +210,7 @@ mysqli_close($connect);
             autoclose: true,
             timepicker: false,
             datepicker: true,
-            format: "Y-m-d",
+            format: "d-m-Y",
             weeks: true
         });
         $.datetimepicker.setLocale('vi');

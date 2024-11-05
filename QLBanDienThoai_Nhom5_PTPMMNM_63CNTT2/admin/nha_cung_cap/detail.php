@@ -8,20 +8,21 @@ include('../includes/footer.html');
 // Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-// Lấy mã nhân viên từ URL
-$manv = isset($_GET['manv']) ? intval($_GET['manv']) : 0;
+// Lấy mã ncc từ URL
+$maNCC = $_GET['id'];
+$msg = "";
 
-// Truy vấn thông tin nhân viên
-$sql = "SELECT * FROM nha_cung_cap WHERE id = $manv";
+// Truy vấn thông tin nhà cung cấp
+$sql = "SELECT * FROM nha_cung_cap WHERE id = '$maNCC'";
 $result = mysqli_query($connect, $sql);
-$nhanVien = mysqli_fetch_assoc($result);
+$nhacungcap = mysqli_fetch_assoc($result);
 
-if (!$nhanVien) {
-    echo "<h4>Không tìm thấy thông tin nhân viên.</h4>";
+if (!$nhacungcap) {
+    echo "<h4>Không tìm thấy thông tin nhà cung cấp.</h4>";
     exit;
 }
-?>
 
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -36,26 +37,26 @@ if (!$nhanVien) {
             <div class="col-md-12">
                 <div class="row">
                     <div class="col-md-6">
-                        <h4 class="page-title">Chi tiết thông tin nhà cung cấp: @Model.Title</h4>
+                        <h4 class="page-title">Chi tiết thông tin nhà cung cấp: <?php echo $nhacungcap['tenNCC']; ?></h4>
                     </div>
                     <div class="col-md-6 text-right">
                         <ul class="breadcrumbs">
                             <li class="nav-home">
-                                <a href="@Url.Action("Index", "Home")">
-                                <i class="flaticon-home"></i>
+                                <a href="<?php echo $base_url?>/admin/index.php">
+                                    <i class="flaticon-home"></i>
                                 </a>
                             </li>
                             <li class="separator">
                                 <i class="flaticon-right-arrow"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="@Url.Action("Index", "Supplier")">Danh sách nhà cung cấp</a>
+                                <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php">Danh mục nhà cung ấp</a>
                             </li>
                             <li class="separator">
                                 <i class="flaticon-right-arrow"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="#">Xem chi tiết</a>
+                                <a href="<?php echo $base_url?>/admin/nha_cung_cap/detail.php">Xem chi tiết</a>
                             </li>
                         </ul>
                     </div>
@@ -69,39 +70,49 @@ if (!$nhanVien) {
                         <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                             <div class="row">
                                 <div class="col-md-6">
-                                    <div class="form-group form-group-default">
-                                        <label>Tên nhà cung cấp</label>
-                                        <span class="form-control">@Model.Title</span>
+                                    <div class="row">
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Mã nhà cung cấp</label>
+                                                    <span class="form-control"><?php if(isset($nhacungcap['id'])) echo $nhacungcap['id']; ?></span>
+                                            </div>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Tên nhà cung cấp</label>
+                                                <span class="form-control"><?php if(isset($nhacungcap['tenNCC'])) echo $nhacungcap['tenNCC']; ?></span>
+                                            </div>
+                                        </div>
                                     </div>
+
+
                                     <div class="form-group form-group-default">
                                         <label>Số điện thoại</label>
-                                        <span class="form-control">@Model.SoDienThoai</span>
+                                        <span class="form-control"><?php if(isset($nhacungcap['soDienThoai'])) echo $nhacungcap['soDienThoai']; ?></span>
                                     </div>
                                     <div class="form-group form-group-default">
                                         <label>Email</label>
-                                        <span class="form-control">@Model.Email</span>
+                                        <span class="form-control"><?php if(isset($nhacungcap['email'])) echo $nhacungcap['email']; ?></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group form-group-default text-center ">
                                         <label>Hình ảnh nhà cung cấp</label><br />
-                                        @if (!string.IsNullOrEmpty(Model.Image))
-                                        {
-                                        <img src="@Model.Image" alt="Ảnh sản phẩm" width="200" class="img-fluid">
-                                        }
-                                        else
-                                        {
-                                        <span class="form-control">Chưa thêm ảnh cho nhà cung cấp này</span>
-                                        }
+                                        <?php if (!empty($nhacungcap['hinhAnh'])): ?>
+                                            <img src="<?php echo $base_url; ?>/Images/<?php echo $nhacungcap['hinhAnh']; ?>" alt="Hình ảnh nhà cung cấp" width="200" class="img-fluid">
+                                        <?php else: ?>
+                                            <span class="form-control">Chưa thêm hình ảnh cho nhà cung cấp này</span>
+                                        <?php endif; ?>
                                     </div>
                                 </div>
 
                             </div>
                         </div>
                         <div class="form-group text-center">
-                            <a href="/admin/supplier/edit/@Model.MaNhaCungCap" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                            <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php?id=<?php echo $nhacungcap['id']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
                             <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php" class="btn btn-danger btnBack">Quay lại</a>
                         </div>
+
                     </div>
                 </div>
             </div>

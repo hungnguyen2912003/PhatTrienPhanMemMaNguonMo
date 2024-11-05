@@ -75,10 +75,21 @@ if (!$nhanVien) {
                             <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="form-group form-group-default">
-                                            <label>Họ tên nhân viên</label>
-                                            <span class="form-control"><?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></span>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Mã nhân viên</label>
+                                                    <span class="form-control"><?php if(isset($nhanVien['id'])) echo $nhanVien['id']; ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Họ tên nhân viên</label>
+                                                    <span class="form-control"><?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></span>
+                                                </div>
+                                            </div>
                                         </div>
+
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
