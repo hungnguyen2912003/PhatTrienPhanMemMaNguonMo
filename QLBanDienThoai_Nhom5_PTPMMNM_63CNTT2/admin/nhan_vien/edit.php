@@ -13,36 +13,39 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 // Lấy mã nhân viên từ URL
 $manv = $_GET['manv'];
 
-// Kiểm tra xem có dữ liệu từ form gửi lên không
-if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    // Lấy dữ liệu từ form
+$msg = "";
+if (isset($_POST['capNhat']))
+{
     $id = $_POST['id'];
     $hoTen = $_POST['hoTen'];
     $ngaySinh = $_POST['ngaySinh'];
     $gioiTinh = $_POST['gioiTinh'];
     $soDienThoai = $_POST['soDienThoai'];
-    $diaChi = $_POST['diaChi']; // Lấy địa chỉ
-    $email = $_POST['email']; // Lấy email
+    $diaChi = $_POST['diaChi'];
+    $email = $_POST['email'];
+    $hinhAnh = $_POST['hinhAnh'];
 
-    // Xử lý hình ảnh
-    $imagePath = $_POST['current_image']; // Giữ lại đường dẫn hình ảnh hiện tại
-    if (isset($_FILES['image']) && $_FILES['image']['error'] == UPLOAD_ERR_OK) {
-        // Thêm kiểm tra tên file hình ảnh và định dạng nếu cần
-        $uploadDir = '../Images/'; // Thư mục lưu trữ hình ảnh
-        $imagePath = $uploadDir . basename($_FILES['image']['name']);
-        move_uploaded_file($_FILES['image']['tmp_name'], $imagePath);
+    if (!empty($hoTen) && !empty($ngaySinh) && isset($gioiTinh) && !empty($diaChi) && !empty($email) && !empty($soDienThoai) && !empty($hinhAnh)) {
+        // Định dạng ngày sinh
+        if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $ngaySinh)) {
+            $msg = "<span class='text-danger font-weight-bold'>Ngày sinh phải đúng định dạng YYYY-MM-DD.</span>";
+            // Định dạng số điện thoại
+        } elseif (!preg_match("/^\d{10,11}$/", $soDienThoai)) {
+            $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 10 đến 11 chữ số.</span>";
+            // Hợp lệ nhập liệu: Tiến hành thêm mới
+        } else {
+            // Cập nhật thông tin nhân viên
+            $sql = "UPDATE nhan_vien SET hoTen='$hoTen', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$id'";
+
+            if (mysqli_query($connect, $sql)) {
+                $msg = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoTen thành công!</span>";
+            } else {
+                $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+            }
+        }
     }
-
-    // Cập nhật thông tin nhân viên
-    $sql = "UPDATE nhan_vien SET hoTen='$hoTen', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$imagePath' WHERE id='$id'";
-
-    if (mysqli_query($connect, $sql)) {
-        // Chuyển hướng về danh sách nhân viên sau khi cập nhật thành công
-        header("Location: $base_url/admin/nhan_vien/index.php");
-        exit();
-    } else {
-        echo "Lỗi: " . mysqli_error($connect);
-    }
+    else
+        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
 }
 
 // Truy vấn thông tin nhân viên theo mã
@@ -95,9 +98,8 @@ $row = mysqli_fetch_assoc($result);
                 <div class="col-md-12">
                     <div class="card h-100">
                         <div class="card-body">
-                            <form action="" method="POST" enctype="multipart/form-data">
+                            <form action="" method="POST">
                                 <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
-                                <input type="hidden" name="current_image" value="<?php echo $row['Images']; ?>">
                                 <div class="row">
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
@@ -111,27 +113,25 @@ $row = mysqli_fetch_assoc($result);
                                                     <input type="date" name="ngaySinh" class="form-control" value="<?php echo $row['ngaySinh']; ?>" required>
                                                 </div>
                                             </div>
+
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
-                                                    <label>Giới tính</label><br>
-                                                    <label style="display: inline-block; margin-right: 10px;">
-                                                        <input type="radio" name="gioiTinh" value="1" <?php echo $row['gioiTinh'] == 1 ? 'checked' : ''; ?>> Nam
-                                                    </label>
-                                                    <label style="display: inline-block;">
-                                                        <input type="radio" name="gioiTinh" value="0" <?php echo $row['gioiTinh'] == 0 ? 'checked' : ''; ?>> Nữ
-                                                    </label>
+                                                    <label>Giới tính <span class="text-danger">*</span></label>
+                                                    <div class="d-flex align-items-center ml-2">
+                                                        <div class="form-check mr-3">
+                                                            <input type="radio" name="gioiTinh" value="1" class="form-check-input"
+                                                                <?php if($row['gioiTinh'] == 1) echo 'checked'; ?>>
+                                                            <label class="form-check-label" style="margin-top: -20px">Nam</label>
+                                                        </div>
+                                                        <div class="form-check">
+                                                            <input type="radio" name="gioiTinh" value="0" class="form-check-input"
+                                                                <?php if($row['gioiTinh'] == 0) echo 'checked'; ?>>
+                                                            <label class="form-check-label" style="margin-top: -20px">Nữ</label>
+                                                        </div>
+                                                    </div>
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group">
-                                            <label>Hình ảnh nhân viên</label><br>
-                                            <?php if ($row['Images']): ?>
-                                                <img src="<?php echo $base_url; ?>/Images/<?php echo $row['Images']; ?>" alt="Hình ảnh đại diện" width="200" class="img-fluid">
-                                            <?php endif; ?>
-                                            <input type="file" name="image" class="form-control" accept="image/*">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Số điện thoại</label>
                                             <input type="text" name="soDienThoai" class="form-control" value="<?php echo $row['soDienThoai']; ?>" required>
@@ -145,10 +145,27 @@ $row = mysqli_fetch_assoc($result);
                                             <input type="email" name="email" class="form-control" value="<?php echo $row['email']; ?>" required>
                                         </div>
                                     </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group text-center">
+                                            <label>Hình ảnh nhân viên</label><br>
+                                            <?php if ($row['Images']): ?>
+                                                <img src='<?php echo $base_url; ?>/Images/<?php echo $row['Images']; ?>' alt='Hình ảnh đại diện' width="200" class='img-fluid mb-2'>
+                                                <div>Tên hình ảnh: <strong><?php echo $row['Images']; ?></strong></div>
+                                            <?php else: ?>
+                                                <div>Không có hình ảnh hiện tại.</div>
+                                            <?php endif; ?>
+                                            <div class="input-group">
+                                                <input type="file" class="form-control-file p-1" name="hinhAnh" value="<?php echo $hinhAnh; ?>"/>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
                                 <div class="form-group text-center">
-                                    <button type="submit" class="btn btn-primary">Cập nhật</button>
+                                    <button type="submit" name="capNhat" class="btn btn-primary">Cập nhật</button>
                                     <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
+                                </div>
+                                <div class="form-group text-center">
+                                    <?php echo $msg?>
                                 </div>
                             </form>
                         </div>
@@ -177,19 +194,6 @@ $row = mysqli_fetch_assoc($result);
             format: "d/m/Y",
             weeks: true
         });
-
         $.datetimepicker.setLocale('vi');
-
-        CKEDITOR.replace('txtDetail', {
-            customConfig: '/content/ckeditor/config.js',
-            extraAllowedContent: 'span',
-        });
     });
-    function BrowseServer(field) {
-        var finder = new CKFinder();
-        finder.selectActionFunction = function (fileUrl) {
-            field.value = fileUrl;
-        };
-        finder.popup();
-    }
 </script>

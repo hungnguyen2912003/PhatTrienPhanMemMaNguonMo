@@ -5,7 +5,7 @@ include('../includes/header.html');
 include ('../_PartialSideBar.html');
 include('../includes/footer.html');
 
-//Kết nối cơ sở dữ liệu
+// Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
@@ -17,6 +17,7 @@ $hinhAnh = "";
 $diaChi = "";
 $email = "";
 $soDienThoai = "";
+$maNV = rand(10000000, 99999999);
 
 if (isset($_POST["themMoi"])) {
     $hoTen = $_POST["hoTen"];
@@ -27,26 +28,38 @@ if (isset($_POST["themMoi"])) {
     $soDienThoai = $_POST["soDienThoai"];
     $hinhAnh = $_POST['hinhAnh'];
 
-    // Check required fields
-    if (!empty($hoTen) && !empty($ngaySinh) && !empty($gioiTinh) && !empty($diaChi) && !empty($email) && !empty($soDienThoai) && !empty($hinhAnh)) {
-        // Validate date and phone format
+    if (!empty($hoTen) && !empty($ngaySinh) && isset($gioiTinh) && !empty($diaChi) && !empty($email) && !empty($soDienThoai) && !empty($hinhAnh)) {
+        // Định dạng ngày sinh
         if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $ngaySinh)) {
             $msg = "<span class='text-danger font-weight-bold'>Ngày sinh phải đúng định dạng YYYY-MM-DD.</span>";
-        } elseif (!preg_match("/^\d{10}$/", $soDienThoai)) {
-            $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm 10 chữ số.</span>";
+            // Định dạng số điện thoại
+        } elseif (!preg_match("/^\d{10,11}$/", $soDienThoai)) {
+            $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 10 đến 11 chữ số.</span>";
+            // Hợp lệ nhập liệu: Tiến hành thêm mới
         } else {
-            $maNV = rand(10000000, 99999999);
-            $sql = "INSERT INTO nhan_vien (id, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoTen', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
-            if (mysqli_query($connect, $sql)) {
-                $msg = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $hoTen thành công!</span>";
+            // Kiểm tra mã nhân viên đã tồn tại
+            $check_maNV = mysqli_query($connect, "SELECT * FROM nhan_vien WHERE id = '$maNV'");
+            if (mysqli_num_rows($check_maNV) != 0) {
+                $msg = "<span class='text-danger font-weight-bold'>Đã có mã nhân viên này. Vui lòng thử lại.</span>";
             } else {
-                $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+                // Thực hiện thêm mới
+                $sql = "INSERT INTO nhan_vien (id, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoTen', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
+                if (mysqli_query($connect, $sql)) {
+                    $msg = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $hoTen thành công!</span>";
+                } else {
+                    $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+                }
             }
+            // Giải phóng kết quả sau khi kiểm tra
+            mysqli_free_result($check_maNV);
         }
     } else {
         $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
     }
 }
+
+// Đóng kết nối sau khi hoàn tất
+mysqli_close($connect);
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -54,16 +67,6 @@ if (isset($_POST["themMoi"])) {
     <meta charset="UTF-8">
     <title>Thêm mới nhân viên</title>
     <link href="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
-    <script>
-        function chonHinhanh(event) {
-            // Lấy file đã chọn
-            const fileInput = document.getElementById('fileInput');
-            const filePath = fileInput.value.split('\\').pop(); // Lấy tên file từ đường dẫn
-
-            // Hiển thị tên file trong ô input hinhAnh
-            document.getElementById('hinhAnh').value = filePath;
-        }
-    </script>
 </head>
 <body>
 <div class="main-panel">
@@ -101,12 +104,20 @@ if (isset($_POST["themMoi"])) {
         <div class="row">
             <div class="col-md-12">
                 <div class="card h-100" >
-                    <form action="" method="post" enctype="multipart/form-data">
+                    <form action="" method="post">
                         <div class="card-body">
                             <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                                 <div class="row">
                                     <div class="col-md-12">
                                         <h2 class="text-center m-3" style="font-weight: bold;">THÔNG TIN NHÂN VIÊN</h2>
+                                    </div>
+                                    <div class="col-md-12 text-center">
+                                        <div class="offset-3 col-md-6 offset-3 text-center">
+                                            <div class="form-group form-group-default">
+                                                <label>Mã nhân viên <span class="text-danger">*</span></label>
+                                                <input type="text" name="maNV" class="form-control text-center" value="<?php echo $maNV; ?>" readonly/>
+                                            </div>
+                                        </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
@@ -125,12 +136,14 @@ if (isset($_POST["themMoi"])) {
                                                     <label>Giới tính <span class="text-danger">*</span></label>
                                                     <div class="d-flex align-items-center ml-2">
                                                         <div class="form-check mr-3">
-                                                            <input type="radio" name="gioiTinh" value="1" class="form-check-input" <?php if(isset($_POST['gioiTinh'])&&($_POST['gioiTinh'])=="1") echo 'checked="checked"'?>>
-                                                            <label style="margin-top: -20px" class="form-check-label">Nam</label>
+                                                            <input type="radio" name="gioiTinh" value="1" class="form-check-input"
+                                                                <?php if(isset($_POST['gioiTinh']) && $_POST['gioiTinh'] == "1") echo 'checked'; ?>>
+                                                            <label class="form-check-label" style="margin-top: -20px">Nam</label>
                                                         </div>
-                                                        <div class="form-check" >
-                                                            <input  type="radio" name="gioiTinh" value="0" class="form-check-input" <?php if(isset($_POST['gioiTinh'])&&($_POST['gioiTinh'])=="0") echo 'checked="checked"'?>>
-                                                            <label  style="margin-top: -20px" class="form-check-label" >Nữ</label>
+                                                        <div class="form-check">
+                                                            <input type="radio" name="gioiTinh" value="0" class="form-check-input"
+                                                                <?php if(isset($_POST['gioiTinh']) && $_POST['gioiTinh'] == "0") echo 'checked'; ?>>
+                                                            <label class="form-check-label" style="margin-top: -20px">Nữ</label>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -141,9 +154,7 @@ if (isset($_POST["themMoi"])) {
                                         <div class="form-group form-group-default">
                                             <label>Hình ảnh nhân viên <span class="text-danger">*</span></label>
                                             <div class="input-group">
-                                                <input type="text" id="hinhAnh" name="hinhAnh" readonly style="width: 80%;" />
-                                                <input type="file" id="fileInput" style="display:none;" onchange="chonHinhanh(event)" />
-                                                <button style="width: 80px;" type="button" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
+                                                <input type="file" class="form-control-file p-1" name="hinhAnh" value="<?php echo $hinhAnh; ?>"/>
                                             </div>
                                         </div>
                                         <div class="form-group form-group-default">

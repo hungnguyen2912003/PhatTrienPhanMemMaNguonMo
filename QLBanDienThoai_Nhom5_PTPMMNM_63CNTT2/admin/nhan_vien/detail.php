@@ -9,12 +9,15 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 // Lấy mã nhân viên từ URL
-$manv = isset($_GET['manv']) ? intval($_GET['manv']) : 0;
+if(isset($_GET['manv'])){
+    $manv = $_GET['manv'];
+}
 
 // Truy vấn thông tin nhân viên
-$sql = "SELECT nv.*, tk.tenTaiKhoan, tk.matKhau, tk.tenHienThi 
+//LEFT JOIN là để trong trường hợp nhân viên chưa có tài khoản thì chỉ hiển thị các dữ liệu của nhân viên mà thôi, các thông tin tài khoản thì không có nên không lấy.
+$sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
         FROM nhan_vien nv 
-        JOIN tai_khoan tk ON nv.idTaiKhoan = tk.idTaiKhoan 
+        LEFT JOIN tai_khoan tk ON nv.idTaiKhoan = tk.idTaiKhoan 
         WHERE nv.id = $manv";
 $result = mysqli_query($connect, $sql);
 $nhanVien = mysqli_fetch_assoc($result);
@@ -74,33 +77,33 @@ if (!$nhanVien) {
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Họ tên nhân viên</label>
-                                            <span class="form-control"><?php echo $nhanVien['hoTen']; ?></span>
+                                            <span class="form-control"><?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></span>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Ngày sinh</label>
-                                                    <span class="form-control"><?php echo date("d/m/Y", strtotime($nhanVien['ngaySinh'])); ?></span>
+                                                    <span class="form-control"><?php if(isset($nhanVien['ngaySinh'])) echo date("d/m/Y", strtotime($nhanVien['ngaySinh'])); ?></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Giới tính</label>
-                                                    <span class="form-control"><?php echo ($nhanVien['gioiTinh'] == 1 ? 'Nam' : 'Nữ'); ?></span>
+                                                    <span class="form-control"><?php if(isset($nhanVien['gioiTinh'])) echo ($nhanVien['gioiTinh'] == 1 ? 'Nam' : 'Nữ'); ?></span>
                                                 </div>
                                             </div>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Địa chỉ</label>
-                                            <span class="form-control"><?php echo $nhanVien['diaChi']; ?></span>
+                                            <span class="form-control"><?php if(isset($nhanVien['diaChi'])) echo $nhanVien['diaChi']; ?></span>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Số điện thoại</label>
-                                            <span class="form-control"><?php echo $nhanVien['soDienThoai']; ?></span>
+                                            <span class="form-control"><?php if(isset($nhanVien['soDienThoai'])) echo $nhanVien['soDienThoai']; ?></span>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Email</label>
-                                            <span class="form-control"><?php echo $nhanVien['email']; ?></span>
+                                            <span class="form-control"><?php if(isset($nhanVien['email'])) echo $nhanVien['email']; ?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -117,19 +120,13 @@ if (!$nhanVien) {
                                             <div class="col-md-4">
                                                 <div class="form-group form-group-default">
                                                     <label>Tên tài khoản</label>
-                                                    <span class="form-control"><?php echo $nhanVien['tenTaiKhoan']; ?></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group form-group-default">
-                                                    <label>Mật khẩu tài khoản</label>
-                                                    <span class="form-control"><?php echo $nhanVien['matKhau']; ?></span>
+                                                    <span class="form-control"><?php if(isset($nhanVien['tenTaiKhoan'])) echo $nhanVien['tenTaiKhoan']; else echo "Chưa thiết lập tài khoản"; ?></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group form-group-default">
                                                     <label>Tên hiển thị tài khoản</label>
-                                                    <span class="form-control"><?php echo $nhanVien['tenHienThi']; ?></span>
+                                                    <span class="form-control"><?php if(isset($nhanVien['tenHienThi'])) echo $nhanVien['tenHienThi']; else echo "Chưa thiết lập tài khoản"; ?></span>
                                                 </div>
                                             </div>
                                         </div>
