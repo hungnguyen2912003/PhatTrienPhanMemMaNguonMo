@@ -12,8 +12,13 @@ $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Kh
 $masp = $_GET['ma_sp'];
 $msg = "";
 
-// Truy vấn để lấy thông tin sản phẩm trước
-$sql_select = "SELECT * FROM san_pham WHERE ma_sp = '$masp'";
+// Truy vấn để lấy thông tin sản phẩm và tên nhà cung cấp
+$sql_select = "
+    SELECT sp.*, ncc.tenNCC 
+    FROM san_pham sp 
+    JOIN nha_cung_cap ncc ON sp.ma_ncc = ncc.id 
+    WHERE sp.ma_sp = '$masp'
+";
 $result_select = mysqli_query($connect, $sql_select);
 $sanpham = mysqli_fetch_assoc($result_select);
 
@@ -21,6 +26,7 @@ if (!$sanpham) {
     echo "<h4>Không tìm thấy thông tin sản phẩm.</h4>";
     exit;
 }
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -86,7 +92,7 @@ if (!$sanpham) {
 
                                             <div class="form-group form-group-default">
                                                 <label>Nhà cung cấp</label>
-                                                <span class="form-control"></span>
+                                                <span class="form-control" <?php if(isset($sanpham['tenNCC'])) echo $sanpham['tenNCC']; ?>></span>
                                             </div>
 
                                         <div class="row">
@@ -124,7 +130,7 @@ if (!$sanpham) {
                                 </div>
                                 <div class="form-group text-center">
                                     <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php?id=<?php echo $sanpham['ma_sp']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
-                                    <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php" class="btn btn-danger btnBack">Quay lại</a>
+                                    <a href="<?php echo $base_url?>/admin/san_pham/index.php" class="btn btn-danger btnBack">Quay lại</a>
                                 </div>
                             </div>
                         </div>
