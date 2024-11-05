@@ -75,8 +75,6 @@ $result = mysqli_query($connect, $sql);
                                   </span>
                                 </div>
                             </div>
-
-
                         </div>
                     </div>
                     <div class="card-body">

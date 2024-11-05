@@ -50,7 +50,7 @@ if (!$nhacungcap) {
                                 <i class="flaticon-right-arrow"></i>
                             </li>
                             <li class="nav-item">
-                                <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php">Danh mục nhà cung ccấp</a>
+                                <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php">Danh mục nhà cung cấp</a>
                             </li>
                             <li class="separator">
                                 <i class="flaticon-right-arrow"></i>
