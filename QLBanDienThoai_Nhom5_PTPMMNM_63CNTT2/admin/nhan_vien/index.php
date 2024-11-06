@@ -9,8 +9,16 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
+$rowsPerPage = 5; //số mẩu tin trên mỗi trang
+if (!isset($_GET['page']))
+{
+    $_GET['page'] = 1;
+}
+//vị trí của mẩu tin đầu tiên trên mỗi trang
+$offset =($_GET['page']-1)*$rowsPerPage;
+
 //Truy vấn toàn bộ thông tin từ bảng nhan_Vien
-$sql = "SELECT * FROM nhan_vien";
+$sql = 'SELECT * FROM nhan_vien LIMIT ' . $offset . ', ' . $rowsPerPage;
 
 //Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
@@ -27,6 +35,33 @@ $result = mysqli_query($connect, $sql);
     .custom-textbox {
         height: 50px;
         border: 2px solid #0094ff;
+    }
+    .pagination-container {
+        display: flex;
+        justify-content: center;
+        margin-top: 10px;
+    }
+
+    .pagination a, .pagination b {
+        display: inline-block;
+        padding: 6px 12px;
+        margin: 5px;
+        text-align: center;
+        text-decoration: none;
+        color: #fff;
+        background-color: #007bff;
+        border-radius: 20px; /* Tạo bo tròn cho nút */
+        font-weight: bold;
+        transition: background-color 0.3s;
+    }
+
+    .pagination a:hover {
+        background-color: #0056b3; /* Màu khi hover */
+    }
+
+    .pagination b {
+        background-color: #0056b3; /* Màu của trang hiện tại */
+        color: #ffffff;
     }
 </style>
 <div class="main-panel">
@@ -125,6 +160,35 @@ $result = mysqli_query($connect, $sql);
                                 ?>
                                 </tbody>
                             </table>
+                            <div class="pagination-container">
+                                <div class="pagination">
+                                    <?php
+                                    $re = mysqli_query($connect, 'SELECT * FROM nhan_vien');
+                                    $numRows = mysqli_num_rows($re);
+                                    $maxPage = ceil($numRows / $rowsPerPage);
+
+                                    // Nút Trang đầu và Trang trước
+                                    if ($_GET['page'] > 1) {
+                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a> ";
+                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($_GET['page'] - 1) . "'>Trang trước</a> ";
+                                    }
+
+                                    for ($i = 1; $i <= $maxPage; $i++) {
+                                        if ($i == $_GET['page']) {
+                                            echo '<b>' . $i . '</b> '; // Trang hiện tại sẽ được bôi đậm
+                                        } else {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $i . "'>" . $i . "</a> ";
+                                        }
+                                    }
+
+                                    // Nút Trang sau và Trang cuối
+                                    if ($_GET['page'] < $maxPage) {
+                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($_GET['page'] + 1) . "'>Trang sau</a> ";
+                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $maxPage . "'>Trang cuối</a> ";
+                                    }
+                                    ?>
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
