@@ -122,7 +122,6 @@ mysqli_close($connect);
                     <div class="card h-100" >
                         <form action="" method="post">
                             <div class="card-body">
-                                <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                                     <div class="row">
                                         <div class="col-md-12">
                                             <h2 class="text-center m-3" style="font-weight: bold;">THÊM MỚI NHÂN VIÊN</h2>
@@ -210,7 +209,6 @@ mysqli_close($connect);
                                     <div class="form-group text-center">
                                         <?php echo $msg?>
                                     </div>
-                                </div>
                             </div>
                         </form>
                     </div>

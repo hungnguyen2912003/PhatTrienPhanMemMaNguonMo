@@ -21,6 +21,12 @@ $result = mysqli_query($connect, $sql);
     <meta charset="UTF-8">
     <title>Danh mục sản phẩm</title>
     <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <style>
+        .custom-textbox {
+            height: 50px;
+            border: 2px solid #0094ff;
+        }
+    </style>
 </head>
 <body>
 <div class="main-panel">
@@ -72,8 +78,19 @@ $result = mysqli_query($connect, $sql);
                     </div>
 
                     <div class="card-body">
+                        <div class="message-container text-center">
+                            <!-- Hiển thị dòng thông báo -->
+                            <?php
+                            if (isset($_SESSION['msg']))
+                            {
+                                echo $_SESSION['msg'];
+                                // Sau khi hiển thị, xóa thông báo để không hiển thị lại sau khi tải lại trang
+                                unset($_SESSION['msg']);
+                            }
+                            ?>
+                        </div>
                         <div class="table-responsive">
-                            <table id="multi-filter-select" class="display table table-striped table-hover table-bordered tableSanPham">
+                            <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
                                 <thead>
                                 <tr class="text-center">
                                     <th>STT</th>
