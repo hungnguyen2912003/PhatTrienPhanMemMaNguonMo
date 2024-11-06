@@ -42,7 +42,7 @@ if (!$nhanVien) {
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="page-title">Chi tiết thông tin nhân viên: <?php echo $nhanVien['hoTen']; ?></h4>
+                            <h4 class="page-title">Chi tiết thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <ul class="breadcrumbs">
@@ -131,13 +131,13 @@ if (!$nhanVien) {
                                             <div class="col-md-4">
                                                 <div class="form-group form-group-default">
                                                     <label>Tên tài khoản</label>
-                                                    <span class="form-control"><?php if(isset($nhanVien['tenTaiKhoan'])) echo $nhanVien['tenTaiKhoan']; else echo "Chưa thiết lập tài khoản"; ?></span>
+                                                    <span class="form-control"><?php if(isset($nhanVien['tenTaiKhoan'])) echo $nhanVien['tenTaiKhoan']; else echo "<span class='text-warning'>Chưa thiết lập tài khoản</span>"; ?></>
                                                 </div>
                                             </div>
                                             <div class="col-md-4">
                                                 <div class="form-group form-group-default">
                                                     <label>Tên hiển thị tài khoản</label>
-                                                    <span class="form-control"><?php if(isset($nhanVien['tenHienThi'])) echo $nhanVien['tenHienThi']; else echo "Chưa thiết lập tài khoản"; ?></span>
+                                                    <span class="form-control"><?php if(isset($nhanVien['tenHienThi'])) echo $nhanVien['tenHienThi']; else echo "<span class='text-warning'>Chưa thiết lập tài khoản</span>"; ?></span>
                                                 </div>
                                             </div>
                                         </div>

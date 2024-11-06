@@ -45,9 +45,11 @@ if (isset($_POST["themMoi"])) {
                 // Thực hiện thêm mới
                 $sql = "INSERT INTO nhan_vien (id, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoTen', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
                 if (mysqli_query($connect, $sql)) {
-                    $msg = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $hoTen thành công!</span>";
+                    $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $hoTen thành công!</span>";
+                    echo "<script>window.location.href = '$base_url/admin/nhan_vien/index.php';</script>";
                 } else {
-                    $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+                    $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+                    echo "<script>window.location.href = '$base_url/admin/nhan_vien/index.php';</script>";
                 }
             }
             // Giải phóng kết quả sau khi kiểm tra
@@ -67,129 +69,156 @@ mysqli_close($connect);
     <meta charset="UTF-8">
     <title>Thêm mới nhân viên</title>
     <link href="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <script>
+        function layAnh(event) {
+            // Get the selected file
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length > 0) {
+                // Extract the file name
+                const fileName = fileInput.files[0].name;
+
+                // Display the file name in the hinhAnh input field
+                document.getElementById('hinhAnh').value = fileName;
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="main-panel">
-    <div class="page-inner">
-        <div class="page-header">
-            <div class="col-md-12">
-                <div class="row">
-                    <div class="col-md-6">
-                        <h4 class="page-title">Thêm mới nhân viên</h4>
-                    </div>
-                    <div class="col-md-6 text-right">
-                        <ul class="breadcrumbs">
-                            <li class="nav-home">
-                                <a href="<?php echo $base_url?>/admin/index.php">
-                                    <i class="flaticon-home"></i>
-                                </a>
-                            </li>
-                            <li class="separator">
-                                <i class="flaticon-right-arrow"></i>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?php echo $base_url?>/admin/nhan_vien/index.php">Danh sách nhân viên</a>
-                            </li>
-                            <li class="separator">
-                                <i class="flaticon-right-arrow"></i>
-                            </li>
-                            <li class="nav-item">
-                                <a href="<?php echo $base_url?>/admin/nhan_vien/create.php">Thêm mới</a>
-                            </li>
-                        </ul>
+    <div class="content">
+        <div class="page-inner">
+            <div class="page-header">
+                <div class="col-md-12">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <h4 class="page-title">Thêm mới nhân viên</h4>
+                        </div>
+                        <div class="col-md-6 text-right">
+                            <ul class="breadcrumbs">
+                                <li class="nav-home">
+                                    <a href="<?php echo $base_url?>/admin/index.php">
+                                        <i class="flaticon-home"></i>
+                                    </a>
+                                </li>
+                                <li class="separator">
+                                    <i class="flaticon-right-arrow"></i>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?php echo $base_url?>/admin/nhan_vien/index.php">Danh sách nhân viên</a>
+                                </li>
+                                <li class="separator">
+                                    <i class="flaticon-right-arrow"></i>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?php echo $base_url?>/admin/nhan_vien/create.php">Thêm mới</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
-        </div>
-        <div class="row">
-            <div class="col-md-12">
-                <div class="card h-100" >
-                    <form action="" method="post">
-                        <div class="card-body">
-                            <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h2 class="text-center m-3" style="font-weight: bold;">THÔNG TIN NHÂN VIÊN</h2>
-                                    </div>
-                                    <div class="col-md-12 text-center">
-                                        <div class="offset-3 col-md-6 offset-3 text-center">
-                                            <div class="form-group form-group-default">
-                                                <label>Mã nhân viên <span class="text-danger">*</span></label>
-                                                <input type="text" name="maNV" class="form-control text-center" value="<?php echo $maNV; ?>" readonly/>
-                                            </div>
+            <div class="row">
+                <div class="col-md-12">
+                    <div class="card h-100" >
+                        <form action="" method="post">
+                            <div class="card-body">
+                                <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2 class="text-center m-3" style="font-weight: bold;">THÊM MỚI NHÂN VIÊN</h2>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default">
-                                            <label>Họ tên nhân viên <span class="text-danger">*</span></label>
-                                            <input type="text" name="hoTen" placeholder="Nhập họ tên nhân viên" class="form-control" value="<?php echo $hoTen; ?>"/>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
+                                        <div class="col-md-12 text-center">
+                                            <div class="offset-3 col-md-6 offset-3 text-center">
                                                 <div class="form-group form-group-default">
-                                                    <label>Ngày sinh <span class="text-danger">*</span></label>
-                                                    <input type="text" name="ngaySinh" class="form-control picker" placeholder="dd/mm/yyyy" autocomplete="off" value="<?php echo $ngaySinh; ?>"/>
+                                                    <label>Mã nhân viên <span class="text-danger">*</span></label>
+                                                    <input type="text" name="maNV" class="form-control text-center" value="<?php echo $maNV; ?>" readonly/>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Giới tính <span class="text-danger">*</span></label>
-                                                    <div class="d-flex align-items-center ml-2">
-                                                        <div class="form-check mr-3">
-                                                            <input type="radio" name="gioiTinh" value="1" class="form-check-input"
-                                                                <?php if(isset($_POST['gioiTinh']) && $_POST['gioiTinh'] == "1") echo 'checked'; ?>>
-                                                            <label class="form-check-label" style="margin-top: -20px">Nam</label>
-                                                        </div>
-                                                        <div class="form-check">
-                                                            <input type="radio" name="gioiTinh" value="0" class="form-check-input"
-                                                                <?php if(isset($_POST['gioiTinh']) && $_POST['gioiTinh'] == "0") echo 'checked'; ?>>
-                                                            <label class="form-check-label" style="margin-top: -20px">Nữ</label>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Họ tên nhân viên <span class="text-danger">*</span></label>
+                                                <input type="text" name="hoTen" placeholder="Nhập họ tên nhân viên" class="form-control" value="<?php echo $hoTen; ?>"/>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Ngày sinh <span class="text-danger">*</span></label>
+                                                        <input type="text" name="ngaySinh" class="form-control picker" placeholder="yyyy-mm-dd" autocomplete="off" value="<?php echo $ngaySinh; ?>"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Giới tính <span class="text-danger">*</span></label>
+                                                        <div class="d-flex align-items-center ml-2">
+                                                            <div class="form-check mr-3">
+                                                                <input type="radio" name="gioiTinh" value="1" class="form-check-input"
+                                                                    <?php if(isset($_POST['gioiTinh']) && $_POST['gioiTinh'] == "1") echo 'checked'; ?>>
+                                                                <label class="form-check-label" style="margin-top: -20px">Nam</label>
+                                                            </div>
+                                                            <div class="form-check">
+                                                                <input type="radio" name="gioiTinh" value="0" class="form-check-input"
+                                                                    <?php if(isset($_POST['gioiTinh']) && $_POST['gioiTinh'] == "0") echo 'checked'; ?>>
+                                                                <label class="form-check-label" style="margin-top: -20px">Nữ</label>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default">
-                                            <label>Hình ảnh nhân viên <span class="text-danger">*</span></label>
-                                            <div class="input-group">
-                                                <input type="file" class="form-control-file p-1" name="hinhAnh" value="<?php echo $hinhAnh; ?>"/>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Hình ảnh nhân viên <span class="text-danger">*</span></label>
+                                                <div class="input-group">
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="col-md-9">
+                                                                <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
+                                                                       value="<?php if(isset($row['Images'])) echo $row['Images']; else echo "Chưa thêm hình ảnh"?>" style="text-align: center;" readonly />
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <input type="file" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" />
+                                                                <button style="width: 80px;" type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="form-group form-group-default">
+                                                <label>Địa chỉ <span class="text-danger">*</span></label>
+                                                <input type="text" name="diaChi" placeholder="Nhập địa chỉ nhân viên" class="form-control" value="<?php echo $diaChi; ?>"/>
                                             </div>
                                         </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Địa chỉ <span class="text-danger">*</span></label>
-                                            <input type="text" name="diaChi" placeholder="Nhập địa chỉ nhân viên" class="form-control" value="<?php echo $diaChi; ?>"/>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Số điện thoại <span class="text-danger">*</span></label>
+                                                <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhân viên" class="form-control" value="<?php echo $soDienThoai; ?>"/>
+                                            </div>
                                         </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default">
-                                            <label>Số điện thoại <span class="text-danger">*</span></label>
-                                            <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhân viên" class="form-control" value="<?php echo $soDienThoai; ?>"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default">
-                                            <label>Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" placeholder="Nhập email nhân viên" class="form-control" value="<?php echo $email; ?>"/>
-                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Email <span class="text-danger">*</span></label>
+                                                <input type="email" name="email" placeholder="Nhập email nhân viên" class="form-control" value="<?php echo $email; ?>"/>
+                                            </div>
 
+                                        </div>
                                     </div>
-                                </div>
-                                <div class="form-group text-center">
-                                    <button type="submit" name="themMoi" class="btn btn-success btnCreate">Thêm mới</button>
-                                    <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
-                                </div>
-                                <div class="form-group text-center">
-                                    <?php echo $msg?>
+                                    <div class="form-group text-center">
+                                        <button type="submit" name="themMoi" class="btn btn-success btnCreate">Thêm mới</button>
+                                        <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <?php echo $msg?>
+                                    </div>
                                 </div>
                             </div>
-                        </div>
-                    </form>
+                        </form>
+                    </div>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <!-- /.content -->
@@ -210,7 +239,7 @@ mysqli_close($connect);
             autoclose: true,
             timepicker: false,
             datepicker: true,
-            format: "d-m-Y",
+            format: "Y-m-d",
             weeks: true
         });
         $.datetimepicker.setLocale('vi');

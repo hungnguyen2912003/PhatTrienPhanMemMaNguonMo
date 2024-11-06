@@ -78,8 +78,19 @@ $result = mysqli_query($connect, $sql);
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="message-container text-center">
+                            <!-- Hiển thị dòng thông báo -->
+                            <?php
+                            if (isset($_SESSION['msg']))
+                            {
+                                echo $_SESSION['msg'];
+                                // Sau khi hiển thị, xóa thông báo để không hiển thị lại sau khi tải lại trang
+                                unset($_SESSION['msg']);
+                            }
+                            ?>
+                        </div>
                         <div class="table-responsive">
-                            <table id="multi-filter-select" class="display table table-striped table-hover tableSupplier">
+                            <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
                                 <thead>
                                 <tr class="text-center">
                                     <th>STT</th>
@@ -100,7 +111,7 @@ $result = mysqli_query($connect, $sql);
                                     echo "<td class='text-center'>$stt</td>";
                                     echo "<td class='text-center'>{$row['id']}</td>";
                                     echo "<td class='text-center'>{$row['tenNCC']}</td>";
-                                    echo "<td class='text-center'><img width='80' src='$base_url/Images/{$row['hinhAnh']}'/></td>";
+                                    echo "<td class='text-center'><img width='80' src='$base_url/Images/{$row['Images']}'/></td>";
                                     echo "<td class='text-center'>{$row['soDienThoai']}</td>";
                                     echo "<td class='text-center'>{$row['email']}</td>";
                                     echo "<td class='text-center'>
@@ -124,4 +135,17 @@ $result = mysqli_query($connect, $sql);
 </div>
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+        // Hàm để ẩn thông báo sau 5 giây
+        function hideMessage() {
+            $('.message-container').fadeOut(); // Ẩn thông báo
+        }
+        // Nếu có thông báo, thiết lập timeout để tự động ẩn sau 5 giây
+        if ($('.message-container').length) {
+            setTimeout(hideMessage, 5000); // 5000 milliseconds = 5 seconds
+        }
+    });
+</script>
 

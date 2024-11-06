@@ -96,8 +96,8 @@ if (!$nhacungcap) {
                                 <div class="col-md-6">
                                     <div class="form-group form-group-default text-center ">
                                         <label>Hình ảnh nhà cung cấp</label><br />
-                                        <?php if (!empty($nhacungcap['hinhAnh'])): ?>
-                                            <img src="<?php echo $base_url; ?>/Images/<?php echo $nhacungcap['hinhAnh']; ?>" alt="Hình ảnh nhà cung cấp" width="200" class="img-fluid">
+                                        <?php if (!empty($nhacungcap['Images'])): ?>
+                                            <img src="<?php echo $base_url; ?>/Images/<?php echo $nhacungcap['Images']; ?>" alt="Hình ảnh nhà cung cấp" width="200" class="img-fluid">
                                         <?php else: ?>
                                             <span class="form-control">Chưa thêm hình ảnh cho nhà cung cấp này</span>
                                         <?php endif; ?>

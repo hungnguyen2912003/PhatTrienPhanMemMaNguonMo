@@ -14,7 +14,6 @@ $sql = "SELECT * FROM nhan_vien";
 
 //Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -77,8 +76,16 @@ $result = mysqli_query($connect, $sql);
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="message-container">
+                        <div class="message-container text-center">
                             <!-- Hiển thị dòng thông báo -->
+                            <?php
+                            if (isset($_SESSION['msg']))
+                            {
+                                echo $_SESSION['msg'];
+                                // Sau khi hiển thị, xóa thông báo để không hiển thị lại sau khi tải lại trang
+                                unset($_SESSION['msg']);
+                            }
+                            ?>
                         </div>
                         <div class="table-responsive">
                             <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
@@ -127,3 +134,16 @@ $result = mysqli_query($connect, $sql);
 </div>
 </body>
 </html>
+
+<script>
+    $(document).ready(function () {
+        // Hàm để ẩn thông báo sau 5 giây
+        function hideMessage() {
+            $('.message-container').fadeOut(); // Ẩn thông báo
+        }
+        // Nếu có thông báo, thiết lập timeout để tự động ẩn sau 5 giây
+        if ($('.message-container').length) {
+            setTimeout(hideMessage, 5000); // 5000 milliseconds = 5 seconds
+        }
+    });
+</script>

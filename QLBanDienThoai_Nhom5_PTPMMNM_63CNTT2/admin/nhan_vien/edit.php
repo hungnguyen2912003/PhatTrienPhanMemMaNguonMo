@@ -15,7 +15,6 @@ $manv = $_GET['manv'];
 $msg = "";
 if (isset($_POST['capNhat']))
 {
-    $id = $_POST['id'];
     $hoTen = $_POST['hoTen'];
     $ngaySinh = $_POST['ngaySinh'];
     $gioiTinh = $_POST['gioiTinh'];
@@ -34,12 +33,14 @@ if (isset($_POST['capNhat']))
             // Hợp lệ nhập liệu: Tiến hành chỉnh sửa
         } else {
             // Cập nhật thông tin nhân viên
-            $sql = "UPDATE nhan_vien SET hoTen='$hoTen', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$id'";
+            $sql = "UPDATE nhan_vien SET hoTen='$hoTen', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
 
             if (mysqli_query($connect, $sql)) {
-                $msg = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoTen thành công!</span>";
+                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoTen thành công!</span>";
+                echo "<script>window.location.href = '$base_url/admin/nhan_vien/index.php';</script>";
             } else {
-                $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+                $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
+                echo "<script>window.location.href = '$base_url/admin/nhan_vien/index.php';</script>";
             }
         }
     }
@@ -58,6 +59,20 @@ $row = mysqli_fetch_assoc($result);
 <head>
     <meta charset="UTF-8">
     <title>Chỉnh sửa nhân viên</title>
+    <link href="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+    <script>
+        function layAnh(event) {
+            // Get the selected file
+            const fileInput = document.getElementById('fileInput');
+            if (fileInput.files.length > 0) {
+                // Extract the file name
+                const fileName = fileInput.files[0].name;
+
+                // Display the file name in the hinhAnh input field
+                document.getElementById('hinhAnh').value = fileName;
+            }
+        }
+    </script>
 </head>
 <body>
 <div class="main-panel">
@@ -100,16 +115,19 @@ $row = mysqli_fetch_assoc($result);
                             <form action="" method="POST">
                                 <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                                 <div class="row">
+                                    <div class="col-md-12">
+                                        <h2 class="text-center m-3" style="font-weight: bold;">CHỈNH SỬA THÔNG TIN NHÂN VIÊN</h2>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Họ tên nhân viên</label>
-                                            <input type="text" name="hoTen" class="form-control" value="<?php echo $row['hoTen']; ?>" required>
+                                            <input type="text" name="hoTen" class="form-control" value="<?php echo $row['hoTen']; ?>">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Ngày sinh</label>
-                                                    <input type="date" name="ngaySinh" class="form-control" value="<?php echo $row['ngaySinh']; ?>" required>
+                                                    <input type="text" name="ngaySinh" class="form-control picker" placeholder="yyyy/mm/dd" autocomplete="off" value="<?php echo $row['ngaySinh']; ?>"/>
                                                 </div>
                                             </div>
 
@@ -133,19 +151,19 @@ $row = mysqli_fetch_assoc($result);
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Số điện thoại</label>
-                                            <input type="text" name="soDienThoai" class="form-control" value="<?php echo $row['soDienThoai']; ?>" required>
+                                            <input type="text" name="soDienThoai" class="form-control" value="<?php echo $row['soDienThoai']; ?>">
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Địa chỉ</label>
-                                            <input type="text" name="diaChi" class="form-control" value="<?php echo $row['diaChi']; ?>" required>
+                                            <input type="text" name="diaChi" class="form-control" value="<?php echo $row['diaChi']; ?>">
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Email</label>
-                                            <input type="email" name="email" class="form-control" value="<?php echo $row['email']; ?>" required>
+                                            <input type="email" name="email" class="form-control" value="<?php echo $row['email']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group text-center">
+                                        <div class="form-group form-group-default text-center">
                                             <label>Hình ảnh nhân viên</label><br>
                                             <?php if ($row['Images']): ?>
                                                 <img src='<?php echo $base_url; ?>/Images/<?php echo $row['Images']; ?>' alt='Hình ảnh đại diện' width="200" class='img-fluid mb-2'>
@@ -153,8 +171,19 @@ $row = mysqli_fetch_assoc($result);
                                             <?php else: ?>
                                                 <div>Không có hình ảnh hiện tại.</div>
                                             <?php endif; ?>
-                                            <div class="input-group">
-                                                <input type="file" class="form-control-file p-1" name="hinhAnh" value="<?php echo $hinhAnh; ?>"/>
+                                            <div class="input-group mb-2 mt-2">
+                                                <div class="col-md-12">
+                                                    <div class="row">
+                                                        <div class="col-md-9">
+                                                            <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
+                                                                   value="<?php if(isset($row['Images'])) echo $row['Images']; else echo "Không có hình ảnh hiện tại."?>" style="text-align: center;" readonly />
+                                                        </div>
+                                                        <div class="col-md-3">
+                                                            <input type="file" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" />
+                                                            <button style="width: 80px;" type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
+                                                        </div>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>
@@ -190,7 +219,7 @@ $row = mysqli_fetch_assoc($result);
             autoclose: true,
             timepicker: false,
             datepicker: true,
-            format: "d/m/Y",
+            format: "Y-m-d",
             weeks: true
         });
         $.datetimepicker.setLocale('vi');
