@@ -152,7 +152,7 @@ mysqli_close($connect);
                                                     <div class="col-md-6">
                                                         <div class="form-group form-group-default">
                                                             <label>Giá bán <span class="text-danger">*</span></label>
-                                                            <input type="text" name="giaBan" value="<?php echo $giaBan; ?>" id="giaBan" placeholder="Nhập giá bán" class="form-control auto">
+                                                            <input type="text" name="giaBan" value="<?php echo $giaBan; ?>" placeholder="Nhập giá bán" class="form-control">
                                                         </div>
                                                     </div>
                                                 </div>
@@ -207,22 +207,5 @@ mysqli_close($connect);
     $(function () {
         //Initialize Select2 Elements
         $('.select').select2()
-    });
-</script>
-<script src="<?php echo $base_url?>/Scripts/jsConvert.js"></script>
-
-<script>
-    $(document).ready(function () {
-        $('.auto').autoNumeric('init'); // Khởi tạo autoNumeric cho các trường
-        $('#giaBan').on('change', function () {
-            var $this = $(this);
-            var demoGet = $this.autoNumeric('get'); // Get the numeric value
-
-            // Update the corresponding hidden field
-            $this.next('input[type="hidden"]').val(demoGet);
-
-            // Set the formatted value back to the input
-            $this.autoNumeric('set', demoGet);
-        });
     });
 </script>
