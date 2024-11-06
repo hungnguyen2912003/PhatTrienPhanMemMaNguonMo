@@ -9,8 +9,14 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-// Lấy mã ncc từ URL
-$maNCC = $_GET['id'];
+// Lấy mã NCC từ URL và kiểm tra sự tồn tại của tham số 'id'
+if (isset($_GET['id'])) {
+    $maNCC = $_GET['id'];
+} else {
+    echo "Mã nhà cung cấp không hợp lệ!";
+    exit();
+}
+
 $msg = "";
 
 if (isset($_POST["capNhat"])) {
@@ -24,8 +30,10 @@ if (isset($_POST["capNhat"])) {
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 8 đến 11 chữ số.</span>";
         } else {
             // Cập nhật thông tin nhà cung cấp
-            $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email', Images='$hinhAnh' WHERE id='$maNCC'";
-            if (mysqli_query($connect, $sql)) {
+            $sql = "UPDATE nha_cung_cap SET tenNCC=?, soDienThoai=?, email=?, Images=? WHERE id=?";
+            $stmt = mysqli_prepare($connect, $sql);
+            mysqli_stmt_bind_param($stmt, 'ssssi', $tenNCC, $soDienThoai, $email, $hinhAnh, $maNCC);
+            if (mysqli_stmt_execute($stmt)) {
                 $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
                 echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
             } else {
@@ -39,10 +47,14 @@ if (isset($_POST["capNhat"])) {
 }
 
 // Truy vấn thông tin nhà cung cấp theo mã
-$sql = "SELECT * FROM nha_cung_cap WHERE id = $maNCC";
-$result = mysqli_query($connect, $sql);
+$sql = "SELECT * FROM nha_cung_cap WHERE id = ?";
+$stmt = mysqli_prepare($connect, $sql);
+mysqli_stmt_bind_param($stmt, 'i', $maNCC);
+mysqli_stmt_execute($stmt);
+$result = mysqli_stmt_get_result($stmt);
 $row = mysqli_fetch_assoc($result);
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -99,7 +111,7 @@ $row = mysqli_fetch_assoc($result);
             <div class="row">
                 <div class="col-md-12">
                     <div class="card h-100">
-                        <form action="" method="post" >
+                        <form action="" method="post">
                             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                             <div class="card-body">
                                 <div class="row">
@@ -144,7 +156,6 @@ $row = mysqli_fetch_assoc($result);
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                 </div>
 
