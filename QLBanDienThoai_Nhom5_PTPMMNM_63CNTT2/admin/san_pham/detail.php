@@ -131,7 +131,7 @@ if (!$sanpham) {
 
                                 </div>
                                 <div class="form-group text-center">
-                                    <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php?id=<?php echo $sanpham['ma_sp']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                                    <a href="<?php echo $base_url?>/admin/san_pham/edit.php?ma_sp=<?php echo $sanpham['ma_sp']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
                                     <a href="<?php echo $base_url?>/admin/san_pham/index.php" class="btn btn-danger btnBack">Quay lại</a>
                                 </div>
                             </div>

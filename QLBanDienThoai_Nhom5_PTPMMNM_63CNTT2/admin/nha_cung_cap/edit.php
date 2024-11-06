@@ -33,6 +33,7 @@ if (isset($_POST["capNhat"])) {
             $sql = "UPDATE nha_cung_cap SET tenNCC=?, soDienThoai=?, email=?, Images=? WHERE id=?";
             $stmt = mysqli_prepare($connect, $sql);
             mysqli_stmt_bind_param($stmt, 'ssssi', $tenNCC, $soDienThoai, $email, $hinhAnh, $maNCC);
+
             if (mysqli_stmt_execute($stmt)) {
                 $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
                 echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
