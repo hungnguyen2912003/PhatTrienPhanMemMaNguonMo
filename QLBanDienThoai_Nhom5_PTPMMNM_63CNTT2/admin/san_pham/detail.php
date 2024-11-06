@@ -122,8 +122,10 @@ if (!$sanpham) {
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Mô tả</label>
-                                            <textarea class="form-control"><?php if(isset($sanpham['moTa'])) echo $sanpham['moTa']; ?></textarea>
+                                            <textarea class="form-control" readonly><?php if(isset($sanpham['moTa'])) echo $sanpham['moTa']; ?></textarea>
                                         </div>
+
+
                                     </div>
 
 
