@@ -92,7 +92,7 @@ if (!$sanpham) {
 
                                             <div class="form-group form-group-default">
                                                 <label>Nhà cung cấp</label>
-                                                <span class="form-control" <?php if(isset($sanpham['tenNCC'])) echo $sanpham['tenNCC']; ?>></span>
+                                                <span class="form-control"> <?php if(isset($sanpham['tenNCC'])) echo $sanpham['tenNCC']; ?></span>
                                             </div>
 
                                         <div class="row">
