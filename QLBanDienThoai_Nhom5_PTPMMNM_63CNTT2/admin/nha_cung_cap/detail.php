@@ -79,23 +79,23 @@ if (!$nhacungcap) {
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default">
-                                                <label>Tên nhà cung cấp</label>
+                                                <label>Tên nhà cung cấp </label>
                                                 <span class="form-control"><?php if(isset($nhacungcap['tenNCC'])) echo $nhacungcap['tenNCC']; ?></span>
                                             </div>
                                         </div>
                                     </div>
                                     <div class="form-group form-group-default">
-                                        <label>Số điện thoại</label>
+                                        <label>Số điện thoại </label>
                                         <span class="form-control"><?php if(isset($nhacungcap['soDienThoai'])) echo $nhacungcap['soDienThoai']; ?></span>
                                     </div>
                                     <div class="form-group form-group-default">
-                                        <label>Email</label>
+                                        <label>Email </label>
                                         <span class="form-control"><?php if(isset($nhacungcap['email'])) echo $nhacungcap['email']; ?></span>
                                     </div>
                                 </div>
                                 <div class="col-md-6">
                                     <div class="form-group form-group-default text-center ">
-                                        <label>Hình ảnh nhà cung cấp</label><br />
+                                        <label>Hình ảnh nhà cung cấp </label><br />
                                         <?php if (!empty($nhacungcap['Images'])): ?>
                                             <img src="<?php echo $base_url; ?>/Images/<?php echo $nhacungcap['Images']; ?>" alt="Hình ảnh nhà cung cấp" width="200" class="img-fluid">
                                         <?php else: ?>
@@ -107,7 +107,7 @@ if (!$nhacungcap) {
                             </div>
                         </div>
                         <div class="form-group text-center">
-                            <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php?id=<?php echo $nhacungcap['id']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                            <a href="<?php echo $base_url?>/admin/nha_cung_cap/edit.php?id=<?php echo $nhacungcap['id']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
                             <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php" class="btn btn-danger btnBack">Quay lại</a>
                         </div>
 

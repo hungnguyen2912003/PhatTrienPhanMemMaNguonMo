@@ -130,21 +130,11 @@ $row = mysqli_fetch_assoc($result);
                         <div class="card-body">
                             <form action="" method="POST">
                                 <div class="row">
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Mã sản phẩm</label>
-                                                    <input type="text" class="form-control" name="ma_sp" value="<?php echo $sanpham['ma_sp']; ?>" readonly>
-                                                </div>
-                                            </div>
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Tên sản phẩm <span class="text-danger">*</span></label>
                                                     <input type="text" class="form-control" name="ten_sp" value="<?php echo $sanpham['ten_sp']; ?>">
                                                 </div>
-                                            </div>
-                                        </div>
                                         <div class="form-group form-group-default">
                                             <label>Nhà cung cấp <span class="text-danger">*</span></label>
                                             <select class="form-control" name="ma_ncc">
@@ -199,7 +189,7 @@ $row = mysqli_fetch_assoc($result);
                                     </div>
                                 </div>
                                 <div class="form-group text-center mt-4">
-                                    <button type="submit" class="btn btn-primary" name="capNhat">Cập nhật sản phẩm</button>
+                                    <button type="submit" class="btn btn-primary" name="capNhat">Cập nhật</button>
                                     <a href="<?php echo $base_url?>/admin/san_pham/index.php" class="btn btn-danger btnBack">Quay lại</a>
                                 </div>
                             </form>

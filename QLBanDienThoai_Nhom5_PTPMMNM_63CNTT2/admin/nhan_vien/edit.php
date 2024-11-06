@@ -120,20 +120,20 @@ $row = mysqli_fetch_assoc($result);
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
-                                            <label>Họ tên nhân viên</label>
+                                            <label>Họ tên nhân viên <span class="text-danger">*</span></label>
                                             <input type="text" name="hoTen" class="form-control" value="<?php echo $row['hoTen']; ?>">
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
-                                                    <label>Ngày sinh</label>
+                                                    <label>Ngày sinh <span class="text-danger">*</span></label>
                                                     <input type="text" name="ngaySinh" class="form-control picker" placeholder="yyyy/mm/dd" autocomplete="off" value="<?php echo $row['ngaySinh']; ?>"/>
                                                 </div>
                                             </div>
 
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
-                                                    <label>Giới tính</label>
+                                                    <label>Giới tính <span class="text-danger">*</span></label>
                                                     <div class="d-flex align-items-center ml-2">
                                                         <div class="form-check mr-3">
                                                             <input type="radio" name="gioiTinh" value="1" class="form-check-input"
@@ -150,21 +150,21 @@ $row = mysqli_fetch_assoc($result);
                                             </div>
                                         </div>
                                         <div class="form-group form-group-default">
-                                            <label>Số điện thoại</label>
+                                            <label>Số điện thoại <span class="text-danger">*</span></label>
                                             <input type="text" name="soDienThoai" class="form-control" value="<?php echo $row['soDienThoai']; ?>">
                                         </div>
                                         <div class="form-group form-group-default">
-                                            <label>Địa chỉ</label>
+                                            <label>Địa chỉ <span class="text-danger">*</span></label>
                                             <input type="text" name="diaChi" class="form-control" value="<?php echo $row['diaChi']; ?>">
                                         </div>
                                         <div class="form-group form-group-default">
-                                            <label>Email</label>
+                                            <label>Email <span class="text-danger">*</span></label>
                                             <input type="email" name="email" class="form-control" value="<?php echo $row['email']; ?>">
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default text-center">
-                                            <label>Hình ảnh nhân viên</label><br>
+                                            <label>Hình ảnh nhân viên <span class="text-danger">*</span></label><br>
                                             <?php if ($row['Images']): ?>
                                                 <img src='<?php echo $base_url; ?>/Images/<?php echo $row['Images']; ?>' alt='Hình ảnh đại diện' width="200" class='img-fluid mb-2'>
                                                 <div>Tên hình ảnh: <strong><?php echo $row['Images']; ?></strong></div>
