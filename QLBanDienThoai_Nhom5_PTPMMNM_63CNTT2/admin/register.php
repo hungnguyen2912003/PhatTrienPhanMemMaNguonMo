@@ -98,20 +98,20 @@ if (isset($_POST['dangKy'])) {
             <form action="" method="post">
                 <fieldset>
                     <div class="form-group form-group-default">
-                        <label>Tên tài khoản</label>
+                        <label>Tên tài khoản <span class="text-danger">*</span></label>
                         <input class="form-control" placeholder="Tên đăng nhập" name="username" type="text" autofocus />
                     </div>
                     <div class="form-group form-group-default">
-                        <label>Mật khẩu</label>
+                        <label>Mật khẩu <span class="text-danger">*</span></label>
                         <input class="form-control" placeholder="Mật khẩu" name="password" type="password" value="" />
                     </div>
                     <div class="form-group form-group-default">
-                        <label>Tên hiển thị</label>
+                        <label>Tên hiển thị <span class="text-danger">*</span></label>
                         <input class="form-control" placeholder="Tên hiển thị" name="tenhienthi" type="text" autofocus />
                     </div>
                     <div class="form-group form-group-default">
-                        <label>Mã nhân viên</label><span class="text-danger">*</span>
-                        <input class="form-control" placeholder="Tên hiển thị" name="maNV" type="text" autofocus />
+                        <label>Mã nhân viên <span class="text-danger">*</span></label>
+                        <input class="form-control" placeholder="Mã nhân viên" name="maNV" type="text" autofocus />
                     </div>
                     <div class="form-group form-group-default text-center font-weight-bold">
                         <p class="text-danger"><?php echo $error;?></p>

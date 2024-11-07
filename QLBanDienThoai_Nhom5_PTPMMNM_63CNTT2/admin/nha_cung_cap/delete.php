@@ -1,29 +1,35 @@
 <?php
 include '../checkSession.php';
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
-
+include('../includes/header.html');
+include('../_PartialSideBar.html');
+include('../includes/footer.html');
 
 // Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-// Lấy mã ncc từ URL
-$maNCC = $_GET['id'];
+// Lấy mã nhà cung cấp từ URL
+if(isset($_GET['id'])){
+    $maNCC = $_GET['id'];
+}
 $msg = "";
 
-if(isset($_POST['deleteBtn'])){
-    // Xóa nhân viên theo mã nhân viên
+// Kiểm tra nếu nút xóa được nhấn
+if(isset($_POST['deleteBtn']) && !empty($maNCC)){
+    // Xóa nhà cung cấp theo mã
     $sqlDelete = "DELETE FROM nha_cung_cap WHERE id = '$maNCC'";
 
     if (mysqli_query($connect, $sqlDelete)) {
-        // Lưu thông báo thành công vào session
+        // Lưu thông báo thành công vào session và chuyển hướng
         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công nhà cung cấp có mã $maNCC</span>";
         echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
+        exit();
     } else {
-        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
-        echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
+        $msg = "<span class='text-danger font-weight-bold'>Lỗi: " . mysqli_error($connect) . "</span>";
     }
 }
+
 // Truy vấn thông tin nhà cung cấp
 $sql = "SELECT * FROM nha_cung_cap WHERE id = '$maNCC'";
 $result = mysqli_query($connect, $sql);
@@ -33,7 +39,7 @@ $nhacungcap = mysqli_fetch_assoc($result);
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chi tiết nhà cung cấp</title>
+    <title>Xóa thông tin nhà cung cấp</title>
 </head>
 <body>
 <div class="main-panel">
@@ -43,7 +49,7 @@ $nhacungcap = mysqli_fetch_assoc($result);
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="page-title">Chi tiết thông tin nhà cung cấp: <?php echo $nhacungcap['tenNCC']; ?></h4>
+                            <h4 class="page-title">Xóa thông tin nhà cung cấp: <?php echo $nhacungcap['tenNCC']; ?></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <ul class="breadcrumbs">
@@ -62,7 +68,7 @@ $nhacungcap = mysqli_fetch_assoc($result);
                                     <i class="flaticon-right-arrow"></i>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/nha_cung_cap/detail.php">Xem chi tiết</a>
+                                    <a href="<?php echo $base_url?>/admin/nha_cung_cap/delete.php">Xóa nhà cung cấp</a>
                                 </li>
                             </ul>
                         </div>
@@ -109,14 +115,16 @@ $nhacungcap = mysqli_fetch_assoc($result);
                                             <?php endif; ?>
                                         </div>
                                     </div>
-
                                 </div>
                             </div>
-                            <div class="form-group text-center">
-                                <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php?id=<?php echo $nhacungcap['id']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                            <!-- Form xóa -->
+                            <form method="POST" class="text-center">
+                                <button type="submit" name="deleteBtn" class="btn btn-info">Xoá</button>
                                 <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php" class="btn btn-danger btnBack">Quay lại</a>
+                            </form>
+                            <div class="form-group text-center">
+                                <?php echo $msg?>
                             </div>
-
                         </div>
                     </div>
                 </div>
@@ -126,4 +134,3 @@ $nhacungcap = mysqli_fetch_assoc($result);
 </div>
 </body>
 </html>
-
