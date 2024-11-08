@@ -139,7 +139,7 @@ $result = mysqli_query($connect, $sql);
                                 </thead>
                                 <tbody>
                                 <?php
-                                $stt = 1;
+                                $stt = $offset + 1;
                                 // Lặp qua các hàng dữ liệu từ kết quả truy vấn
                                 while($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
@@ -164,7 +164,7 @@ $result = mysqli_query($connect, $sql);
                                 <div class="pagination">
                                     <?php
                                     // Get total number of rows
-                                    $re = mysqli_query($connect, 'SELECT * FROM nhan_vien');
+                                    $re = mysqli_query($connect, 'SELECT * FROM nha_cung_cap');
                                     $numRows = mysqli_num_rows($re);
                                     $maxPage = ceil($numRows / $rowsPerPage);
                                     $currentPage = $_GET['page'];
