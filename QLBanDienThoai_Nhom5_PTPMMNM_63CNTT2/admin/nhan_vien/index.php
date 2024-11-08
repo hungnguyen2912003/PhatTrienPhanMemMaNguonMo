@@ -9,7 +9,7 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$rowsPerPage = 4; //số mẩu tin trên mỗi trang
+$rowsPerPage = 5; //số mẩu tin trên mỗi trang
 if (!isset($_GET['page']))
 {
     $_GET['page'] = 1;
@@ -17,11 +17,43 @@ if (!isset($_GET['page']))
 //vị trí của mẩu tin đầu tiên trên mỗi trang
 $offset =($_GET['page']-1)*$rowsPerPage;
 
-//Truy vấn toàn bộ thông tin từ bảng nhan_Vien
-$sql = "SELECT * FROM nhan_vien LIMIT $offset, $rowsPerPage";
+/////////////////////////////////////////////////////////////
+/// Xử lý tìm kiếm
+// Nếu người dùng nhấn nút tìm kiếm
+if (isset($_POST['btnTimKiem'])) {
+    $str = trim($_POST['searchtext']);
+    if (empty($str)) {
+        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Họ tên nhân viên cần tìm kiếm không được bỏ trống</span>";
+    } else {
+        // Truy vấn tìm kiếm
+        $sql = "SELECT * FROM nhan_vien WHERE LOWER(hoTen) LIKE LOWER('%$str%')";
+        $result = mysqli_query($connect, $sql);
 
-//Gửi truy vấn đến cơ sở dữ liệu
-$result = mysqli_query($connect, $sql);
+        // Kiểm tra nếu không có kết quả tìm kiếm
+        if (mysqli_num_rows($result) > 0) {
+            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả họ tên có từ khoá: '$str'</span>";
+        } else {
+            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khoá: '$str'</span>";
+        }
+        // Reset lại phân trang về trang 1
+        $_GET['page'] = 1;
+    }
+} else {
+    // Nếu không tìm kiếm thì lấy toàn bộ danh sách
+    $sql = "SELECT * FROM nhan_vien LIMIT $offset, $rowsPerPage";
+    $result = mysqli_query($connect, $sql);
+}
+
+// Lấy tổng số kết quả tìm kiếm (dùng trong phân trang)
+if (isset($_POST['btnTimKiem'])) {
+    $count_sql = "SELECT COUNT(*) FROM nhan_vien WHERE LOWER(hoTen) LIKE LOWER('%$str%')";
+    $count_result = mysqli_query($connect, $count_sql);
+    $count_row = mysqli_fetch_row($count_result);
+    $numRows = $count_row[0];
+} else {
+    $re = mysqli_query($connect, 'SELECT * FROM nhan_vien');
+    $numRows = mysqli_num_rows($re);
+}
 ?>
 
 <!DOCTYPE html>
@@ -101,12 +133,14 @@ $result = mysqli_query($connect, $sql);
                                 </div>
                             </div>
                             <div class="col-md-5">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhân viên bạn muốn tìm kiếm">
-                                    <span class="input-group-append">
-                                        <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
-                                  </span>
-                                </div>
+                                <form action="" method="post">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhân viên bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
+                                        <span class="input-group-append">
+                                            <button type="submit" name="btnTimKiem" class="btn btn-info btn-flat">Tìm kiếm</button>
+                                        </span>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -140,6 +174,7 @@ $result = mysqli_query($connect, $sql);
                                 <?php
                                 $stt = $offset + 1;
                                 //mysqli_fetch_assoc lấy một hàng dữ liệu từ kết quả truy vấn ($result) dưới dạng mảng kết hợp. Mỗi lần while lặp, nó sẽ lấy một hàng mới cho đến khi hết dữ liệu
+                                //mysqli_fetch_assoc lấy một hàng dữ liệu từ kết quả truy vấn ($result) dưới dạng mảng kết hợp. Mỗi lần while lặp, nó sẽ lấy một hàng mới cho đến khi hết dữ liệu
                                 while($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
                                     echo "<td class='text-center'>$stt</td>";
@@ -163,9 +198,6 @@ $result = mysqli_query($connect, $sql);
                             <div class="pagination-container">
                                 <div class="pagination">
                                     <?php
-                                    // Get total number of rows
-                                    $re = mysqli_query($connect, 'SELECT * FROM nhan_vien');
-                                    $numRows = mysqli_num_rows($re);
                                     $maxPage = ceil($numRows / $rowsPerPage);
                                     $currentPage = $_GET['page'];
 
