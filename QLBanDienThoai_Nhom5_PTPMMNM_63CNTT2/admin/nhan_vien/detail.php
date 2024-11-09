@@ -124,7 +124,7 @@ if (empty($manv)) {
                                         <div class="form-group form-group-default text-center">
                                             <label>Hình ảnh đại diện</label>
                                             <?php if (!empty($nhanVien['Images'])): ?>
-                                                <img src="<?php echo $base_url; ?>/Images/<?php echo $nhanVien['Images']; ?>" alt="Hình ảnh đại diện" width="200" class="img-fluid">
+                                                <img src="<?php echo $base_url; ?>/Images/<?php echo $nhanVien['Images']; ?>" alt="Hình ảnh đại diện" width="250" class="img-fluid p-2">
                                                 <div class="mt-1">Tên hình ảnh: <strong><?php echo $nhanVien['Images']; ?></strong></div>
                                             <?php else: ?>
                                                 <span class="form-control">Chưa thêm hình ảnh cho nhân viên này</span>
