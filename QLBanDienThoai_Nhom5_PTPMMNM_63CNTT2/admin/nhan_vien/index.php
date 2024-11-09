@@ -1,4 +1,5 @@
 <?php
+session_start();
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include ('../_PartialSideBar.html');
@@ -262,3 +263,15 @@ if (isset($_POST['btnTimKiem'])) {
 </div>
 </body>
 </html>
+<script>
+    $(document).ready(function () {
+        // Hàm để ẩn thông báo sau 5 giây
+        function hideMessage() {
+            $('.message-container').fadeOut(); // Ẩn thông báo
+        }
+        // Nếu có thông báo, thiết lập timeout để tự động ẩn sau 5 giây
+        if ($('.message-container').length) {
+            setTimeout(hideMessage, 5000); // 5000 milliseconds = 5 seconds
+        }
+    });
+</script>
