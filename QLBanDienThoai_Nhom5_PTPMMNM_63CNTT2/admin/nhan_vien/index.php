@@ -1,5 +1,4 @@
 <?php
-include '../checkSession.php';
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include ('../_PartialSideBar.html');
@@ -10,15 +9,15 @@ $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 $rowsPerPage = 5; //số mẩu tin trên mỗi trang
-if (!isset($_GET['page']))
-{
+if (!isset($_GET['page'])) {
     $_GET['page'] = 1;
 }
 //vị trí của mẩu tin đầu tiên trên mỗi trang
-$offset =($_GET['page']-1)*$rowsPerPage;
+$offset = ($_GET['page']-1) * $rowsPerPage;
 
 /////////////////////////////////////////////////////////////
 /// Xử lý tìm kiếm
+$searchResult = false; // Biến kiểm tra kết quả tìm kiếm
 // Nếu người dùng nhấn nút tìm kiếm
 if (isset($_POST['btnTimKiem'])) {
     $str = trim($_POST['searchtext']);
@@ -32,11 +31,10 @@ if (isset($_POST['btnTimKiem'])) {
         // Kiểm tra nếu không có kết quả tìm kiếm
         if (mysqli_num_rows($result) > 0) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả họ tên có từ khoá: '$str'</span>";
+            $searchResult = true; // Đặt biến kiểm tra kết quả tìm kiếm là true
         } else {
             $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khoá: '$str'</span>";
         }
-        // Reset lại phân trang về trang 1
-        $_GET['page'] = 1;
     }
 } else {
     // Nếu không tìm kiếm thì lấy toàn bộ danh sách
@@ -44,16 +42,6 @@ if (isset($_POST['btnTimKiem'])) {
     $result = mysqli_query($connect, $sql);
 }
 
-// Lấy tổng số kết quả tìm kiếm (dùng trong phân trang)
-if (isset($_POST['btnTimKiem'])) {
-    $count_sql = "SELECT COUNT(*) FROM nhan_vien WHERE LOWER(hoTen) LIKE LOWER('%$str%')";
-    $count_result = mysqli_query($connect, $count_sql);
-    $count_row = mysqli_fetch_row($count_result);
-    $numRows = $count_row[0];
-} else {
-    $re = mysqli_query($connect, 'SELECT * FROM nhan_vien');
-    $numRows = mysqli_num_rows($re);
-}
 ?>
 
 <!DOCTYPE html>
@@ -173,8 +161,6 @@ if (isset($_POST['btnTimKiem'])) {
                                 <tbody>
                                 <?php
                                 $stt = $offset + 1;
-                                //mysqli_fetch_assoc lấy một hàng dữ liệu từ kết quả truy vấn ($result) dưới dạng mảng kết hợp. Mỗi lần while lặp, nó sẽ lấy một hàng mới cho đến khi hết dữ liệu
-                                //mysqli_fetch_assoc lấy một hàng dữ liệu từ kết quả truy vấn ($result) dưới dạng mảng kết hợp. Mỗi lần while lặp, nó sẽ lấy một hàng mới cho đến khi hết dữ liệu
                                 while($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
                                     echo "<td class='text-center'>$stt</td>";
@@ -195,52 +181,40 @@ if (isset($_POST['btnTimKiem'])) {
                                 ?>
                                 </tbody>
                             </table>
-                            <div class="pagination-container">
-                                <div class="pagination">
-                                    <?php
-                                    $maxPage = ceil($numRows / $rowsPerPage);
-                                    $currentPage = $_GET['page'];
+                            <?php if (!$searchResult) { // Ẩn phân trang nếu có kết quả tìm kiếm ?>
+                                <div class="pagination-container">
+                                    <div class="pagination">
+                                        <?php
+                                        // Get total number of rows
+                                        $re = mysqli_query($connect, 'SELECT * FROM nhan_vien');
+                                        $numRows = mysqli_num_rows($re);
+                                        $maxPage = ceil($numRows / $rowsPerPage);
+                                        $currentPage = $_GET['page'];
 
-                                    // Display "Trang đầu" and "Trang trước"
-                                    if ($currentPage > 1) {
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a> ";
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "'>Trang trước</a> ";
-                                    }
-
-                                    $pagesPerSet = 5;
-                                    $currentSet = ceil($_GET['page'] / $pagesPerSet);
-
-                                    // Calculate start and end page for current set
-                                    $startPage = ($currentSet - 1) * $pagesPerSet + 1;
-                                    $endPage = min($startPage + $pagesPerSet - 1, $maxPage);
-
-                                    // Display "..." before the pagination block if necessary
-                                    if ($startPage > 1) {
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($startPage - 1) . "'>...</a> ";
-                                    }
-
-                                    // Display page numbers
-                                    for ($i = $startPage; $i <= $endPage; $i++) {
-                                        if ($i == $currentPage) {
-                                            echo "<b>$i</b> "; // Current page, bolded
-                                        } else {
-                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $i . "'>$i</a> ";
+                                        // Display "Trang đầu" and "Trang trước"
+                                        if ($currentPage > 1) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a>";
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "'>Trang trước</a>";
                                         }
-                                    }
 
-                                    // Display "..." after the pagination block if necessary
-                                    if ($endPage < $maxPage) {
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($endPage + 1) . "'>...</a> ";
-                                    }
+                                        // Display page numbers
+                                        for ($page = max(1, $currentPage - 2); $page <= min($maxPage, $currentPage + 2); $page++) {
+                                            if ($page == $currentPage) {
+                                                echo "<b>$page</b>";
+                                            } else {
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$page'>$page</a>";
+                                            }
+                                        }
 
-                                    // Display "Trang sau" and "Trang cuối"
-                                    if ($currentPage < $maxPage) {
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "'>Trang sau</a> ";
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $maxPage . "'>Trang cuối</a> ";
-                                    }
-                                    ?>
+                                        // Display "Trang sau" and "Trang cuối"
+                                        if ($currentPage < $maxPage) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "'>Trang sau</a>";
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$maxPage'>Trang cuối</a>";
+                                        }
+                                        ?>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
@@ -250,16 +224,3 @@ if (isset($_POST['btnTimKiem'])) {
 </div>
 </body>
 </html>
-
-<script>
-    $(document).ready(function () {
-        // Hàm để ẩn thông báo sau 5 giây
-        function hideMessage() {
-            $('.message-container').fadeOut(); // Ẩn thông báo
-        }
-        // Nếu có thông báo, thiết lập timeout để tự động ẩn sau 5 giây
-        if ($('.message-container').length) {
-            setTimeout(hideMessage, 5000); // 5000 milliseconds = 5 seconds
-        }
-    });
-</script>

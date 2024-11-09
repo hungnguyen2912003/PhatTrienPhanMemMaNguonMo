@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project version="4">
+  <component name="SqlDialectMappings">
+    <file url="file://$PROJECT_DIR$/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/admin/nhan_vien/delete.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/admin/nhan_vien/detail.php" dialect="GenericSQL" />
+    <file url="file://$PROJECT_DIR$/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/admin/nhan_vien/edit.php" dialect="GenericSQL" />
+  </component>
+</project>

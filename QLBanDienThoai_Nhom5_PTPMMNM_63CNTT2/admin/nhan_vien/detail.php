@@ -1,30 +1,33 @@
 <?php
-include '../checkSession.php';
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include('../_PartialSideBar.html');
 include('../includes/footer.html');
 
 // Kết nối cơ sở dữ liệu
-$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
+$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") or die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 // Lấy mã nhân viên từ URL
-if(isset($_GET['manv'])){
-    $manv = $_GET['manv'];
-}
+$manv = isset($_GET['manv']) ? $_GET['manv'] : "";
 
-// Truy vấn thông tin nhân viên
-//LEFT JOIN là để trong trường hợp nhân viên chưa có tài khoản thì chỉ hiển thị các dữ liệu của nhân viên mà thôi, các thông tin tài khoản thì không có nên không lấy.
-$sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
-        FROM nhan_vien nv 
-        LEFT JOIN tai_khoan tk ON nv.idTaiKhoan = tk.idTaiKhoan 
-        WHERE nv.id = $manv";
-$result = mysqli_query($connect, $sql);
-$nhanVien = mysqli_fetch_assoc($result);
+// Biến thông báo
+$msg = "";
 
-if (!$nhanVien) {
-    echo "<h4>Không tìm thấy thông tin nhân viên.</h4>";
-    exit;
+// Kiểm tra mã nhân viên
+if (empty($manv)) {
+    $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
+} else {
+    // Truy vấn thông tin nhân viên trực tiếp
+    $sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
+            FROM nhan_vien nv 
+            LEFT JOIN tai_khoan tk ON nv.idTaiKhoan = tk.idTaiKhoan 
+            WHERE nv.id = '$manv'";
+    $result = mysqli_query($connect, $sql);
+    $nhanVien = mysqli_fetch_assoc($result);
+
+    if (!$nhanVien) {
+        $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
+    }
 }
 ?>
 
@@ -42,12 +45,12 @@ if (!$nhanVien) {
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="page-title">Chi tiết thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></h4>
+                            <h4 class="page-title">Chi tiết thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; else echo 'Không xác định';?></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <ul class="breadcrumbs">
                                 <li class="nav-home">
-                                    <a href="<?php echo $base_url?>/admin/index.php">
+                                    <a href="<?php echo $base_url ?>/admin/index.php">
                                         <i class="flaticon-home"></i>
                                     </a>
                                 </li>
@@ -55,13 +58,13 @@ if (!$nhanVien) {
                                     <i class="flaticon-right-arrow"></i>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/nhan_vien/index.php">Danh sách nhân viên</a>
+                                    <a href="<?php echo $base_url ?>/admin/nhan_vien/index.php">Danh sách nhân viên</a>
                                 </li>
                                 <li class="separator">
                                     <i class="flaticon-right-arrow"></i>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/nhan_vien/detail.php">Xem chi tiết</a>
+                                    <a href="<?php echo $base_url ?>/admin/nhan_vien/detail.php">Xem chi tiết</a>
                                 </li>
                             </ul>
                         </div>
@@ -72,53 +75,44 @@ if (!$nhanVien) {
                 <div class="col-md-12">
                     <div class="card h-100">
                         <div class="card-body">
-                            <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
+                            <?php if (!empty($msg)): ?>
+                                <?php echo $msg; ?>
+                            <?php else: ?>
                                 <div class="row">
                                     <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Mã nhân viên</label>
-                                                    <span class="form-control"><?php if(isset($nhanVien['id'])) echo $nhanVien['id']; ?></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Họ tên nhân viên</label>
-                                                    <span class="form-control"><?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></span>
-                                                </div>
-                                            </div>
+                                        <!-- Employee Information -->
+                                        <div class="form-group">
+                                            <label>Mã nhân viên</label>
+                                            <span class="form-control"><?php echo $nhanVien['id']; ?></span>
                                         </div>
-
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Ngày sinh</label>
-                                                    <span class="form-control"><?php if(isset($nhanVien['ngaySinh'])) echo date("d/m/Y", strtotime($nhanVien['ngaySinh'])); ?></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Giới tính</label>
-                                                    <span class="form-control"><?php if(isset($nhanVien['gioiTinh'])) echo ($nhanVien['gioiTinh'] == 1 ? 'Nam' : 'Nữ'); ?></span>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+                                            <label>Họ tên nhân viên</label>
+                                            <span class="form-control"><?php echo $nhanVien['hoTen']; ?></span>
                                         </div>
-                                        <div class="form-group form-group-default">
+                                        <div class="form-group">
+                                            <label>Ngày sinh</label>
+                                            <span class="form-control"><?php echo date("d/m/Y", strtotime($nhanVien['ngaySinh'])); ?></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Giới tính</label>
+                                            <span class="form-control"><?php echo ($nhanVien['gioiTinh'] == 1 ? 'Nam' : 'Nữ'); ?></span>
+                                        </div>
+                                        <div class="form-group">
                                             <label>Địa chỉ</label>
-                                            <span class="form-control"><?php if(isset($nhanVien['diaChi'])) echo $nhanVien['diaChi']; ?></span>
+                                            <span class="form-control"><?php echo $nhanVien['diaChi']; ?></span>
                                         </div>
-                                        <div class="form-group form-group-default">
+                                        <div class="form-group">
                                             <label>Số điện thoại</label>
-                                            <span class="form-control"><?php if(isset($nhanVien['soDienThoai'])) echo $nhanVien['soDienThoai']; ?></span>
+                                            <span class="form-control"><?php echo $nhanVien['soDienThoai']; ?></span>
                                         </div>
-                                        <div class="form-group form-group-default">
+                                        <div class="form-group">
                                             <label>Email</label>
-                                            <span class="form-control"><?php if(isset($nhanVien['email'])) echo $nhanVien['email']; ?></span>
+                                            <span class="form-control"><?php echo $nhanVien['email']; ?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group form-group-default text-center">
+                                        <!-- Account Information -->
+                                        <div class="text-center">
                                             <label>Hình ảnh đại diện</label><br />
                                             <?php if (!empty($nhanVien['Images'])): ?>
                                                 <img src="<?php echo $base_url; ?>/Images/<?php echo $nhanVien['Images']; ?>" alt="Hình ảnh đại diện" width="200" class="img-fluid">
@@ -127,27 +121,21 @@ if (!$nhanVien) {
                                             <?php endif; ?>
                                         </div>
                                         <label class="mb-3" style="font-weight: bold;">TÀI KHOẢN</label>
-                                        <div class="row">
-                                            <div class="col-md-4">
-                                                <div class="form-group form-group-default">
-                                                    <label>Tên tài khoản</label>
-                                                    <span class="form-control"><?php if(isset($nhanVien['tenTaiKhoan'])) echo $nhanVien['tenTaiKhoan']; else echo "<span class='text-warning'>Chưa thiết lập tài khoản</span>"; ?></>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-4">
-                                                <div class="form-group form-group-default">
-                                                    <label>Tên hiển thị tài khoản</label>
-                                                    <span class="form-control"><?php if(isset($nhanVien['tenHienThi'])) echo $nhanVien['tenHienThi']; else echo "<span class='text-warning'>Chưa thiết lập tài khoản</span>"; ?></span>
-                                                </div>
-                                            </div>
+                                        <div class="form-group">
+                                            <label>Tên tài khoản</label>
+                                            <span class="form-control"><?php echo $nhanVien['tenTaiKhoan'] ?? 'Chưa thiết lập tài khoản'; ?></span>
+                                        </div>
+                                        <div class="form-group">
+                                            <label>Tên hiển thị tài khoản</label>
+                                            <span class="form-control"><?php echo $nhanVien['tenHienThi'] ?? 'Chưa thiết lập tài khoản'; ?></span>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
-                            <div class="form-group text-center">
-                                <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php?manv=<?php echo $nhanVien['id']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
-                                <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
-                            </div>
+                                <div class="text-center">
+                                    <a href="<?php echo $base_url ?>/admin/nhan_vien/edit.php?manv=<?php echo $nhanVien['id']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                                    <a href="<?php echo $base_url ?>/admin/nhan_vien/index.php" class="btn btn-danger">Quay lại</a>
+                                </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>

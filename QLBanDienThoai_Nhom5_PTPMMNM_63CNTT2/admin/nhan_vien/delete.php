@@ -1,5 +1,4 @@
 <?php
-include '../checkSession.php';
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include('../_PartialSideBar.html');
@@ -10,10 +9,27 @@ $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 // Lấy mã nhân viên từ URL
-if(isset($_GET['manv'])){
-    $manv = $_GET['manv'];
-}
+$manv = isset($_GET['manv']) ? $_GET['manv'] : "";
+
+//Biến thông báo
 $msg = "";
+
+// Kiểm tra mã nhân viên
+if (empty($manv)) {
+    $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
+} else {
+    // Truy vấn thông tin nhân viên trực tiếp
+    $sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
+            FROM nhan_vien nv 
+            LEFT JOIN tai_khoan tk ON nv.idTaiKhoan = tk.idTaiKhoan 
+            WHERE nv.id = '$manv'";
+    $result = mysqli_query($connect, $sql);
+    $nhanVien = mysqli_fetch_assoc($result);
+
+    if (!$nhanVien) {
+        $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
+    }
+}
 
 if(isset($_POST['deleteBtn'])){
     // Xóa nhân viên theo mã nhân viên
@@ -28,12 +44,6 @@ if(isset($_POST['deleteBtn'])){
     }
 }
 
-$sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
-        FROM nhan_vien nv 
-        LEFT JOIN tai_khoan tk ON nv.idTaiKhoan = tk.idTaiKhoan 
-        WHERE nv.id = $manv";
-$result = mysqli_query($connect, $sql);
-$nhanVien = mysqli_fetch_assoc($result);
 ?>
 
 <!DOCTYPE html>
@@ -50,7 +60,7 @@ $nhanVien = mysqli_fetch_assoc($result);
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="page-title">Xoá thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></h4>
+                            <h4 class="page-title">Xoá thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; else echo 'Không xác định';?></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <ul class="breadcrumbs">
@@ -80,7 +90,10 @@ $nhanVien = mysqli_fetch_assoc($result);
                 <div class="col-md-12">
                     <div class="card h-100">
                         <div class="card-body">
-                            <form action="" method="POST">
+                            <?php if (!empty($msg)): ?>
+                                <?php echo $msg; ?>
+                            <?php else: ?>
+                                <form action="" method="POST">
                                 <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -161,7 +174,7 @@ $nhanVien = mysqli_fetch_assoc($result);
                                     <?php echo $msg?>
                                 </div>
                             </form>
-
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
