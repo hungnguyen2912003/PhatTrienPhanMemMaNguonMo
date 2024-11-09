@@ -2,21 +2,22 @@
 session_start();
 // Khai báo đường dẫn
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
-// Bao gồm các file giao diện chung như header, sidebar và footer
 include('../includes/header.html');
 include('../_PartialSideBar.html');
 include('../includes/footer.html');
 
-// Kết nối vào cơ sở dữ liệu và hiển thị thông báo lỗi nếu không kết nối được
+// Kết nối vào cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
-OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error()); // Kết nối vào cơ sở dữ liệu và hiển thị thông báo lỗi nếu không kết nối được
+OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-// Truy vấn toàn bộ thông tin từ bảng nha_cung_cap
-$sql = "SELECT * FROM nha_cung_cap";
+// Kiểm tra nếu có giá trị tìm kiếm
+$searchText = isset($_GET['Searchtext']) ? $_GET['Searchtext'] : '';
 
-// Gửi truy vấn đến cơ sở dữ liệu, lưu kết quả vào biến $result
+// Truy vấn tìm kiếm với điều kiện nếu có từ khóa tìm kiếm
+$sql = "SELECT * FROM nha_cung_cap WHERE tenNCC LIKE '%$searchText%'";
+
+// Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
-
 ?>
 
 <!DOCTYPE html>
@@ -41,21 +42,6 @@ $result = mysqli_query($connect, $sql);
                         <div class="col-md-6">
                             <h4 class="page-title">Danh mục nhà cung cấp</h4>
                         </div>
-                        <div class="col-md-6 text-right">
-                            <ul class="breadcrumbs">
-                                <li class="nav-home">
-                                    <a href="<?php echo $base_url?>/admin/index.php">
-                                        <i class="flaticon-home"></i>
-                                    </a>
-                                </li>
-                                <li class="separator">
-                                    <i class="flaticon-right-arrow"></i>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php">Danh mục nhà cung cấp</a>
-                                </li>
-                            </ul>
-                        </div>
                     </div>
                 </div>
             </div>
@@ -69,25 +55,18 @@ $result = mysqli_query($connect, $sql);
                                 </div>
                             </div>
                             <div class="col-md-5">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhà cung cấp bạn muốn tìm kiếm">
-                                    <span class="input-group-append">
-                                        <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
-                                  </span>
-                                </div>
+                                <form method="GET" action="">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhà cung cấp bạn muốn tìm kiếm" value="<?php echo isset($_GET['Searchtext']) ? $_GET['Searchtext'] : ''; ?>">
+                                        <span class="input-group-append">
+                                            <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
+                                        </span>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
                     <div class="card-body">
-                        <div class="message-container text-center">
-                            <?php
-                            if (isset($_SESSION['msg'])) // Kiểm tra xem có thông báo nào trong session không
-                            {
-                                echo $_SESSION['msg']; // Hiển thị thông báo
-                                unset($_SESSION['msg']); // Xóa thông báo khỏi session sau khi hiển thị
-                            }
-                            ?>
-                        </div>
                         <div class="table-responsive">
                             <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
                                 <thead>
@@ -103,22 +82,22 @@ $result = mysqli_query($connect, $sql);
                                 </thead>
                                 <tbody>
                                 <?php
-                                $stt = 1; // Bắt đầu STT từ 1
-                                while($row = mysqli_fetch_assoc($result)) { // Lặp qua các hàng dữ liệu từ kết quả truy vấn
+                                $stt = 1;
+                                while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
-                                    echo "<td class='text-center'>$stt</td>"; // Hiển thị STT
-                                    echo "<td class='text-center'>{$row['id']}</td>"; // Hiển thị mã nhà cung cấp
-                                    echo "<td class='text-center'>{$row['tenNCC']}</td>"; // Hiển thị tên nhà cung cấp
-                                    echo "<td class='text-center'><img width='80' src='$base_url/Images/{$row['Images']}'/></td>"; // Hiển thị hình ảnh nhà cung cấp
-                                    echo "<td class='text-center'>{$row['soDienThoai']}</td>"; // Hiển thị số điện thoại nhà cung cấp
-                                    echo "<td class='text-center'>{$row['email']}</td>"; // Hiển thị email nhà cung cấp
+                                    echo "<td class='text-center'>$stt</td>";
+                                    echo "<td class='text-center'>{$row['id']}</td>";
+                                    echo "<td class='text-center'>{$row['tenNCC']}</td>";
+                                    echo "<td class='text-center'><img width='80' src='$base_url/Images/{$row['Images']}'/></td>";
+                                    echo "<td class='text-center'>{$row['soDienThoai']}</td>";
+                                    echo "<td class='text-center'>{$row['email']}</td>";
                                     echo "<td class='text-center'>
-                                                <a href='$base_url/admin/nha_cung_cap/detail.php?id={$row['id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a> <!-- Nút xem chi tiết -->
-                                                <a href='$base_url/admin/nha_cung_cap/edit.php?id={$row['id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a> <!-- Nút chỉnh sửa -->
-                                                <a href='$base_url/admin/nha_cung_cap/delete.php?id={$row['id']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a> <!-- Nút xóa -->
-                                              </td>";
+                                            <a href='$base_url/admin/nha_cung_cap/detail.php?id={$row['id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
+                                            <a href='$base_url/admin/nha_cung_cap/edit.php?id={$row['id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
+                                            <a href='$base_url/admin/nha_cung_cap/delete.php?id={$row['id']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
+                                        </td>";
                                     echo "</tr>";
-                                    $stt++; // Tăng STT cho dòng tiếp theo
+                                    $stt++;
                                 }
                                 ?>
                                 </tbody>
@@ -132,6 +111,7 @@ $result = mysqli_query($connect, $sql);
 </div>
 </body>
 </html>
+
 
 <script>
     $(document).ready(function () {
