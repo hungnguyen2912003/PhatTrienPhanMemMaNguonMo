@@ -44,12 +44,14 @@ if (isset($_POST["capNhat"])) {
     $hinhAnh = !empty($_FILES['hinhAnh']['name']) ? $_FILES['hinhAnh']['name'] : $_POST['hinhAnh'];
 
     // Kiểm tra các trường bắt buộc
-    if (!empty($tenNCC) && !empty($email) && !empty($soDienThoai) && !empty($hinhAnh)) {
-        //Kiêm tra sdt 8-11 số
+    if (empty($tenNCC) || empty($email) || empty($soDienThoai) || empty($hinhAnh)) {
+        $msg = "<span class='text-danger font-weight-bold'>Tất cả các trường đều phải điền đầy đủ.</span>";
+    } else {
+        // Kiểm tra số điện thoại
         if (!preg_match("/^\d{8,11}$/", $soDienThoai)) {
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 8 đến 11 chữ số.</span>";
-        } //Kiểm tra hình ảnh mới
-        elseif (!empty($_FILES['hinhAnh']['name'])) {
+        } elseif (!empty($_FILES['hinhAnh']['name'])) {
+            // Kiểm tra hình ảnh mới
             // Lấy tên, kích thước, và đường dẫn tạm thời của file tải lên
             $file_name = $_FILES['hinhAnh']['name'];
             $file_size = $_FILES['hinhAnh']['size'];
@@ -62,19 +64,16 @@ if (isset($_POST["capNhat"])) {
 
             // Kiểm tra xem phần mở rộng của file có hợp lệ không
             if (!in_array($file_ext, $allowed_ext)) {
-                // Nếu đuôi file không hợp lệ, hiển thị thông báo lỗi
-                $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận jpeg, jpg, png</span>";
+                $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận jpeg, jpg, png.</span>";
             }
             // Kiểm tra kích thước file có vượt quá 2MB không
             elseif ($file_size > 2097152) {
-                // Nếu file vượt quá 2MB, hiển thị thông báo lỗi
                 $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>";
             } else {
                 // Nếu tất cả các điều kiện trên đều hợp lệ, di chuyển file từ thư mục tạm thời đến thư mục mong muốn
                 move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/" . $file_name);
             }
         }
-
     }
     if (empty($msg)) {
         // Cập nhật thông tin nhà cung cấp
