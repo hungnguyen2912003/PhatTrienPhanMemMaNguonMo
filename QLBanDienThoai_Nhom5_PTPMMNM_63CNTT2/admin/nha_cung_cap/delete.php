@@ -14,6 +14,13 @@ if(isset($_GET['id'])){
 }
 $msg = "";
 
+// Truy vấn thông tin nhà cung cấp
+$sql = "SELECT * FROM nha_cung_cap WHERE id = '$maNCC'";
+$result = mysqli_query($connect, $sql);
+$nhacungcap = mysqli_fetch_assoc($result);
+if (!$nhacungcap) {
+    $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy nhà cung cấp có mã: " . $maNCC . "</h2>";
+}
 // Kiểm tra nếu nút xóa được nhấn
 if(isset($_POST['deleteBtn']) && !empty($maNCC)){
     // Xóa nhà cung cấp theo mã
@@ -29,10 +36,7 @@ if(isset($_POST['deleteBtn']) && !empty($maNCC)){
     }
 }
 
-// Truy vấn thông tin nhà cung cấp
-$sql = "SELECT * FROM nha_cung_cap WHERE id = '$maNCC'";
-$result = mysqli_query($connect, $sql);
-$nhacungcap = mysqli_fetch_assoc($result);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

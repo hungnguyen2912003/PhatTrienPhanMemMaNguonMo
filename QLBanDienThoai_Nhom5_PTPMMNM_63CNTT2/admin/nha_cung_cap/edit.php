@@ -18,41 +18,82 @@ if (isset($_GET['id'])) {
 
 $msg = "";
 
+
+// Truy vấn thông tin nhà cung cấp theo mã
+$sql = "SELECT * FROM nha_cung_cap WHERE id = '$maNCC'";
+
+// Gửi truy vấn đến cơ sở dữ liệu, lưu kết quả vào biến $result
+$result = mysqli_query($connect, $sql);
+
+// Lấy kết quả từ truy vấn và lưu vào biến $row dưới dạng mảng kết hợp
+$row = mysqli_fetch_assoc($result);
+
+// kiểm tra nếu không có mã ncc, thông báo lỗi
+if (!$row) {
+    $is_found = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhà cung cấp có mã: " . $maNCC . "</h2>";
+}
+
+// Kiểm tra nếu form được gửi với nút "Cập nhật" được nhấn.
 if (isset($_POST["capNhat"])) {
+
+    // Lấy tên ncc, email, sdt, tên file hình ảnh từ form.
     $tenNCC = $_POST["tenNhaCungCap"];
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
-    $hinhAnh = $_POST["hinhAnh"];
+    //Nếu có hình ảnh mới
+    $hinhAnh = !empty($_FILES['hinhAnh']['name']) ? $_FILES['hinhAnh']['name'] : $_POST['hinhAnh'];
+
     // Kiểm tra các trường bắt buộc
     if (!empty($tenNCC) && !empty($email) && !empty($soDienThoai) && !empty($hinhAnh)) {
+        //Kiêm tra sdt 8-11 số
         if (!preg_match("/^\d{8,11}$/", $soDienThoai)) {
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 8 đến 11 chữ số.</span>";
-        } else {
-            // Cập nhật thông tin nhà cung cấp
-            $sql = "UPDATE nha_cung_cap SET tenNCC=?, soDienThoai=?, email=?, Images=? WHERE id=?";
-            $stmt = mysqli_prepare($connect, $sql);
-            mysqli_stmt_bind_param($stmt, 'ssssi', $tenNCC, $soDienThoai, $email, $hinhAnh, $maNCC);
+        } //Kiểm tra hình ảnh mới
+        elseif (!empty($_FILES['hinhAnh']['name'])) {
+            // Lấy tên, kích thước, và đường dẫn tạm thời của file tải lên
+            $file_name = $_FILES['hinhAnh']['name'];
+            $file_size = $_FILES['hinhAnh']['size'];
+            $file_tmp = $_FILES['hinhAnh']['tmp_name'];
+            // Lấy đuôi file chuyển về chữ thường
+            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
 
-            if (mysqli_stmt_execute($stmt)) {
-                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
-                echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
+            // Các đuôi file được phép tải lên
+            $allowed_ext = ["jpeg", "jpg", "png"];
+
+            // Kiểm tra xem phần mở rộng của file có hợp lệ không
+            if (!in_array($file_ext, $allowed_ext)) {
+                // Nếu đuôi file không hợp lệ, hiển thị thông báo lỗi
+                $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận jpeg, jpg, png</span>";
+            }
+            // Kiểm tra kích thước file có vượt quá 2MB không
+            elseif ($file_size > 2097152) {
+                // Nếu file vượt quá 2MB, hiển thị thông báo lỗi
+                $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>";
             } else {
-                $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
-                echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
+                // Nếu tất cả các điều kiện trên đều hợp lệ, di chuyển file từ thư mục tạm thời đến thư mục mong muốn
+                move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/" . $file_name);
             }
         }
-    } else {
-        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
-    }
-}
 
-// Truy vấn thông tin nhà cung cấp theo mã
-$sql = "SELECT * FROM nha_cung_cap WHERE id = ?";
-$stmt = mysqli_prepare($connect, $sql);
-mysqli_stmt_bind_param($stmt, 'i', $maNCC);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$row = mysqli_fetch_assoc($result);
+    }
+    if (empty($msg)) {
+        // Cập nhật thông tin nhà cung cấp
+        $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email', Images='$hinhAnh'
+                WHERE id='$maNCC'";
+
+        // Thực hiện câu lệnh UPDATE và kiểm tra kết quả
+        if (mysqli_query($connect, $sql)) {
+            // Nếu cập nhật thành công, lưu thông báo thành công vào session và chuyển hướng về trang danh sách nhà cung cấp
+            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
+            echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
+        } else {
+            // Nếu có lỗi khi cập nhật, lưu thông báo lỗi vào session và chuyển hướng về trang danh sách nhà cung cấp
+            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
+            echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
+        }
+    }
+
+}
 ?>
 
 <!DOCTYPE html>
@@ -61,14 +102,16 @@ $row = mysqli_fetch_assoc($result);
     <meta charset="UTF-8">
     <title>Thêm mới nhà cung cấp</title>
     <script>
+        // Hàm lấy tên file khi người dùng chọn tệp
         function layAnh(event) {
-            // Get the selected file
+            // Lấy phần tử <input> có id là 'fileInput' (đây là phần tử cho phép người dùng chọn file)
             const fileInput = document.getElementById('fileInput');
+            // Kiểm tra xem có tệp nào được chọn không
             if (fileInput.files.length > 0) {
-                // Extract the file name
+                // Nếu có tệp, lấy tên của tệp đầu tiên (tệp được chọn) và lưu vào biến fileName
                 const fileName = fileInput.files[0].name;
 
-                // Display the file name in the hinhAnh input field
+                // Gán tên tệp vào phần tử <input> có id là 'hinhAnh'
                 document.getElementById('hinhAnh').value = fileName;
             }
         }
@@ -146,7 +189,7 @@ $row = mysqli_fetch_assoc($result);
                                                     <div class="row">
                                                         <div class="col-md-9">
                                                             <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
-                                                                   value="<?php if(isset($row['Images'])) echo $row['Images']; else echo "Chưa thêm hình ảnh"?>" style="text-align: center;" readonly />
+                                                                   value="<?php echo isset($row['Images']) ? $row['Images'] : ''; ?>" style="text-align: center;" readonly />
                                                         </div>
                                                         <div class="col-md-3">
                                                             <input type="file" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" />

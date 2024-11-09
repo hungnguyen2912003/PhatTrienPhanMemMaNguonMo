@@ -4,21 +4,26 @@ include('../includes/header.html');
 include('../_PartialSideBar.html');
 include('../includes/footer.html');
 
-// Kết nối cơ sở dữ liệu
+// Kết nối vào cơ sở dữ liệu và hiển thị thông báo lỗi nếu không kết nối được
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 // Lấy mã ncc từ URL
 $maNCC = $_GET['id'];
 $msg = "";
 
-// Truy vấn thông tin nhà cung cấp
+// Truy vấn toàn bo thông tin nhà cung cấp theo mã NCC
 $sql = "SELECT * FROM nha_cung_cap WHERE id = '$maNCC'";
+
+// Gửi truy vấn đến cơ sở dữ liệu, lưu kết quả vào biến $result
 $result = mysqli_query($connect, $sql);
+
+// Lấy kết quả từ truy vấn và lưu vào biến $nhacungcap dưới dạng mảng kết hợp
 $nhacungcap = mysqli_fetch_assoc($result);
 
+// Kiểm tra nếu không tìm thấy nhà cung cấp với mã NCC trong cơ sở dữ liệu
 if (!$nhacungcap) {
-    echo "<h4>Không tìm thấy thông tin nhà cung cấp.</h4>";
-    exit;
+    echo "<h4>Không tìm thấy thông tin nhà cung cấp.</h4>";// thông báo lỗi
+    exit;//dừng
 }
 
 ?>
