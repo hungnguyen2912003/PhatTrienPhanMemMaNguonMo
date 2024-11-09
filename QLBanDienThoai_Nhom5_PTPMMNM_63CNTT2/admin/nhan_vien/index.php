@@ -205,14 +205,27 @@ if (isset($_POST['btnTimKiem'])) {
                                         $pagesPerSet = 5;
                                         //$currentSet: Xác định nhóm hiện tại dựa trên trang hiện tại. Ví dụ: Nếu bạn ở trang 6, nhóm hiện tại sẽ là nhóm thứ 2 (vì mỗi nhóm chứa tối đa 5 trang).
                                         $currentSet = ceil($_GET['page'] / $pagesPerSet);
-
+                                        //$startPage: Xác định trang đầu tiên trong nhóm hiện tại.
                                         //(currentSet - 1): Trừ đi 1 vì nhóm đầu tiên bắt đầu từ trang 1 (chứ không phải từ trang 0).
                                         //($currentSet - 1) * $pagesPerSet: Phép tính này xác định số trang đã được hiển thị ở các nhóm trước đó.
                                         //Ví dụ: Nếu bạn đang ở nhóm 2 (tức $currentSet = 2), phép tính sẽ là (2 - 1) * 5 = 5, có nghĩa là đã có 5 trang ở nhóm 1.
                                         //($currentSet - 1) * $pagesPerSet + 1: Sau khi tính toán số trang đã hiển thị ở các nhóm trước đó, bạn cộng thêm 1 để bắt đầu trang đầu tiên trong nhóm hiện tại.
                                         //Ví dụ: Nếu bạn đang ở nhóm 2 (tức $currentSet = 2), trang đầu tiên trong nhóm này sẽ là trang số 6.
                                         $startPage = ($currentSet - 1) * $pagesPerSet + 1;
+                                        //$endPage: Xác định trang cuối cùng trong nhóm hiện tại.
+                                        //$startPage + $pagesPerSet - 1: Tính trang cuối cùng trong nhóm.
+                                        //Ví dụ, nếu $startPage = 6 (tức là trang đầu tiên trong nhóm 2) và bạn muốn hiển thị tối đa 5 trang trong nhóm, thì trang cuối cùng trong nhóm này sẽ là 6 + 5 - 1 = 10.
+                                        //min($startPage + $pagesPerSet - 1, $maxPage): Hàm min() sẽ đảm bảo rằng trang cuối cùng trong nhóm không vượt quá tổng số trang ($maxPage). Nếu số trang trong nhóm vượt quá số trang tối đa ($maxPage), nó sẽ tự động gán trang cuối cùng bằng $maxPage để không bị vượt qua.
                                         $endPage = min($startPage + $pagesPerSet - 1, $maxPage);
+
+
+                                        //Giả sử có tổng cộng 23 trang ($maxPage = 23), và bạn muốn chia các trang thành nhóm 5 trang. Ta có các nhóm sau:
+                                        //Nhóm 1 (Trang 1 đến Trang 5): $startPage = 1, $endPage = 5
+                                        //Nhóm 2 (Trang 6 đến Trang 10): $startPage = 6, $endPage = 10
+                                        //Nhóm 3 (Trang 11 đến Trang 15): $startPage = 11, $endPage = 15
+                                        //Nhóm 4 (Trang 16 đến Trang 20): $startPage = 16, $endPage = 20
+                                        //Nhóm 5 (Trang 21 đến Trang 23): $startPage = 21, $endPage = 23
+
 
                                         //$startPage > 1: Nếu trang đầu tiên trong nhóm không phải là trang đầu tiên toàn cục (ví dụ, khi người dùng ở nhóm 2, nhóm 3,...), hiển thị dấu ... để người dùng biết có các trang bị ẩn.
                                         if ($startPage > 1) {
