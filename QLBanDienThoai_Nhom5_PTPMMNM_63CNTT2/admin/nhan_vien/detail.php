@@ -73,7 +73,6 @@ if (empty($manv)) {
             </div>
             <div class="row">
                 <div class="col-md-12">
-
                     <div class="card h-100">
                         <div class="card-body">
                             <?php if (!empty($msg)): ?>
@@ -86,15 +85,15 @@ if (empty($manv)) {
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Mã nhân viên</label>
-                                            <span class="form-control"><?php echo $nhanVien['id']; ?></span>
+                                            <span class="form-control"><?php if(isset($nhanVien['id'])) echo $nhanVien['id']; ?></span>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Họ tên nhân viên</label>
-                                            <span class="form-control"><?php echo $nhanVien['hoTen']; ?></span>
+                                            <span class="form-control"><?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></span>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Ngày sinh</label>
-                                            <span class="form-control"><?php echo date("d/m/Y", strtotime($nhanVien['ngaySinh'])); ?></span>
+                                            <span class="form-control"><?php if(isset($nhanVien['ngaySinh'])) echo date("d/m/Y", strtotime($nhanVien['ngaySinh'])); ?></span>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Giới tính</label>
@@ -102,19 +101,19 @@ if (empty($manv)) {
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Địa chỉ</label>
-                                            <span class="form-control"><?php echo $nhanVien['diaChi']; ?></span>
+                                            <span class="form-control"><?php if(isset($nhanVien['diaChi'])) echo $nhanVien['diaChi']; ?></span>
                                         </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Số điện thoại</label>
-                                                    <span class="form-control"><?php echo $nhanVien['soDienThoai']; ?></span>
+                                                    <span class="form-control"><?php if(isset($nhanVien['soDienThoai'])) echo $nhanVien['soDienThoai']; ?></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Email</label>
-                                                    <span class="form-control"><?php echo $nhanVien['email']; ?></span>
+                                                    <span class="form-control"><?php if(isset($nhanVien['email'])) echo $nhanVien['email']; ?></span>
                                                 </div>
                                             </div>
                                         </div>
@@ -136,7 +135,7 @@ if (empty($manv)) {
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Tên tài khoản</label>
-                                                    <span class="form-control text-warning"><?php echo $nhanVien['tenTaiKhoan'] ?? 'Chưa thiết lập tài khoản'; ?></span>
+                                                    <span class="form-control text-warning"><?php  echo $nhanVien['tenTaiKhoan'] ?? 'Chưa thiết lập tài khoản'; ?></span>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
