@@ -8,11 +8,14 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$rowsPerPage = 5; //số mẩu tin trên mỗi trang
+//Mỗi trang hiển thị 5 dữ liệu
+$rowsPerPage = 5;
+
+//Nếu tham số page trong URL chưa được set, nó sẽ được gán giá trị mặc định là 1, tức là trang đầu tiên.
 if (!isset($_GET['page'])) {
     $_GET['page'] = 1;
 }
-//vị trí của mẩu tin đầu tiên trên mỗi trang
+//Xác định vị trí của bản ghi đầu tiên trong câu truy vấn SQL. Nó tính toán dựa trên số trang hiện tại và số bản ghi trên mỗi trang.
 $offset = ($_GET['page']-1) * $rowsPerPage;
 
 /////////////////////////////////////////////////////////////
@@ -185,28 +188,50 @@ if (isset($_POST['btnTimKiem'])) {
                                 <div class="pagination-container">
                                     <div class="pagination">
                                         <?php
-                                        // Get total number of rows
                                         $re = mysqli_query($connect, 'SELECT * FROM nhan_vien');
+                                        //$numRows: Số lượng bản ghi trong cơ sở dữ liệu (toàn bộ bản ghi từ bảng nhan_vien).
                                         $numRows = mysqli_num_rows($re);
+                                        //$maxPage: Số lượng trang tối đa, được tính bằng cách chia tổng số bản ghi cho số bản ghi trên mỗi trang, sau đó làm tròn lên bằng hàm ceil().
                                         $maxPage = ceil($numRows / $rowsPerPage);
+                                        //Trang hiện tại mà người dùng đang xem, được lấy từ $_GET['page'].
                                         $currentPage = $_GET['page'];
 
-                                        // Display "Trang đầu" and "Trang trước"
+                                        //Nếu trang hiện tại không phải là trang đầu tiên (tức là $currentPage > 1), sẽ hiển thị liên kết đến trang đầu và trang trước. Khi người dùng nhấn vào, họ sẽ được chuyển tới trang đầu tiên hoặc trang trước.
                                         if ($currentPage > 1) {
                                             echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a>";
                                             echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "'>Trang trước</a>";
                                         }
+                                        //$pagesPerSet: Số lượng trang hiển thị tối đa trong một nhóm. Trong trường hợp này, bạn muốn hiển thị tối đa 5 trang.
+                                        $pagesPerSet = 5;
+                                        //$currentSet: Xác định nhóm hiện tại dựa trên trang hiện tại. Ví dụ: Nếu bạn ở trang 6, nhóm hiện tại sẽ là nhóm thứ 2 (vì mỗi nhóm chứa tối đa 5 trang).
+                                        $currentSet = ceil($_GET['page'] / $pagesPerSet);
 
-                                        // Display page numbers
-                                        for ($page = max(1, $currentPage - 2); $page <= min($maxPage, $currentPage + 2); $page++) {
-                                            if ($page == $currentPage) {
-                                                echo "<b>$page</b>";
+                                        //(currentSet - 1): Trừ đi 1 vì nhóm đầu tiên bắt đầu từ trang 1 (chứ không phải từ trang 0).
+                                        //($currentSet - 1) * $pagesPerSet: Phép tính này xác định số trang đã được hiển thị ở các nhóm trước đó.
+                                        //Ví dụ: Nếu bạn đang ở nhóm 2 (tức $currentSet = 2), phép tính sẽ là (2 - 1) * 5 = 5, có nghĩa là đã có 5 trang ở nhóm 1.
+                                        //($currentSet - 1) * $pagesPerSet + 1: Sau khi tính toán số trang đã hiển thị ở các nhóm trước đó, bạn cộng thêm 1 để bắt đầu trang đầu tiên trong nhóm hiện tại.
+                                        //Ví dụ: Nếu bạn đang ở nhóm 2 (tức $currentSet = 2), trang đầu tiên trong nhóm này sẽ là trang số 6.
+                                        $startPage = ($currentSet - 1) * $pagesPerSet + 1;
+                                        $endPage = min($startPage + $pagesPerSet - 1, $maxPage);
+
+                                        //$startPage > 1: Nếu trang đầu tiên trong nhóm không phải là trang đầu tiên toàn cục (ví dụ, khi người dùng ở nhóm 2, nhóm 3,...), hiển thị dấu ... để người dùng biết có các trang bị ẩn.
+                                        if ($startPage > 1) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($startPage - 1) . "'>...</a> ";
+                                        }
+                                        for ($i = $startPage; $i <= $endPage; $i++) {
+                                            if ($i == $currentPage) {
+                                                echo "<b>$i</b> ";
                                             } else {
-                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$page'>$page</a>";
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $i . "'>$i</a> ";
                                             }
                                         }
 
-                                        // Display "Trang sau" and "Trang cuối"
+                                        //$endPage < $maxPage: Nếu trang cuối cùng trong nhóm không phải là trang cuối cùng toàn cục, hiển thị dấu ... để người dùng biết có thêm trang phía sau.
+                                        if ($endPage < $maxPage) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($endPage + 1) . "'>...</a> ";
+                                        }
+
+                                        // Hiển thị "Trang sau" và "Trang cuối"
                                         if ($currentPage < $maxPage) {
                                             echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "'>Trang sau</a>";
                                             echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$maxPage'>Trang cuối</a>";
