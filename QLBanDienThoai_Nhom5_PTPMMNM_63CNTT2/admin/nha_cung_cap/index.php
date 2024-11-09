@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Khai báo đường dẫn
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');

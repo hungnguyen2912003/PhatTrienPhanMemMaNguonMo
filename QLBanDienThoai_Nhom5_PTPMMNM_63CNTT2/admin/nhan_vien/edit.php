@@ -44,7 +44,7 @@ if (isset($_POST['capNhat']))
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
     //Nếu có hình ảnh mới
-    $hinhAnh = !empty($_FILES['hinhAnh']['name']) ? $_FILES['hinhAnh']['name'] : $_POST['hinhAnh'];
+    $hinhAnh = $_FILES['hinhAnh']['name'];
 
     if(empty($hoTen)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ tên</span>";
@@ -64,7 +64,7 @@ if (isset($_POST['capNhat']))
     elseif(empty($soDienThoai)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập số điện thoại</span>";
     }
-    elseif (empty($_POST['hinhAnh']) || $_FILES['hinhAnh']['error'] != 0){
+    elseif (empty($_FILES['hinhAnh'])) {
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng thêm một hình ảnh</span>";
     }
     else{
@@ -75,22 +75,18 @@ if (isset($_POST['capNhat']))
         elseif (!preg_match("/^\d{10,11}$/", $soDienThoai))
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 10 đến 11 chữ số.</span>";
         //Kiểm tra hình ảnh mớis
-        elseif (!empty($_FILES['hinhAnh']['name']))
-        {
-            $file_name = $_FILES['hinhAnh']['name'];
-            $file_size = $_FILES['hinhAnh']['size'];
-            $file_tmp = $_FILES['hinhAnh']['tmp_name'];
-            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
-            $allowed_ext = ["jpeg", "jpg", "png"];
-
-            if (!in_array($file_ext, $allowed_ext)) {
-                $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận jpeg, jpg, png</span>";
-            } elseif ($file_size > 2097152) {
-                $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>";
-            } else {
-                move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/" . $file_name);
-            }
-        }
+        $file_name = $_FILES['hinhAnh']['name'];
+        $file_size = $_FILES['hinhAnh']['size'];
+        $file_tmp = $_FILES['hinhAnh']['tmp_name'];
+        $array = explode('.', $file_name);
+        $file_ext = @strtolower(end($array));
+        $expensions = array("jpeg", "jpg", "png");
+        if (!in_array($file_ext, $expensions))
+            $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận cái đuôi file: jpeg, jpg, png</span>";
+        elseif ($file_size > 2097152)
+            $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>";
+        else
+            move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "\\QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2\\Images\\" . $file_name);
 
         if (empty($msg)) {
             // Cập nhật thông tin nhân viên
@@ -223,11 +219,11 @@ if (isset($_POST['capNhat']))
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <div class="col-md-9">
-                                                            <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
-                                                                   value="<?php echo isset($nhanVien['Images']) ? $nhanVien['Images'] : ''; ?>" style="text-align: center;" readonly />
+                                                            <input type="text" id="hinhAnh" class="form-control"
+                                                                   style="text-align: center;" readonly value="<?php echo isset($_POST['hinhAnh']) ? $_POST['hinhAnh'] : $nhanVien['Images']; ?>"/>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <input type="file" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" />
+                                                            <input type="file" name="hinhAnh" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" value="<?php echo isset($_POST['hinhAnh']) ? $_POST['hinhAnh'] : $nhanVien['Images']; ?>"/>
                                                             <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
                                                         </div>
                                                     </div>

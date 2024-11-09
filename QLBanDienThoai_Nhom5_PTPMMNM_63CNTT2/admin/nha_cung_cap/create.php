@@ -1,4 +1,5 @@
 <?php
+session_start();
 // Khai báo đường dẫn
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 // Bao gồm các file giao diện chung như header, sidebar và footer
@@ -179,7 +180,7 @@ mysqli_close($connect); // Đóng kết nối cơ sở dữ liệu.
                                         </div>
                                     </div>
                                 </div>
-                                <div class="col-md-12">
+                                <div class="col-md-12 text-center">
                                     <?php echo $msg; ?>
                                 </div>
                                 <div class="col-md-12 text-center">
