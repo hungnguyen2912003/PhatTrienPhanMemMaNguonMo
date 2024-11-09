@@ -12,6 +12,7 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 // Kiểm tra nếu có giá trị tìm kiếm
 $searchText = isset($_GET['Searchtext']) ? $_GET['Searchtext'] : '';
 
+
 // Truy vấn tìm kiếm với điều kiện nếu có từ khóa tìm kiếm
 $sql = "SELECT * FROM nha_cung_cap WHERE tenNCC LIKE '%$searchText%'";
 
@@ -28,6 +29,20 @@ $result = mysqli_query($connect, $sql);
         .custom-textbox {
             height: 50px;
             border: 2px solid #0094ff;
+        }
+
+        .message-container {
+            background-color: #f8d7da;
+            color: #721c24;
+            padding: 10px;
+            border: 1px solid #f5c6cb;
+            margin-bottom: 20px;
+            display: none;
+        }
+
+        .error-message {
+            color: #d9534f;
+            font-weight: bold;
         }
     </style>
 </head>
@@ -66,6 +81,7 @@ $result = mysqli_query($connect, $sql);
                         </div>
                     </div>
                     <div class="card-body">
+
                         <div class="table-responsive">
                             <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
                                 <thead>
@@ -110,7 +126,6 @@ $result = mysqli_query($connect, $sql);
 </div>
 </body>
 </html>
-
 
 <script>
     $(document).ready(function () {
