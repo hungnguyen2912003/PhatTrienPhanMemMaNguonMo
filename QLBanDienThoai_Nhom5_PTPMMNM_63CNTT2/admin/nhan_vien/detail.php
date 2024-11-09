@@ -15,7 +15,7 @@ $msg = "";
 
 // Kiểm tra mã nhân viên
 if (empty($manv)) {
-    $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
+    $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên đang để trống</h2>";
 } else {
     // Truy vấn thông tin nhân viên trực tiếp
     $sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
