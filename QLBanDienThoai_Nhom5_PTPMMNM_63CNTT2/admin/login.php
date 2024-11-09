@@ -35,7 +35,6 @@ if (isset($_POST['dangNhap'])) {
             $_SESSION['logged'] = true;
             $_SESSION['username'] = $user_data['tenTaiKhoan'];
             $_SESSION['tenhienthi'] = $user_data['tenHienThi'];
-
             //Kiểm tra xem có biến phiên redirect_to không?
             //Nếu có, sẽ chuyển hướng đến trang mà người dùng muốn truy cập trước khi đăng nhập;
             //Nếu không, chuyển hướng mặc định đến index.php
