@@ -171,7 +171,6 @@ mysqli_close($connect);
                                                     <div class="form-group form-group-default">
                                                         <label>Giới tính <span class="text-danger">*</span></label>
                                                         <select name="gioiTinh" class="custom-select form-control select">
-                                                            <option value="">Chọn giới tính</option>
                                                             <option value="1" <?php if(isset($_POST['gioiTinh']) && $_POST['gioiTinh'] == "1") echo 'selected'; ?>>Nam</option>
                                                             <option value="0" <?php if(isset($_POST['gioiTinh']) && $_POST['gioiTinh'] == "0") echo 'selected'; ?>>Nữ</option>
                                                         </select>
