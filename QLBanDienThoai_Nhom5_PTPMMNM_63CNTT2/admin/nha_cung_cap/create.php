@@ -180,9 +180,6 @@ mysqli_close($connect); // Đóng kết nối cơ sở dữ liệu.
                                     </div>
                                 </div>
                                 <div class="col-md-12 text-center">
-                                    <?php echo $msg; ?>
-                                </div>
-                                <div class="col-md-12 text-center">
                                     <button type="submit" name="themMoi" class="btn btn-success mt-3">Thêm mới</button>
                                     <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php" class="btn btn-danger btnBack mt-3">Quay lại</a>
                                 </div>

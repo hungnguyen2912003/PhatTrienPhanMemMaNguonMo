@@ -22,8 +22,7 @@ $result = mysqli_query($connect, $sql);
 // Kiểm tra kết quả tìm kiếm
 if ((mysqli_num_rows($result) > 0) && !empty($searchText)) {//nếu có kết quả tìm kiếm và người dùng đã nhập gì đó vào ô tìm kiếm
     $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả có từ khoá: '$searchText'</span>";
-} else{
-    // Nếu không tìm thấy kết quả, có thể thêm thông báo
+} elseif(mysqli_num_rows($result) < 0){////nếu không có kết quả tìm kiếm và người dùng đã nhập gì đó vào ô tìm kiếm. Hiện báo lỗi
     $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả có từ khoá: '$searchText'</span>";
 }
 

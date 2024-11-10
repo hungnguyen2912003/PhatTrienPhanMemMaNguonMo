@@ -38,6 +38,7 @@ if (isset($_POST["themMoi"])) {
             if (mysqli_num_rows($check_maSP) != 0) {
                 $msg = "<span class='text-danger font-weight-bold'>Đã có mã sản phẩm này rồi. Vui lòng thử lại.</span>";
             } else {
+
                 // Thực hiện truy vấn INSERT vào bảng sản phẩm
                 $sql = "INSERT INTO san_pham (ma_sp, ma_ncc, ten_sp, hinhAnh, moTa, soLuong, giaBan) VALUES ('$maSP', '$supplierID', '$tenSP', '$hinhAnh', '$moTa', '$soLuong', '$giaBan')";
                 if (mysqli_query($connect, $sql)) {
