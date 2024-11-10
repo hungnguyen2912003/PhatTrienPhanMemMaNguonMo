@@ -1,4 +1,5 @@
 <?php
+$base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 //Khởi động phiên làm việc
 session_start();
 
@@ -8,7 +9,6 @@ session_unset();
 //Phá hủy hoàn toàn phiên làm việc
 session_destroy();
 
-//Chuyển hướng người dùng về trang login.php. Hàm header() gửi một tiêu đề HTTP để trình duyệt thực hiện chuyển hướng
-header("Location: login.php");
+echo "<script>window.location.href = '$base_url/admin/login.php';</script>";
 exit;
 ?>

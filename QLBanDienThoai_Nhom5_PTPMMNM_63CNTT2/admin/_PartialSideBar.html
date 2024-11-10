@@ -17,7 +17,7 @@
                     <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
                         <span>
                             <span><?php if(isset($_SESSION['hoTen'])) echo $_SESSION['hoTen']; ?></span>
-                            <span class="user-level"><?php if(isset($_SESSION['username'])) echo $_SESSION['username']; ?></span>
+                            <span class="user-level">Phân quyền: <?php if(isset($_SESSION['phanQuyen'])) echo $_SESSION['phanQuyen']; ?></span>
                             <span class="caret"></span>
                         </span>
                     </a>
