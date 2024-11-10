@@ -32,7 +32,7 @@ if (isset($_POST['dangNhap'])) {
 
         //Kiểm tra nếu có một dòng kết quả (tức là tài khoản và mật khẩu khớp với một tài khoản trong cơ sở dữ liệu).
         if (mysqli_num_rows($result) == 1) {
-            $sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV_KH, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.hoTen AS hoTen FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV_KH = nv.id";
+            $sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV_KH, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.tenNV AS hoTen FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV_KH = nv.id";
             $result = mysqli_query($connect, $sql);
             //mysqli_fetch_assoc: lấy một hàng dữ liệu từ kết quả của truy vấn
             $user_data = mysqli_fetch_assoc($result);

@@ -64,9 +64,7 @@ if (isset($_POST['capNhat']))
     elseif(empty($soDienThoai)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập số điện thoại</span>";
     }
-    elseif (!isset($_FILES['hinhAnh']) || $_FILES['hinhAnh']['error'] != 0){
-        $msg = "<span class='text-danger font-weight-bold'>Vui lòng thêm một hình ảnh</span>";
-    }
+
     else{
         // Định dạng ngày sinh
         if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $ngaySinh))
@@ -98,7 +96,7 @@ if (isset($_POST['capNhat']))
         }
         if (empty($msg)) {
             // Cập nhật thông tin nhân viên
-            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenNV = '$tenNV' ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
+            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
 
             if (mysqli_query($connect, $sql)) {
                 $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $tenNV thành công!</span>";
