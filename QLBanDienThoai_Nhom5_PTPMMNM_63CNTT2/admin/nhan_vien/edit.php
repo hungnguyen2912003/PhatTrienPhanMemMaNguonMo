@@ -12,9 +12,6 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 // Lấy mã nhân viên từ URL
 $manv = isset($_GET['manv']) ? $_GET['manv'] : "";
 
-//biến trong truong hợp mã nhân viên bỏ trống hoặc không trùng khớp
-$is_found = "";
-
 //biến thông báo nhập liệu
 $msg = "";
 // Kiểm tra mã nhân viên
@@ -30,7 +27,7 @@ if (empty($manv)) {
     $nhanVien = mysqli_fetch_assoc($result);
 
     if (!$nhanVien) {
-        $is_found = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
+        $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
     }
 }
 
@@ -43,8 +40,7 @@ if (isset($_POST['capNhat']))
     $diaChi = $_POST["diaChi"];
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
-    //Nếu có hình ảnh mới
-    $hinhAnh = $_FILES['hinhAnh']['name'];
+    $hinhAnh = $nhanVien['Images'];
 
     if(empty($hoTen)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ tên</span>";
@@ -64,7 +60,7 @@ if (isset($_POST['capNhat']))
     elseif(empty($soDienThoai)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập số điện thoại</span>";
     }
-    elseif (empty($_FILES['hinhAnh'])) {
+    elseif (!isset($_FILES['hinhAnh']) || $_FILES['hinhAnh']['error'] != 0){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng thêm một hình ảnh</span>";
     }
     else{
@@ -74,20 +70,28 @@ if (isset($_POST['capNhat']))
         // Định dạng số điện thoại
         elseif (!preg_match("/^\d{10,11}$/", $soDienThoai))
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 10 đến 11 chữ số.</span>";
-        //Kiểm tra hình ảnh mớis
-        $file_name = $_FILES['hinhAnh']['name'];
-        $file_size = $_FILES['hinhAnh']['size'];
-        $file_tmp = $_FILES['hinhAnh']['tmp_name'];
-        $array = explode('.', $file_name);
-        $file_ext = @strtolower(end($array));
-        $expensions = array("jpeg", "jpg", "png");
-        if (!in_array($file_ext, $expensions))
-            $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận cái đuôi file: jpeg, jpg, png</span>";
-        elseif ($file_size > 2097152)
-            $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>";
-        else
-            move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "\\QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2\\Images\\" . $file_name);
+        //Kiểm tra hình ảnh mới
+        if (!empty($_FILES['fileInput']['name'])) {
+            $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
+            $file = $dir . basename($_FILES["fileInput"]["name"]);
+            $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
+            // Kiểm tra kích thước file
+            if ($_FILES["fileInput"]["size"] > 2097152) {
+                $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
+            }
+            // Kiểm tra loại file ảnh
+            elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG & GIF.</span>";
+            } else {
+                // Tải file lên server
+                if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
+                    $hinhAnh = basename($_FILES["fileInput"]["name"]); // lưu tên file mới
+                } else {
+                    $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
+                }
+            }
+        }
         if (empty($msg)) {
             // Cập nhật thông tin nhân viên
             $sql = "UPDATE nhan_vien SET hoTen='$hoTen', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
@@ -162,9 +166,9 @@ if (isset($_POST['capNhat']))
                 <div class="col-md-12">
                     <div class="card h-100">
                         <div class="card-body">
-                            <?php if (!empty($is_found)): ?>
-                                <?php echo $is_found; ?>
-                            <?php else: ?>
+<!--                            --><?php //if (!empty($msg)): ?>
+<!--                                --><?php //echo $msg; ?>
+<!--                            --><?php //else: ?>
                             <form action="" method="POST" enctype="multipart/form-data">
                                 <input type="hidden" name="id" value="<?php echo $nhanVien['id']; ?>">
                                 <div class="row">
@@ -215,16 +219,16 @@ if (isset($_POST['capNhat']))
                                             <?php else: ?>
                                                 <div>Không có hình ảnh hiện tại.</div>
                                             <?php endif; ?>
+
                                             <div class="input-group mb-2 mt-2">
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <div class="col-md-9">
-                                                            <input type="text" id="hinhAnh" class="form-control"
-                                                                   style="text-align: center;" readonly value="<?php echo isset($_POST['hinhAnh']) ? $_POST['hinhAnh'] : $nhanVien['Images']; ?>"/>
+                                                            <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php if (isset($_FILES['hinhAnh'])) echo $_FILES['hinhAnh']['name']; else echo $nhanVien['Images']; ?>"/>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <input type="file" name="hinhAnh" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" value="<?php echo isset($_POST['hinhAnh']) ? $_POST['hinhAnh'] : $nhanVien['Images']; ?>"/>
-                                                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
+                                                            <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
+                                                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Chọn ảnh</button>
                                                         </div>
                                                     </div>
                                                 </div>
@@ -240,7 +244,7 @@ if (isset($_POST['capNhat']))
                                     <?php echo $msg?>
                                 </div>
                             </form>
-                            <?php endif; ?>
+<!--                            --><?php //endif; ?>
                         </div>
                     </div>
                 </div>

@@ -8,7 +8,7 @@ include('../includes/footer.html');
 //Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
-
+$result = "";
 //Mỗi trang hiển thị 5 dữ liệu
 $rowsPerPage = 5;
 
