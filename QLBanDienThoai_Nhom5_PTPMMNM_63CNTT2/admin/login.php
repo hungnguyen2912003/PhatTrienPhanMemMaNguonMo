@@ -9,6 +9,7 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 //Kiểm tra đã login chưa?
 if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: index.php");
     exit;
 }
@@ -35,6 +36,8 @@ if (isset($_POST['dangNhap'])) {
             $_SESSION['username'] = $user_data['tenTaiKhoan'];
             $_SESSION['tenhienthi'] = $user_data['tenHienThi'];
             //Kiểm tra xem có biến phiên redirect_to không?
+            //Nếu có, sẽ chuyển hướng đến trang mà người dùng muốn truy cập trước khi đăng nhập;
+            //Nếu không, chuyển hướng mặc định đến index.php
             $redirect_to = isset($_SESSION['redirect_to']) ? $_SESSION['redirect_to'] : 'index.php';
             //Xóa biến redirect_to để tránh ảnh hưởng đến các lần đăng nhập tiếp theo.
             unset($_SESSION['redirect_to']);
