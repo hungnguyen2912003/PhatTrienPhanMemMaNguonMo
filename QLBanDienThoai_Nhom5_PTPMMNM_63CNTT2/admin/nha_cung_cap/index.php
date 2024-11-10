@@ -31,20 +31,6 @@ $result = mysqli_query($connect, $sql);
             height: 50px;
             border: 2px solid #0094ff;
         }
-
-        .message-container {
-            background-color: #f8d7da;
-            color: #721c24;
-            padding: 10px;
-            border: 1px solid #f5c6cb;
-            margin-bottom: 20px;
-            display: none;
-        }
-
-        .error-message {
-            color: #d9534f;
-            font-weight: bold;
-        }
     </style>
 </head>
 <body>
