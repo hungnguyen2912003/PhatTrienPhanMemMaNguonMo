@@ -29,15 +29,12 @@ if (isset($_POST['dangNhap'])) {
 
         //Kiểm tra nếu có một dòng kết quả (tức là tài khoản và mật khẩu khớp với một tài khoản trong cơ sở dữ liệu).
         if (mysqli_num_rows($result) == 1) {
-
             //mysqli_fetch_assoc: lấy một hàng dữ liệu từ kết quả của truy vấn
             $user_data = mysqli_fetch_assoc($result);
             $_SESSION['logged'] = true;
             $_SESSION['username'] = $user_data['tenTaiKhoan'];
             $_SESSION['tenhienthi'] = $user_data['tenHienThi'];
             //Kiểm tra xem có biến phiên redirect_to không?
-            //Nếu có, sẽ chuyển hướng đến trang mà người dùng muốn truy cập trước khi đăng nhập;
-            //Nếu không, chuyển hướng mặc định đến index.php
             $redirect_to = isset($_SESSION['redirect_to']) ? $_SESSION['redirect_to'] : 'index.php';
             //Xóa biến redirect_to để tránh ảnh hưởng đến các lần đăng nhập tiếp theo.
             unset($_SESSION['redirect_to']);
