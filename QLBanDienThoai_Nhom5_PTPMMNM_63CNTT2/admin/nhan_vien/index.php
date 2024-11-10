@@ -40,12 +40,12 @@ if (isset($_POST['btnTimKiem'])) {
             $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khoá: '$str'</span>";
         }
     }
-} else {
+}
+else {
     // Nếu không tìm kiếm thì lấy toàn bộ danh sách
     $sql = "SELECT * FROM nhan_vien LIMIT $offset, $rowsPerPage";
     $result = mysqli_query($connect, $sql);
 }
-
 ?>
 
 <!DOCTYPE html>
