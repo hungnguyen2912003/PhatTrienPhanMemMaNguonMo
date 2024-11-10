@@ -7,26 +7,64 @@ include('../includes/footer.html');
 //Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
-$rowsPerPage = 5; //số mẩu tin trên mỗi trang
+
+//Mỗi trang hiển thị 5 dữ liệu
+$rowsPerPage = 5;
+
+//Nếu tham số page trong URL chưa được set, nó sẽ được gán giá trị mặc định là 1, tức là trang đầu tiên.
 if (!isset($_GET['page']))
 {
     $_GET['page'] = 1;
 }
-//vị trí của mẩu tin đầu tiên trên mỗi trang
+//Xác định vị trí của bản ghi đầu tiên trong câu truy vấn SQL. Nó tính toán dựa trên số trang hiện tại và số bản ghi trên mỗi trang.
 $offset =($_GET['page']-1)*$rowsPerPage;
+////Lọc sản phẩm theo nhà cung cấp
+if (isset($_POST['nha_cung_cap']) && !empty($_POST['nha_cung_cap'])) {
+    $nhaCungCapId = $_POST['nha_cung_cap'];
+    $sql = "SELECT * FROM san_pham WHERE ma_ncc = '$nhaCungCapId' LIMIT $offset, $rowsPerPage";
+    $result = mysqli_query($connect, $sql);
+}
 
-//Truy vấn toàn bộ thông tin từ bảng nhan_Vien
-$sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
+/// Xử lý tìm kiếm
+$searchResult = false; // Biến kiểm tra kết quả tìm kiếm
+// Nếu người dùng nhấn nút tìm kiếm
+// Nếu người dùng nhấn nút tìm kiếm
+if (isset($_POST['btnTimKiem'])) {
+    $str = trim($_POST['searchtext']);
+    if (empty($str)) {
+        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Sản phẩm cần tìm kiếm không được bỏ trống</span>";
+    } else {
+        // Truy vấn tìm kiếm
+        $sql = "SELECT * FROM san_pham WHERE LOWER(ten_sp) LIKE LOWER('%$str%')";
+        $result = mysqli_query($connect, $sql);
 
-//Gửi truy vấn đến cơ sở dữ liệu
-$result = mysqli_query($connect, $sql);
+        // Kiểm tra nếu câu truy vấn thành công và có kết quả
+        if ($result && mysqli_num_rows($result) > 0) {
+            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả tên có từ khoá: '$str'</span>";
+            $searchResult = true; // Đặt biến kiểm tra kết quả tìm kiếm là true
+        } else {
+            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khoá: '$str'</span>";
+            $searchResult = false; // Đảm bảo không hiển thị kết quả không hợp lệ
+        }
+    }
+} else {
+    // Nếu không tìm kiếm thì lấy toàn bộ danh sách
+    $sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
+    $result = mysqli_query($connect, $sql);
+
+    // Kiểm tra nếu câu truy vấn thành công
+    if (!$result) {
+        die('Lỗi truy vấn: ' . mysqli_error($connect));
+    }
+}
+
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Danh mục sản phẩm</title>
-    <link rel="stylesheet" href="//code.jquery.com/ui/1.13.1/themes/base/jquery-ui.css">
+    <title>Quản lý sản phẩm</title>
     <style>
         .custom-textbox {
             height: 50px;
@@ -94,18 +132,37 @@ $result = mysqli_query($connect, $sql);
                 <div class="card h-100" >
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-4">
+                            <div class="col-md-2">
                                 <div class="card-tools">
                                     <a href="<?php echo $base_url?>/admin/san_pham/create.php" class="btn btn-rounded btn-primary">Thêm mới</a>
                                 </div>
                             </div>
+                            <div class="col-md-4">
+                                <form action="" method="post">
+                                    <select name="nha_cung_cap" id="nha_cung_cap" class="form-control p-2" >
+                                        <option value="">Chọn nhà cung cấp</option>
+                                        <?php
+                                        // Truy vấn dữ liệu nhà cung cấp từ cơ sở dữ liệu
+                                        $sqlNhaCungCap = "SELECT * FROM nha_cung_cap";
+                                        $resultNhaCungCap = mysqli_query($connect, $sqlNhaCungCap);
+
+                                        // Lặp qua các nhà cung cấp và tạo các option
+                                        while($rowNCC = mysqli_fetch_assoc($resultNhaCungCap)) {
+                                            echo "<option value='{$rowNCC['id']}'>{$rowNCC['tenNCC']}</option>";
+                                        }
+                                        ?>
+                                    </select>
+                                </form>
+                            </div>
                             <div class="col-md-5">
-                                <div class="input-group input-group-sm">
-                                    <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin sản phẩm bạn muốn tìm kiếm">
-                                    <span class="input-group-append">
-                                        <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
-                                    </span>
-                                </div>
+                                <form action="" method="post">
+                                    <div class="input-group input-group-sm">
+                                        <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin sản phẩm bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
+                                        <span class="input-group-append">
+                                            <button type="submit" name="btnTimKiem" class="btn btn-info btn-flat">Tìm kiếm</button>
+                                        </span>
+                                    </div>
+                                </form>
                             </div>
                         </div>
                     </div>
@@ -158,55 +215,66 @@ $result = mysqli_query($connect, $sql);
                                 ?>
                                 </tbody>
                             </table>
-                            <div class="pagination-container">
-                                <div class="pagination">
-                                    <?php
-                                    // Get total number of rows
-                                    $re = mysqli_query($connect, 'SELECT * FROM san_pham');
-                                    $numRows = mysqli_num_rows($re);
-                                    $maxPage = ceil($numRows / $rowsPerPage);
-                                    $currentPage = $_GET['page'];
+                            <?php if (!$searchResult) { // Ẩn phân trang nếu có kết quả tìm kiếm ?>
+                                <div class="pagination-container">
+                                    <div class="pagination">
+                                        <?php
+                                        $re = mysqli_query($connect, 'SELECT * FROM san_pham');
+                                        //$numRows: Số lượng bản ghi trong cơ sở dữ liệu (toàn bộ bản ghi từ bảng san_pham).
+                                        $numRows = mysqli_num_rows($re);
+                                        //$maxPage: Số lượng trang tối đa, được tính bằng cách chia tổng số bản ghi cho số bản ghi trên mỗi trang, sau đó làm tròn lên bằng hàm ceil().
+                                        $maxPage = ceil($numRows / $rowsPerPage);
+                                        //Trang hiện tại mà người dùng đang xem, được lấy từ $_GET['page'].
+                                        $currentPage = $_GET['page'];
 
-                                    // Display "Trang đầu" and "Trang trước"
-                                    if ($currentPage > 1) {
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a> ";
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "'>Trang trước</a> ";
-                                    }
-
-                                    $pagesPerSet = 5;
-                                    $currentSet = ceil($_GET['page'] / $pagesPerSet);
-
-                                    // Calculate start and end page for current set
-                                    $startPage = ($currentSet - 1) * $pagesPerSet + 1;
-                                    $endPage = min($startPage + $pagesPerSet - 1, $maxPage);
-
-                                    // Display "..." before the pagination block if necessary
-                                    if ($startPage > 1) {
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($startPage - 1) . "'>...</a> ";
-                                    }
-
-                                    // Display page numbers
-                                    for ($i = $startPage; $i <= $endPage; $i++) {
-                                        if ($i == $currentPage) {
-                                            echo "<b>$i</b> "; // Current page, bolded
-                                        } else {
-                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $i . "'>$i</a> ";
+                                        //Nếu trang hiện tại không phải là trang đầu tiên (tức là $currentPage > 1), sẽ hiển thị liên kết đến trang đầu và trang trước. Khi người dùng nhấn vào, họ sẽ được chuyển tới trang đầu tiên hoặc trang trước.
+                                        if ($currentPage > 1) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a>";
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "'>Trang trước</a>";
                                         }
-                                    }
+                                        //$pagesPerSet: Số lượng trang hiển thị tối đa trong một nhóm. Trong trường hợp này, bạn muốn hiển thị tối đa 5 trang.
+                                        $pagesPerSet = 5;
+                                        //$currentSet: Xác định nhóm hiện tại dựa trên trang hiện tại. Ví dụ: Nếu bạn ở trang 6, nhóm hiện tại sẽ là nhóm thứ 2 (vì mỗi nhóm chứa tối đa 5 trang).
+                                        $currentSet = ceil($_GET['page'] / $pagesPerSet);
+                                        //$startPage: Xác định trang đầu tiên trong nhóm hiện tại.
+                                        //(currentSet - 1): Trừ đi 1 vì nhóm đầu tiên bắt đầu từ trang 1 (chứ không phải từ trang 0).
+                                        //($currentSet - 1) * $pagesPerSet: Phép tính này xác định số trang đã được hiển thị ở các nhóm trước đó.
+                                        //Ví dụ: Nếu bạn đang ở nhóm 2 (tức $currentSet = 2), phép tính sẽ là (2 - 1) * 5 = 5, có nghĩa là đã có 5 trang ở nhóm 1.
+                                        //($currentSet - 1) * $pagesPerSet + 1: Sau khi tính toán số trang đã hiển thị ở các nhóm trước đó, bạn cộng thêm 1 để bắt đầu trang đầu tiên trong nhóm hiện tại.
+                                        //Ví dụ: Nếu bạn đang ở nhóm 2 (tức $currentSet = 2), trang đầu tiên trong nhóm này sẽ là trang số 6.
+                                        $startPage = ($currentSet - 1) * $pagesPerSet + 1;
+                                        //$endPage: Xác định trang cuối cùng trong nhóm hiện tại.
+                                        //$startPage + $pagesPerSet - 1: Tính trang cuối cùng trong nhóm.
+                                        //Ví dụ, nếu $startPage = 6 (tức là trang đầu tiên trong nhóm 2) và bạn muốn hiển thị tối đa 5 trang trong nhóm, thì trang cuối cùng trong nhóm này sẽ là 6 + 5 - 1 = 10.
+                                        //min($startPage + $pagesPerSet - 1, $maxPage): Hàm min() sẽ đảm bảo rằng trang cuối cùng trong nhóm không vượt quá tổng số trang ($maxPage). Nếu số trang trong nhóm vượt quá số trang tối đa ($maxPage), nó sẽ tự động gán trang cuối cùng bằng $maxPage để không bị vượt qua.
+                                        $endPage = min($startPage + $pagesPerSet - 1, $maxPage);
 
-                                    // Display "..." after the pagination block if necessary
-                                    if ($endPage < $maxPage) {
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($endPage + 1) . "'>...</a> ";
-                                    }
+                                        //$startPage > 1: Nếu trang đầu tiên trong nhóm không phải là trang đầu tiên toàn cục (ví dụ, khi người dùng ở nhóm 2, nhóm 3,...), hiển thị dấu ... để người dùng biết có các trang bị ẩn.
+                                        if ($startPage > 1) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($startPage - 1) . "'>...</a> ";
+                                        }
+                                        for ($i = $startPage; $i <= $endPage; $i++) {
+                                            if ($i == $currentPage) {
+                                                echo "<b>$i</b> ";
+                                            } else {
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $i . "'>$i</a> ";
+                                            }
+                                        }
 
-                                    // Display "Trang sau" and "Trang cuối"
-                                    if ($currentPage < $maxPage) {
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "'>Trang sau</a> ";
-                                        echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $maxPage . "'>Trang cuối</a> ";
-                                    }
-                                    ?>
+                                        //$endPage < $maxPage: Nếu trang cuối cùng trong nhóm không phải là trang cuối cùng toàn cục, hiển thị dấu ... để người dùng biết có thêm trang phía sau.
+                                        if ($endPage < $maxPage) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($endPage + 1) . "'>...</a> ";
+                                        }
+
+                                        // Hiển thị "Trang sau" và "Trang cuối"
+                                        if ($currentPage < $maxPage) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "'>Trang sau</a>";
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$maxPage'>Trang cuối</a>";
+                                        }
+                                        ?>
+                                    </div>
                                 </div>
-                            </div>
+                            <?php } ?>
                         </div>
                     </div>
                 </div>
