@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('../timeOutSession.php');
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include ('../_PartialSideBar.html');
@@ -38,7 +38,7 @@ if (isset($_POST["themMoi"])) {
     elseif(empty($soDienThoai)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập số điện thoại</span>";
     }
-    elseif (!isset($_FILES['hinhAnh']) || $_FILES['hinhAnh']['error'] != 0){
+    elseif (empty($_FILES['fileInput'])){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng thêm một hình ảnh</span>";
     }
     else{
@@ -48,19 +48,28 @@ if (isset($_POST["themMoi"])) {
         // Định dạng số điện thoại
         elseif (!preg_match("/^\d{10,11}$/", $soDienThoai))
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 10 đến 11 chữ số.</span>";
-        //Kiểm tra hình ảnh
-        $file_name = $_FILES['hinhAnh']['name'];
-        $file_size = $_FILES['hinhAnh']['size'];
-        $file_tmp = $_FILES['hinhAnh']['tmp_name'];
-        $array = explode('.', $file_name);
-        $file_ext = @strtolower(end($array));
-        $expensions = array("jpeg", "jpg", "png");
-        if (!in_array($file_ext, $expensions))
-            $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận cái đuôi file: jpeg, jpg, png</span>";
-        elseif ($file_size > 2097152)
-            $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>";
-        else
-            move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "\\QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2\\Images\\" . $file_name);
+        //Kiểm tra hình ảnh mới
+        if (!empty($_FILES['fileInput']['name'])) {
+            $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
+            $file = $dir . basename($_FILES["fileInput"]["name"]);
+            $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+            // Kiểm tra kích thước file
+            if ($_FILES["fileInput"]["size"] > 2097152) {
+                $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
+            }
+            // Kiểm tra loại file ảnh
+            elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG & GIF.</span>";
+            } else {
+                // Tải file lên server
+                if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
+                    $hinhAnh = basename($_FILES["fileInput"]["name"]); // lưu tên file mới
+                } else {
+                    $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
+                }
+            }
+        }
         if (empty($msg)) {
             // Kiểm tra mã nhân viên đã tồn tại
             $check_maNV = mysqli_query($connect, "SELECT * FROM nhan_vien WHERE id = '$maNV'");
@@ -186,12 +195,11 @@ mysqli_close($connect);
                                                     <div class="col-md-12">
                                                         <div class="row">
                                                             <div class="col-md-9">
-                                                                <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
-                                                                       value="<?php if (isset($_FILES['hinhAnh']) && $_FILES['hinhAnh']['error'] == 0) echo $_FILES['hinhAnh']['name']; else echo 'Chưa thêm hình ảnh'; ?>" style="text-align: center;" readonly />
+                                                                <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php if (isset($_FILES['hinhAnh'])) echo $_FILES['hinhAnh']['name']; else echo 'Chưa thêm hình ảnh'; ?>"/>
                                                             </div>
                                                             <div class="col-md-3">
-                                                                <input type="file" id="fileInput" name="hinhAnh" accept="image/*" onchange="layAnh(event)" style="display: none;" />
-                                                                <button style="width: 80px;" type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
+                                                                <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
+                                                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Chọn ảnh</button>
                                                             </div>
                                                         </div>
                                                     </div>

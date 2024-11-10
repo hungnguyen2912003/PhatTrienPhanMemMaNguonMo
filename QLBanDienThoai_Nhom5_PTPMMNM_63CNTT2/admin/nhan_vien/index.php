@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('../timeOutSession.php');
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include ('../_PartialSideBar.html');
@@ -8,7 +8,7 @@ include('../includes/footer.html');
 //Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
-
+$result = "";
 //Mỗi trang hiển thị 5 dữ liệu
 $rowsPerPage = 5;
 

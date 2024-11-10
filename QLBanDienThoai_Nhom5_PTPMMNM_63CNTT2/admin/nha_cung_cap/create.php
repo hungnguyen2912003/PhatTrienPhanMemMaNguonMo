@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('../timeOutSession.php');
 // Khai báo đường dẫn
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 // Bao gồm các file giao diện chung như header, sidebar và footer

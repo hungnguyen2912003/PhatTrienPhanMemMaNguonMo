@@ -9,6 +9,7 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 //Kiểm tra đã login chưa?
 if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
+    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: index.php");
     exit;
 }
@@ -31,7 +32,6 @@ if (isset($_POST['dangNhap'])) {
 
         //Kiểm tra nếu có một dòng kết quả (tức là tài khoản và mật khẩu khớp với một tài khoản trong cơ sở dữ liệu).
         if (mysqli_num_rows($result) == 1) {
-
             //mysqli_fetch_assoc: lấy một hàng dữ liệu từ kết quả của truy vấn
             $user_data = mysqli_fetch_assoc($result);
             $_SESSION['logged'] = true;
