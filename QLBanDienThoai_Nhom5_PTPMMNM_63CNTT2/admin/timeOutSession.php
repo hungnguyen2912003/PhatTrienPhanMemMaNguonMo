@@ -6,7 +6,7 @@ define('SESSION_TIMEOUT', 600);
 
 if (!isset($_SESSION['logged']) || $_SESSION['logged'] !== true) {
     $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
-    header("Location: $base_url/login.php");
+    header("Location: login.php");
     exit;
 }
 
