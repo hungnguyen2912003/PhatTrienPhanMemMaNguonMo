@@ -112,9 +112,9 @@ if (isset($_POST['dangNhap'])) {
                     <div class="form-group form-group-default">
                         <p class="text-danger"><?php echo $error;?></p>
                         <?php
-                            if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
-                                echo "<p class='text-danger' style='text-align: center;'>Bạn cần đăng nhập lại để tiếp tục hoạt động!</p>";
-                            }
+                        if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
+                            echo "<p class='text-danger' style='text-align: center;'>Bạn cần đăng nhập lại để tiếp tục hoạt động!</p>";
+                        }
                         ?>
                     </div>
                     <!-- /.col -->

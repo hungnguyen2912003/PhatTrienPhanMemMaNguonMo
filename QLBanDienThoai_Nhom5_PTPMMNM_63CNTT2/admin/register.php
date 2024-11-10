@@ -35,7 +35,7 @@ if (isset($_POST['dangKy'])) {
                     $msg = "<span class='text-danger font-weight-bold'>Tên đăng nhập đã tồn tại. Vui lòng chọn nhập tên đăng nhập khác!</span>";
                 } else {
                     //Thêm mới tài khoản
-                    $sql = "INSERT INTO tai_khoan (tenTaiKhoan, matKhau, tenHienThi, maNV) VALUES ('$username', '$pass', '$tenhienthi', '$maNV')";
+                    $sql = "INSERT INTO tai_khoan (tenTaiKhoan, matKhau, tenHienThi, maNV_KH) VALUES ('$username', '$pass', '$tenhienthi', '$maNV')";
                     if (mysqli_query($connect, $sql)) {
                         $msg = "<span class='text-success font-weight-bold'>Đăng ký tài khoản thành công</span>";
                     } else
