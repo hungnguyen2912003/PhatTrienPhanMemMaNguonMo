@@ -6,7 +6,10 @@ include('../_PartialSideBar.html');
 include('../includes/footer.html');
 
 // Kết nối cơ sở dữ liệu
-$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") or die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
+$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai");
+if (!$connect) {
+    die("<h2 class='text-center text-danger'>Không thể kết nối MySQL: " . mysqli_connect_error() . "</h2>");
+}
 
 // Lấy mã nhân viên từ URL
 $manv = isset($_GET['manv']) ? $_GET['manv'] : "";
@@ -21,16 +24,23 @@ if (empty($manv)) {
     // Truy vấn thông tin nhân viên trực tiếp
     $sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
             FROM nhan_vien nv 
-            LEFT JOIN tai_khoan tk ON nv.id = tk.maNV 
+            LEFT JOIN tai_khoan tk ON nv.id = tk.maNV_KH 
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
+
+    // Kiểm tra lỗi truy vấn
+    if (!$result) {
+        die("<h2 class='text-center text-danger'>Lỗi truy vấn: " . mysqli_error($connect) . "</h2>");
+    }
+
     $nhanVien = mysqli_fetch_assoc($result);
 
     if (!$nhanVien) {
-        $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
+        $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . htmlspecialchars($manv) . "</h2>";
     }
 }
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">

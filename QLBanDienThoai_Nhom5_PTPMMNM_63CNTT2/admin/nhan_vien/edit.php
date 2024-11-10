@@ -21,7 +21,7 @@ if (empty($manv)) {
     // Truy vấn thông tin nhân viên trực tiếp
     $sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
             FROM nhan_vien nv 
-            LEFT JOIN tai_khoan tk ON nv.id = tk.maNV 
+            LEFT JOIN tai_khoan tk ON nv.id = tk.maNV_KH
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);
