@@ -7,6 +7,7 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 $msg = "";
 $maKH = rand(10000000, 99999999);
+$phanQuyen = "Khách hàng";
 //mysqli_real_escape_string: dùng để thoát (escape) các ký tự đặc biệt trong một chuỗi, đảm bảo rằng dữ liệu nhập từ người dùng sẽ không gây ra lỗi SQL hoặc bị khai thác qua SQL Injection khi bạn chèn chuỗi đó vào câu truy vấn SQL.
 
 if (isset($_POST['dangKy'])) {
@@ -14,9 +15,9 @@ if (isset($_POST['dangKy'])) {
     $pass = $_POST['password'];
     $pass_confirm = $_POST['password_confirm'];
     $tenhienthi = $_POST['tenhienthi'];
-    $hoTen  = $_POST['hoten'];
-    $gioitinh = $_POST['gioitinh'];
-    $diachi  = $_POST['diachi'];
+    $hoTen  = $_POST['hoTen'];
+    $gioitinh = $_POST['gioiTinh'];
+    $diachi  = $_POST['diaChi'];
     $sodienthoai = $_POST['soDienThoai'];
     $email = $_POST['email'];
     //Kiểm tra tên đăng nhập, mật khẩu và tên hiển thị có để trống không?
@@ -32,7 +33,7 @@ if (isset($_POST['dangKy'])) {
         $msg = "<span class='text-danger font-weight-bold'>Họ tên khách hàng không được để trống</span>";
     elseif(empty($diachi))
         $msg = "<span class='text-danger font-weight-bold'>Địa chỉ khách hàng không được để trống</span>";
-    elseif(!isset($gioiTinh)){
+    elseif(!isset($gioitinh)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng chọn giới tính</span>";
     }
     elseif(empty($sodienthoai)){
@@ -42,33 +43,24 @@ if (isset($_POST['dangKy'])) {
         $msg = "<span class='text-danger font-weight-bold'>Email không được để trống</span>";
     }
     else{
-        //Truy vấn mã khách hàng trong cơ sở dữ liệu
-        $check_maKH = "SELECT * FROM khach_hang WHERE ma_khach_hang = '$maKH'";
+        //Truy vấn tên đăng nhập trong cơ sở dữ liệu
+        $check_username = "SELECT * FROM tai_khoan WHERE tenTaiKhoan = '$username'";
         //Gửi truy vấn đến cơ sở dữ liệu
-        $check_maKH = mysqli_query($connect, $check_maKH);
-        //Kiểm tra nếu có một dòng kết quả (tức là mã nhân viên vừa nhập khớp với một mã nhân viên trong cơ sở dữ liệu).
-        if (mysqli_num_rows($check_maKH) == 0)
-            $msg = "<span class='text-danger font-weight-bold'>Mã khách hàng không tồn tại. Vui lòng kiểm tra lại.</span>";
-        else {
-            //Truy vấn tên đăng nhập trong cơ sở dữ liệu
-            $check_username = "SELECT * FROM tai_khoan WHERE tenTaiKhoan = '$username'";
-            //Gửi truy vấn đến cơ sở dữ liệu
-            $result_username = mysqli_query($connect, $check_username);
-            //Kiểm tra nếu có một dòng kết quả (tức là tên tài khoản vừa nhập khớp với tên tài khoản trong cơ sở dữ liệu).
-            if (mysqli_num_rows($result_username) != 0) {
-                $msg = "<span class='text-danger font-weight-bold'>Tên đăng nhập đã tồn tại. Vui lòng chọn nhập tên đăng nhập khác!</span>";
-            } else {
-                //Thêm mới tài khoản
-                $sql = "INSERT INTO tai_khoan (tenTaiKhoan, matKhau, tenHienThi, maNV_KH) VALUES ('$username', '$pass', '$tenhienthi', '$maKH')";
-                if (mysqli_query($connect, $sql)) {
-                    $msg = "<span class='text-success font-weight-bold'>Đăng ký tài khoản thành công</span>";
-                } else
-                    $msg = "<span class='text-danger font-weight-bold'>Đã có lỗi trong quá trình đăng ký</span>";
+        $result_username = mysqli_query($connect, $check_username);
+        //Kiểm tra nếu có một dòng kết quả (tức là tên tài khoản vừa nhập khớp với tên tài khoản trong cơ sở dữ liệu).
+        if (mysqli_num_rows($result_username) != 0) {
+            $msg = "<span class='text-danger font-weight-bold'>Tên đăng nhập đã tồn tại. Vui lòng chọn nhập tên đăng nhập khác!</span>";
+        } else {
+            //Thêm mới tài khoản
+            $sql = "INSERT INTO tai_khoan (tenTaiKhoan, matKhau, tenHienThi, maNV_KH, phanQuyen) VALUES ('$username', '$pass', '$tenhienthi', '$maKH', '$phanQuyen')";
+            if (mysqli_query($connect, $sql)) {
+                $msg = "<span class='text-success font-weight-bold'>Đăng ký tài khoản thành công</span>";
+            } else
+                $msg = "<span class='text-danger font-weight-bold'>Đã có lỗi trong quá trình đăng ký</span>";
 
-                //Thêm thông tin khách hàng vào bảng khách hàng
-                $sql_Insert_KH = "INSERT INTO khach_hang (ma_khach_hang, ten_khach_hang, gioiTinh, dia_chi, so_dien_thoai, email) VALUES ('$maKH', '$hoTen', '$gioiTinh', '$diachi', '$sodienthoai', '$email')";
-                mysqli_query($connect, $sql_Insert_KH);
-            }
+            //Thêm thông tin khách hàng vào bảng khách hàng
+            $sql_Insert_KH = "INSERT INTO khach_hang (ma_khach_hang, ten_khach_hang, gioiTinh, dia_chi, so_dien_thoai, email) VALUES ('$maKH', '$hoTen', '$gioitinh', '$diachi', '$sodienthoai', '$email')";
+            mysqli_query($connect, $sql_Insert_KH);
         }
     }
 }
@@ -107,27 +99,27 @@ if (isset($_POST['dangKy'])) {
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                     <label>Tên tài khoản <span class="text-danger">*</span></label>
-                                    <input class="form-control" placeholder="Tên đăng nhập" name="username" type="text" autofocus />
+                                    <input class="form-control" placeholder="Tên đăng nhập" name="username" type="text" autofocus value="<?php if(isset($_POST['username'])) echo $username; ?>"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                     <label>Tên hiển thị <span class="text-danger">*</span></label>
-                                    <input class="form-control" placeholder="Tên hiển thị" name="tenhienthi" type="text" autofocus />
+                                    <input class="form-control" placeholder="Tên hiển thị" name="tenhienthi" type="text" autofocus value="<?php if(isset($_POST['tenhienthi'])) echo $tenhienthi; ?>"/>
                                 </div>
 
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                     <label>Mật khẩu <span class="text-danger">*</span></label>
-                                    <input class="form-control" placeholder="Mật khẩu" name="password" type="password" value="" />
+                                    <input class="form-control" placeholder="Mật khẩu" name="password" type="password" value="<?php if(isset($_POST['password'])) echo $pass; ?>" />
                                 </div>
 
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                     <label>Xác nhận mật khẩu<span class="text-danger">*</span></label>
-                                    <input class="form-control" placeholder="Xác nhận mật khẩu" name="password_confirm" type="password" value="" />
+                                    <input class="form-control" placeholder="Xác nhận mật khẩu" name="password_confirm" type="password" value="<?php if(isset($_POST['password_confirm'])) echo $pass_confirm; ?>"/>
                                 </div>
                             </div>
                         </div>
@@ -135,7 +127,7 @@ if (isset($_POST['dangKy'])) {
                     <div class="col-md-12">
                         <div class="form-group form-group-default">
                             <label>Họ tên <span class="text-danger">*</span></label>
-                            <input class="form-control" placeholder="Họ tên khách hàng" name="hoTen" type="text" autofocus />
+                            <input class="form-control" placeholder="Họ tên khách hàng" name="hoTen" type="text" autofocus value="<?php if(isset($_POST['hoTen'])) echo $hoTen; ?>"/>
                         </div>
                         <div class="row">
                             <div class="col-md-6">
@@ -150,19 +142,19 @@ if (isset($_POST['dangKy'])) {
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                     <label>Số điện thoại <span class="text-danger">*</span></label>
-                                    <input class="form-control" placeholder="Số điện thoại" name="soDienThoai" type="text" autofocus />
+                                    <input class="form-control" placeholder="Số điện thoại" name="soDienThoai" type="text" autofocus value="<?php if(isset($_POST['soDienThoai'])) echo $sodienthoai; ?>"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                     <label>Địa chỉ <span class="text-danger">*</span></label>
-                                    <input class="form-control" placeholder="Địa chỉ" name="diaChi" type="text" autofocus />
+                                    <input class="form-control" placeholder="Địa chỉ" name="diaChi" type="text" autofocus value="<?php if(isset($_POST['diaChi'])) echo $diachi; ?>"/>
                                 </div>
                             </div>
                             <div class="col-md-6">
                                 <div class="form-group form-group-default">
                                     <label>Email <span class="text-danger">*</span></label>
-                                    <input class="form-control" placeholder="Email" name="email" type="text" autofocus />
+                                    <input class="form-control" placeholder="Email" name="email" type="text" autofocus value="<?php if(isset($_POST['email'])) echo $email; ?>"/>
                                 </div>
                             </div>
                         </div>
