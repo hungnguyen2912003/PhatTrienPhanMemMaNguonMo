@@ -19,24 +19,29 @@ if (!isset($_GET['page']))
 }
 //Xác định vị trí của bản ghi đầu tiên trong câu truy vấn SQL. Nó tính toán dựa trên số trang hiện tại và số bản ghi trên mỗi trang.
 $offset =($_GET['page']-1)*$rowsPerPage;
-////Lọc sản phẩm theo nhà cung cấp
+
+// Lọc sản phẩm theo nhà cung cấp nếu có
 if (isset($_POST['nha_cung_cap']) && !empty($_POST['nha_cung_cap'])) {
     $nhaCungCapId = $_POST['nha_cung_cap'];
     $sql = "SELECT * FROM san_pham WHERE ma_ncc = '$nhaCungCapId' LIMIT $offset, $rowsPerPage";
     $result = mysqli_query($connect, $sql);
+} else {
+    // Nếu không có nhà cung cấp được chọn thì lấy tất cả sản phẩm
+    $sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
+    $result = mysqli_query($connect, $sql);
 }
 
-/// Xử lý tìm kiếm
+// Xử lý tìm kiếm
 $searchResult = false; // Biến kiểm tra kết quả tìm kiếm
-// Nếu người dùng nhấn nút tìm kiếm
-// Nếu người dùng nhấn nút tìm kiếm
 if (isset($_POST['btnTimKiem'])) {
     $str = trim($_POST['searchtext']);
     if (empty($str)) {
-        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Sản phẩm cần tìm kiếm không được bỏ trống</span>";
+        // Nếu input tìm kiếm rỗng, lấy tất cả sản phẩm
+        $sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
+        $result = mysqli_query($connect, $sql);
     } else {
         // Truy vấn tìm kiếm
-        $sql = "SELECT * FROM san_pham WHERE LOWER(ten_sp) LIKE LOWER('%$str%')";
+        $sql = "SELECT * FROM san_pham WHERE LOWER(ten_sp) LIKE LOWER('%$str%') LIMIT $offset, $rowsPerPage";
         $result = mysqli_query($connect, $sql);
 
         // Kiểm tra nếu câu truy vấn thành công và có kết quả
@@ -48,19 +53,9 @@ if (isset($_POST['btnTimKiem'])) {
             $searchResult = false; // Đảm bảo không hiển thị kết quả không hợp lệ
         }
     }
-} else {
-    // Nếu không tìm kiếm thì lấy toàn bộ danh sách
-    $sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
-    $result = mysqli_query($connect, $sql);
-
-    // Kiểm tra nếu câu truy vấn thành công
-    if (!$result) {
-        die('Lỗi truy vấn: ' . mysqli_error($connect));
-    }
 }
-
-
 ?>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>

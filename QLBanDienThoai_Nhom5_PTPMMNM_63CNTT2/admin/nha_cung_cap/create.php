@@ -48,9 +48,7 @@ if (isset($_POST["themMoi"])) { // Kiểm tra nếu form được gửi với n�
                     $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>"; // Thông báo lỗi.
                 } else {
                     move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "\\QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2\\Images\\" . $file_name);// Di chuyển file hình ảnh đến thư mục lưu trữ.
-
                     $sql = "INSERT INTO nha_cung_cap (id, tenNCC, soDienThoai, email, Images) VALUES ('$maNCC', '$tenNCC', '$soDienThoai', '$email', '$hinhAnh')"; // Chuẩn bị câu lệnh SQL để chèn dữ liệu vào cơ sở dữ liệu.
-
                     if (mysqli_query($connect, $sql)) { // Thực hiện câu lệnh SQL.
                         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhà cung cấp $tenNCC thành công!</span>"; // Thông báo thành công.
                         echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>"; // Chuyển hướng trang.
@@ -68,6 +66,7 @@ if (isset($_POST["themMoi"])) { // Kiểm tra nếu form được gửi với n�
 }
 mysqli_close($connect); // Đóng kết nối cơ sở dữ liệu.
 ?>
+
 
 <!DOCTYPE html>
 <html lang="en">
@@ -186,6 +185,9 @@ mysqli_close($connect); // Đóng kết nối cơ sở dữ liệu.
                                 <div class="col-md-12 text-center">
                                     <button type="submit" name="themMoi" class="btn btn-success mt-3">Thêm mới</button>
                                     <a href="<?php echo $base_url?>/admin/nha_cung_cap/index.php" class="btn btn-danger btnBack mt-3">Quay lại</a>
+                                </div>
+                                <div class="form-group text-center">
+                                    <?php echo $msg?>
                                 </div>
                             </div>
                         </form>

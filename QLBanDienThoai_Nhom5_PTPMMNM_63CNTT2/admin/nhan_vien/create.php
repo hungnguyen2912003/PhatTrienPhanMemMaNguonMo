@@ -80,6 +80,7 @@ if (isset($_POST["themMoi"])) {
             if (mysqli_num_rows($check_maNV) != 0) {
                 $msg = "<span class='text-danger font-weight-bold'>Đã có mã nhân viên này. Vui lòng thử lại.</span>";
             } else {
+
                 // Thực hiện thêm mới
                 $sql = "INSERT INTO nhan_vien (id, hoNV, tenNV, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoNV','$tenNV', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
                 if (mysqli_query($connect, $sql)) {
@@ -119,6 +120,7 @@ mysqli_close($connect);
     </script>
 </head>
 <body>
+<!-- Nội dung trang của bạn tiếp theo -->
 <div class="main-panel">
     <div class="content">
         <div class="page-inner">

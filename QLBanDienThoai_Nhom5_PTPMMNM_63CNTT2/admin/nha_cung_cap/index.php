@@ -13,14 +13,21 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 // Kiểm tra nếu có giá trị tìm kiếm
 $searchText = isset($_GET['Searchtext']) ? $_GET['Searchtext'] : '';
 
-
 // Truy vấn tìm kiếm với điều kiện nếu có từ khóa tìm kiếm
 $sql = "SELECT * FROM nha_cung_cap WHERE tenNCC LIKE '%$searchText%'";
 
 // Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
-?>
 
+// Kiểm tra kết quả tìm kiếm
+if ((mysqli_num_rows($result) > 0) && !empty($searchText)) {//nếu có kết quả tìm kiếm và người dùng đã nhập gì đó vào ô tìm kiếm
+    $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả có từ khoá: '$searchText'</span>";
+} else{
+    // Nếu không tìm thấy kết quả, có thể thêm thông báo
+    $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả có từ khoá: '$searchText'</span>";
+}
+
+?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -68,6 +75,16 @@ $result = mysqli_query($connect, $sql);
                         </div>
                     </div>
                     <div class="card-body">
+                        <div class="message-container text-center">
+                            <!-- Hiển thị dòng thông báo tìm kiếm -->
+                            <?php
+                            // Hiển thị thông báo khác nếu có
+                            if (isset($_SESSION['msg'])) {
+                                echo $_SESSION['msg'];
+                                unset($_SESSION['msg']);
+                            }
+                            ?>
+                        </div>
 
                         <div class="table-responsive">
                             <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">

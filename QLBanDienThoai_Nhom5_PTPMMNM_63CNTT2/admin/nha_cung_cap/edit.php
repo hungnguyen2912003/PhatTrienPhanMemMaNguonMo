@@ -36,13 +36,12 @@ if (!$row) {
 
 // Kiểm tra nếu form được gửi với nút "Cập nhật" được nhấn.
 if (isset($_POST["capNhat"])) {
-
     // Lấy tên ncc, email, sdt, tên file hình ảnh từ form.
     $tenNCC = $_POST["tenNhaCungCap"];
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
-    //Nếu có hình ảnh mới
-    $hinhAnh = !empty($_FILES['hinhAnh']['name']) ? $_FILES['hinhAnh']['name'] : $_POST['hinhAnh'];
+    // Nếu có hình ảnh mới
+    $hinhAnh = !empty($_FILES['Images']['name']) ? $_FILES['Images']['name'] : $_POST['hinhAnh'];
 
     // Kiểm tra các trường bắt buộc
     if (empty($tenNCC) || empty($email) || empty($soDienThoai) || empty($hinhAnh)) {
@@ -51,17 +50,15 @@ if (isset($_POST["capNhat"])) {
         // Kiểm tra số điện thoại
         if (!preg_match("/^\d{8,11}$/", $soDienThoai)) {
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 8 đến 11 chữ số.</span>";
-        } elseif (!empty($_FILES['hinhAnh']['name'])) {
+        } elseif (!empty($_FILES['Images']['name'])) {
             // Kiểm tra hình ảnh mới
-            // Lấy tên, kích thước, và đường dẫn tạm thời của file tải lên
-            $file_name = $_FILES['hinhAnh']['name'];
-            $file_size = $_FILES['hinhAnh']['size'];
-            $file_tmp = $_FILES['hinhAnh']['tmp_name'];
-            // Lấy đuôi file chuyển về chữ thường
-            $file_ext = strtolower(pathinfo($file_name, PATHINFO_EXTENSION));
+            $file_name = $_FILES['Images']['name'];
+            $file_size = $_FILES['Images']['size'];
+            $file_tmp = $_FILES['Images']['tmp_name'];
 
-            // Các đuôi file được phép tải lên
-            $allowed_ext = ["jpeg", "jpg", "png"];
+            $array = explode('.', $file_name); // Tách tên file để lấy phần đuôi.
+            $file_ext = strtolower(end($array)); // Lấy phần đuôi file và chuyển về chữ thường.
+            $allowed_ext = array("jpeg", "jpg", "png"); // Các đuôi file hình ảnh hợp lệ.
 
             // Kiểm tra xem phần mở rộng của file có hợp lệ không
             if (!in_array($file_ext, $allowed_ext)) {
@@ -76,23 +73,18 @@ if (isset($_POST["capNhat"])) {
             }
         }
     }
-    if (empty($msg)) {
-        // Cập nhật thông tin nhà cung cấp
-        $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email', Images='$hinhAnh'
-                WHERE id='$maNCC'";
 
-        // Thực hiện câu lệnh UPDATE và kiểm tra kết quả
+    // Cập nhật thông tin nhà cung cấp
+    if (empty($msg)) {
+        $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email', Images='$hinhAnh' WHERE id='$maNCC'";
         if (mysqli_query($connect, $sql)) {
-            // Nếu cập nhật thành công, lưu thông báo thành công vào session và chuyển hướng về trang danh sách nhà cung cấp
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
             echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
         } else {
-            // Nếu có lỗi khi cập nhật, lưu thông báo lỗi vào session và chuyển hướng về trang danh sách nhà cung cấp
             $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
             echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/index.php';</script>";
         }
     }
-
 }
 ?>
 
@@ -188,11 +180,14 @@ if (isset($_POST["capNhat"])) {
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <div class="col-md-9">
+                                                            <!-- input hiển thị tên hình ảnh, được điền giá trị bằng cách kiểm tra trạng thái của tệp đã chọn -->
                                                             <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
-                                                                   value="<?php echo isset($row['Images']) ? $row['Images'] : ''; ?>" style="text-align: center;" readonly />
+                                                                   value="<?php if (isset($_FILES['Images']) && $_FILES['Images']['error'] == 0) echo $_FILES['Images']['name']; else echo 'Chưa thêm hình ảnh'; ?>" style="text-align: center;" readonly />
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <input type="file" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" />
+                                                            <!-- input kiểu file để người dùng chọn hình ảnh, mặc định là ẩn -->
+                                                            <input type="file" id="fileInput" name="Images" accept="image/*" onchange="layAnh(event)" style="display: none;" />
+                                                            <!-- Nút tải ảnh, khi nhấn trường input file ẩn để chọn hình ảnh -->
                                                             <button style="width: 80px;" type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
                                                         </div>
                                                     </div>
