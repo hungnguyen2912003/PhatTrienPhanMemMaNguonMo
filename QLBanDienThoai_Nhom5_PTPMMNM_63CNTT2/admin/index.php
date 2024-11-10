@@ -1,5 +1,5 @@
 <?php
-session_start();
+include('../timeOutSession.php');
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 ?>
 
