@@ -17,7 +17,7 @@ $mapq = $_GET['id'];
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
-$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.hoTen AS hoTen, tk.id AS tk_id 
+$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.tenNV AS hoTen, tk.id AS tk_id 
         FROM tai_khoan tk 
         JOIN nhan_vien nv ON tk.maNV_KH = nv.id 
         WHERE tk.id = '$mapq'";
