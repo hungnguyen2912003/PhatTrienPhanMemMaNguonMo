@@ -1,4 +1,3 @@
-
 <?php
 include('../timeOutSession.php');
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
@@ -9,24 +8,28 @@ include('../includes/footer.html');
 // Kết nối vào cơ sở dữ liệu và hiển thị thông báo lỗi nếu không kết nối được
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-// Lấy mã ncc từ URL
+// Kiểm tra và lấy mã phân quyền từ URL
+if (!isset($_GET['id'])) {
+    echo "<h4>Không tìm thấy mã phân quyền.</h4>";
+    exit();
+}
 $mapq = $_GET['id'];
 $msg = "";
 
-$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.hoTen AS hoTen, tk.id AS tk_id FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV_KH = nv.id";
+// Lấy thông tin tài khoản theo mã phân quyền
+$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.hoTen AS hoTen, tk.id AS tk_id 
+        FROM tai_khoan tk 
+        JOIN nhan_vien nv ON tk.maNV_KH = nv.id 
+        WHERE tk.id = '$mapq'";
 
-
-// Gửi truy vấn đến cơ sở dữ liệu, lưu kết quả vào biến $result
+// Gửi truy vấn đến cơ sở dữ liệu và kiểm tra kết quả
 $result = mysqli_query($connect, $sql);
-
-// Lấy kết quả từ truy vấn và lưu vào biến $nhacungcap dưới dạng mảng kết hợp
 $phan_quyen = mysqli_fetch_assoc($result);
 
 if (!$phan_quyen) {
-    echo "<h4>Không tìm thấy thông tin .</h4>";// thông báo lỗi
-    exit;//dừng
+    echo "<h4>Không tìm thấy thông tin phân quyền.</h4>";
+    exit();
 }
-
 ?>
 <!DOCTYPE html>
 <html lang="en">
@@ -74,19 +77,18 @@ if (!$phan_quyen) {
                         <div class="card-body">
                             <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                                 <div class="row">
-
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Tên đăng nhập</label>
-                                                    <span class="form-control"><?php if(isset($phan_quyen['tenTaiKhoan'])) echo $phan_quyen['tenTaiKhoan']; ?></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Mã nhân viên </label>
-                                                    <span class="form-control"><?php if(isset($phan_quyen['maNV'])) echo $phan_quyen['maNV']; ?></span>
-                                                </div>
-                                            </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Tên đăng nhập</label>
+                                            <span class="form-control"><?php if(isset($phan_quyen['tenTaiKhoan'])) echo $phan_quyen['tenTaiKhoan']; ?></span>
+                                        </div>
+                                    </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Mã nhân viên </label>
+                                            <span class="form-control"><?php if(isset($phan_quyen['maNV'])) echo $phan_quyen['maNV']; ?></span>
+                                        </div>
+                                    </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Tên hiển thị </label>
@@ -99,9 +101,6 @@ if (!$phan_quyen) {
                                             <span class="form-control"><?php if(isset($phan_quyen['phanQuyen'])) echo $phan_quyen['phanQuyen']; ?></span>
                                         </div>
                                     </div>
-
-                                </div>
-
                                 </div>
                             </div>
                             <div class="form-group text-center">
