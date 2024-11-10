@@ -22,7 +22,7 @@ if (empty($manv)) {
     // Truy vấn thông tin nhân viên trực tiếp
     $sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
             FROM nhan_vien nv 
-            LEFT JOIN tai_khoan tk ON nv.idTaiKhoan = tk.idTaiKhoan 
+             LEFT JOIN tai_khoan tk ON nv.id = tk.maNV_KH 
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);
@@ -61,7 +61,7 @@ if(isset($_POST['deleteBtn'])){
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="page-title">Xoá thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; else echo 'Không xác định';?></h4>
+                            <h4 class="page-title">Xoá thông tin nhân viên: <?php if(isset($nhanVien['tenNV'])) echo $nhanVien['tenNV']; else echo 'Không xác định';?></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <ul class="breadcrumbs">
@@ -104,10 +104,21 @@ if(isset($_POST['deleteBtn'])){
                                                 <label>Mã nhân viên</label>
                                                 <span class="form-control"><?php if(isset($nhanVien['id'])) echo $nhanVien['id']; ?></span>
                                             </div>
-                                            <div class="form-group form-group-default">
-                                                <label>Họ tên nhân viên</label>
-                                                <span class="form-control"><?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></span>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Họ nhân viên</label>
+                                                        <span class="form-control"><?php if(isset($nhanVien['hoNV'])) echo $nhanVien['hoNV']; ?></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Tên nhân viên</label>
+                                                        <span class="form-control"><?php if(isset($nhanVien['tenNV'])) echo $nhanVien['tenNV']; ?></span>
+                                                    </div>
+                                                </div>
                                             </div>
+
                                             <div class="form-group form-group-default">
                                                 <label>Ngày sinh</label>
                                                 <span class="form-control"><?php if(isset($nhanVien['ngaySinh'])) echo date("d/m/Y", strtotime($nhanVien['ngaySinh'])); ?></span>

@@ -30,12 +30,25 @@ if (!$phan_quyen) {
     echo "<h4>Không tìm thấy thông tin phân quyền.</h4>";
     exit();
 }
+if(isset($_POST['deleteBtn'])){
+    // Xóa
+    $sqlDelete = "DELETE FROM tai_khoan WHERE id = '$mapq'";
+
+    if (mysqli_query($connect, $sqlDelete)) {
+        // Lưu thông báo thành công vào session
+        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công  $mapq  </span>";
+        echo "<script>window.location.href = '$base_url/admin/phan_quyen/index.php';</script>";
+    } else {
+        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
+    }
+}
+
 ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <title>Chi tiết phân quyền</title>
+    <title>Xóa phân quyền</title>
 </head>
 <body>
 <div class="main-panel">
@@ -64,7 +77,7 @@ if (!$phan_quyen) {
                                     <i class="flaticon-right-arrow"></i>
                                 </li>
                                 <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/phan_quyen/detail.php">Xem chi tiết</a>
+                                    <a href="<?php echo $base_url?>/admin/phan_quyen/delete.php">Xoá phân quyền</a>
                                 </li>
                             </ul>
                         </div>
@@ -75,6 +88,10 @@ if (!$phan_quyen) {
                 <div class="col-md-12">
                     <div class="card h-100">
                         <div class="card-body">
+                            <?php if (!empty($msg)): ?>
+                                <?php echo $msg; ?>
+                            <?php else: ?>
+                            <form action="" method="POST">
                             <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                                 <div class="row">
                                     <div class="col-md-6">
@@ -104,9 +121,14 @@ if (!$phan_quyen) {
                                 </div>
                             </div>
                             <div class="form-group text-center">
-                                <a href="<?php echo $base_url?>/admin/phan_quyen/edit.php?id=<?php echo $phan_quyen['tk_id']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                                <button type="submit" name="deleteBtn" class="btn btn-info">Xoá</button>
                                 <a href="<?php echo $base_url?>/admin/phan_quyen/index.php" class="btn btn-danger btnBack">Quay lại</a>
                             </div>
+                                <div class="form-group text-center">
+                                    <?php echo $msg?>
+                                </div>
+                            </form>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
