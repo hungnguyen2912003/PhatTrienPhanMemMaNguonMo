@@ -5,7 +5,6 @@ $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$error = "";
 $msg = "";
 
 //mysqli_real_escape_string: dùng để thoát (escape) các ký tự đặc biệt trong một chuỗi, đảm bảo rằng dữ liệu nhập từ người dùng sẽ không gây ra lỗi SQL hoặc bị khai thác qua SQL Injection khi bạn chèn chuỗi đó vào câu truy vấn SQL.
@@ -13,60 +12,42 @@ $msg = "";
 if (isset($_POST['dangKy'])) {
     //Kiểm tra tên đăng nhập, mật khẩu và tên hiển thị có để trống không?
     if (!empty($_POST['username']) && !empty($_POST['password']) && !empty($_POST['tenhienthi'])) {
-        $username = mysqli_real_escape_string($connect, $_POST['username']);
-        $pass = mysqli_real_escape_string($connect, $_POST['password']);
-        $tenhienthi = mysqli_real_escape_string($connect, $_POST['tenhienthi']);
+        $username = $_POST['username'];
+        $pass = $_POST['password'];
+        $tenhienthi = $_POST['tenhienthi'];
+        $maNV = $_POST['maNV'];
         //Kiểm tra mã nhân viên có trống không?
-        if (!empty($_POST['maNV'])) {
-            $maNV = mysqli_real_escape_string($connect, $_POST['maNV']);
-
+        if (!empty($maNV)) {
             //Truy vấn mã nhân viên trong cơ sở dữ liệu
             $check_maNV = "SELECT * FROM nhan_vien WHERE id = '$maNV'";
             //Gửi truy vấn đến cơ sở dữ liệu
             $result_maNV = mysqli_query($connect, $check_maNV);
             //Kiểm tra nếu có một dòng kết quả (tức là mã nhân viên vừa nhập khớp với một mã nhân viên trong cơ sở dữ liệu).
             if (mysqli_num_rows($result_maNV) == 0)
-                $error = "Mã nhân viên không tồn tại. Vui lòng kiểm tra lại.";
+                $msg = "<span class='text-danger font-weight-bold'>Mã nhân viên không tồn tại. Vui lòng kiểm tra lại.</span>";
             else {
-
                 //Truy vấn tên đăng nhập trong cơ sở dữ liệu
                 $check_username = "SELECT * FROM tai_khoan WHERE tenTaiKhoan = '$username'";
                 //Gửi truy vấn đến cơ sở dữ liệu
                 $result_username = mysqli_query($connect, $check_username);
                 //Kiểm tra nếu có một dòng kết quả (tức là tên tài khoản vừa nhập khớp với tên tài khoản trong cơ sở dữ liệu).
                 if (mysqli_num_rows($result_username) != 0) {
-                    $error = "Tên đăng nhập đã tồn tại. Vui lòng chọn nhập tên đăng nhập khác!";
+                    $msg = "<span class='text-danger font-weight-bold'>Tên đăng nhập đã tồn tại. Vui lòng chọn nhập tên đăng nhập khác!</span>";
                 } else {
-                    //Truy vấn nhân viên đã có tài khoản hay chưa.
-                    $check_nv_tk = "SELECT * FROM nhan_vien WHERE id = '$maNV' AND idTaiKhoan IS NOT NULL";
-                    //Gửi truy vấn đến cơ sở dữ liệu
-                    $result_nv_tk = mysqli_query($connect, $check_nv_tk);
-                    //Kiểm tra nếu có một dòng kết quả.
-                    if (mysqli_num_rows($result_nv_tk) != 0) {
-                        $error = "Nhân viên này đã có tài khoản.";
-                    } else  //Đủ điều kiện: Mã nhân viên đúng, idTaiKhoan = null
-                    {
-                        //Thêm mới tài khoản
-                        $sql = "INSERT INTO tai_khoan (tenTaiKhoan, matKhau, tenHienThi) VALUES ('$username', '$pass', '$tenhienthi')";
-
-                        if (mysqli_query($connect, $sql)) {
-                            //mysqli_insert_id: lấy ID của tài khoản vừa được thêm vào từ bảng tai_khoan, sau đó liên kết tài khoản này với một nhân viên cụ thể trong bảng nhan_vien bằng cách cập nhật cột idTaiKhoan
-                            $idtk = mysqli_insert_id($connect);
-                            //Cập nhật tài khoản vào nhân viên
-                            $query = "UPDATE nhan_vien SET idTaiKhoan = '$idtk' WHERE id = '$maNV'";
-                            mysqli_query($connect, $query);
-                            $msg = "Đăng ký tài khoản thành công";
-                        } else
-                            $error = "Đã có lỗi trong quá trình đăng ký";
-                    }
+                    //Thêm mới tài khoản
+                    $sql = "INSERT INTO tai_khoan (tenTaiKhoan, matKhau, tenHienThi, maNV) VALUES ('$username', '$pass', '$tenhienthi', '$maNV')";
+                    if (mysqli_query($connect, $sql)) {
+                        $msg = "<span class='text-success font-weight-bold'>Đăng ký tài khoản thành công</span>";
+                    } else
+                        $msg = "<span class='text-danger font-weight-bold'>Đã có lỗi trong quá trình đăng ký</span>";
                 }
             }
         }
         else
-            $error = "Mã nhân viên là trường bắt buộc";
+            $msg = "<span class='text-danger font-weight-bold'>Mã nhân viên là trường bắt buộc</span>";
     }
     else
-        $error = "Tên đăng nhập, mật khẩu, tên hiển thị không được để trống";
+        $msg = "<span class='text-danger font-weight-bold'>Tên đăng nhập, mật khẩu, tên hiển thị không được để trống</span>";
 }
 ?>
 
@@ -114,7 +95,6 @@ if (isset($_POST['dangKy'])) {
                         <input class="form-control" placeholder="Mã nhân viên" name="maNV" type="text" autofocus />
                     </div>
                     <div class="form-group form-group-default text-center font-weight-bold">
-                        <p class="text-danger"><?php echo $error;?></p>
                         <p class="text-success"><?php echo $msg;?></p>
                     </div>
                     <!-- /.col -->

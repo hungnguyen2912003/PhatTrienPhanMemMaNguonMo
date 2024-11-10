@@ -30,11 +30,15 @@ if (isset($_POST['dangNhap'])) {
 
         //Kiểm tra nếu có một dòng kết quả (tức là tài khoản và mật khẩu khớp với một tài khoản trong cơ sở dữ liệu).
         if (mysqli_num_rows($result) == 1) {
+            $sql = "SELECT * FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV = nv.id";
+            $result = mysqli_query($connect, $sql);
             //mysqli_fetch_assoc: lấy một hàng dữ liệu từ kết quả của truy vấn
             $user_data = mysqli_fetch_assoc($result);
             $_SESSION['logged'] = true;
             $_SESSION['username'] = $user_data['tenTaiKhoan'];
             $_SESSION['tenhienthi'] = $user_data['tenHienThi'];
+            $_SESSION['hoTen'] = $user_data['hoTen'];
+            $_SESSION['phanQuyen'] = $user_data['phanQuyen'];
             //Kiểm tra xem có biến phiên redirect_to không?
             //Nếu có, sẽ chuyển hướng đến trang mà người dùng muốn truy cập trước khi đăng nhập;
             //Nếu không, chuyển hướng mặc định đến index.php
