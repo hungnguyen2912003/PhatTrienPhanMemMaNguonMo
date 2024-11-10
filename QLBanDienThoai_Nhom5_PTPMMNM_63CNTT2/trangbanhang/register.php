@@ -20,7 +20,6 @@ if (isset($_POST['dangKy'])) {
     $diachi  = $_POST['diaChi'];
     $sodienthoai = $_POST['soDienThoai'];
     $email = $_POST['email'];
-    //Kiểm tra tên đăng nhập, mật khẩu và tên hiển thị có để trống không?
     if(empty($username))
         $msg = "<span class='text-danger font-weight-bold'>Tên đăng nhập không được để trống</span>";
     elseif(empty($pass))
@@ -54,13 +53,14 @@ if (isset($_POST['dangKy'])) {
             //Thêm mới tài khoản
             $sql = "INSERT INTO tai_khoan (tenTaiKhoan, matKhau, tenHienThi, maNV_KH, phanQuyen) VALUES ('$username', '$pass', '$tenhienthi', '$maKH', '$phanQuyen')";
             if (mysqli_query($connect, $sql)) {
+                mysqli_insert_id($connect);
                 $msg = "<span class='text-success font-weight-bold'>Đăng ký tài khoản thành công</span>";
             } else
                 $msg = "<span class='text-danger font-weight-bold'>Đã có lỗi trong quá trình đăng ký</span>";
 
-            //Thêm thông tin khách hàng vào bảng khách hàng
-            $sql_Insert_KH = "INSERT INTO khach_hang (ma_khach_hang, ten_khach_hang, gioiTinh, dia_chi, so_dien_thoai, email) VALUES ('$maKH', '$hoTen', '$gioitinh', '$diachi', '$sodienthoai', '$email')";
-            mysqli_query($connect, $sql_Insert_KH);
+//            //Thêm thông tin khách hàng vào bảng khách hàng
+//            $sql_Insert_KH = "INSERT INTO khach_hang (ma_khach_hang, ten_khach_hang, gioiTinh, dia_chi, so_dien_thoai, email) VALUES ('$maKH', '$hoTen', '$gioitinh', '$diachi', '$sodienthoai', '$email')";
+//            mysqli_query($connect, $sql_Insert_KH);
         }
     }
 }

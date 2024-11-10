@@ -10,7 +10,7 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.hoTen AS hoTen, tk.id AS tk_id FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV = nv.id";
+$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.hoTen AS hoTen, tk.id AS tk_id FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV_KH = nv.id";
 
 
 // Gửi truy vấn đến cơ sở dữ liệu
