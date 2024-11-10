@@ -13,15 +13,19 @@ $msg = "";
 $maNV = rand(10000000, 99999999);
 
 if (isset($_POST["themMoi"])) {
-    $hoTen = $_POST["hoTen"];
+    $hoNV = $_POST["hoNV"];
+    $tenNV = $_POST["tenNV"];
     $ngaySinh = $_POST["ngaySinh"];
     $gioiTinh = $_POST["gioiTinh"];
     $diaChi = $_POST["diaChi"];
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
     $hinhAnh = $_FILES['hinhAnh']['name'];
-    if(empty($hoTen)){
-        $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ tên</span>";
+    if(empty($hoNV)){
+        $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ</span>";
+    }
+    elseif(empty($tenNV)){
+        $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập tên</span>";
     }
     elseif(empty($ngaySinh)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập ngày sinh</span>";
@@ -77,9 +81,9 @@ if (isset($_POST["themMoi"])) {
                 $msg = "<span class='text-danger font-weight-bold'>Đã có mã nhân viên này. Vui lòng thử lại.</span>";
             } else {
                 // Thực hiện thêm mới
-                $sql = "INSERT INTO nhan_vien (id, hoTen, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoTen', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
+                $sql = "INSERT INTO nhan_vien (id, hoNV, tenNV, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoNV','$tenNV', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
                 if (mysqli_query($connect, $sql)) {
-                    $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $hoTen thành công!</span>";
+                    $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $tenNV thành công!</span>";
                     echo "<script>window.location.href = '$base_url/admin/nhan_vien/index.php';</script>";
                 } else {
                     $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
@@ -166,9 +170,19 @@ mysqli_close($connect);
                                             </div>
                                         </div>
                                         <div class="col-md-6">
-                                            <div class="form-group form-group-default">
-                                                <label>Họ tên nhân viên <span class="text-danger">*</span></label>
-                                                <input type="text" name="hoTen" placeholder="Nhập họ tên nhân viên" class="form-control" value="<?php if(isset($_POST['hoTen'])) echo $hoTen; ?>"/>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Họ nhân viên <span class="text-danger">*</span></label>
+                                                        <input type="text" name="hoNV" placeholder="Nhập họ nhân viên" class="form-control" value="<?php if(isset($_POST['hoNV'])) echo $hoNV; ?>"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Tên nhân viên <span class="text-danger">*</span></label>
+                                                        <input type="text" name="tenNV" placeholder="Nhập tên nhân viên" class="form-control" value="<?php if(isset($_POST['tenNV'])) echo $tenNV; ?>"/>
+                                                    </div>
+                                                </div>
                                             </div>
                                             <div class="row">
                                                 <div class="col-md-6">

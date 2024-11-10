@@ -98,9 +98,19 @@ if (empty($manv)) {
                                             <label>Mã nhân viên</label>
                                             <span class="form-control"><?php if(isset($nhanVien['id'])) echo $nhanVien['id']; ?></span>
                                         </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Họ tên nhân viên</label>
-                                            <span class="form-control"><?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; ?></span>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Họ nhân viên</label>
+                                                    <span class="form-control"><?php if(isset($nhanVien['hoNV'])) echo $nhanVien['hoNV']; ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Tên nhân viên</label>
+                                                    <span class="form-control"><?php if(isset($nhanVien['tenNV'])) echo $nhanVien['tenNV']; ?></span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Ngày sinh</label>

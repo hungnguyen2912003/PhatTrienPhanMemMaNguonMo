@@ -29,7 +29,7 @@ if (isset($_POST['btnTimKiem'])) {
         $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Họ tên nhân viên cần tìm kiếm không được bỏ trống</span>";
     } else {
         // Truy vấn tìm kiếm
-        $sql = "SELECT * FROM nhan_vien WHERE LOWER(hoTen) LIKE LOWER('%$str%')";
+        $sql = "SELECT * FROM nhan_vien WHERE LOWER(tenNV) LIKE LOWER('%$str%')";
         $result = mysqli_query($connect, $sql);
 
         // Kiểm tra nếu không có kết quả tìm kiếm
@@ -154,7 +154,8 @@ else {
                                 <tr class="text-center">
                                     <th>STT</th>
                                     <th>Mã nhân viên</th>
-                                    <th>Họ tên nhân viên</th>
+                                    <th>Họ nhân viên</th>
+                                    <th>Tên nhân viên</th>
                                     <th>Hình ảnh</th>
                                     <th>Ngày sinh</th>
                                     <th>Giới tính</th>
@@ -169,7 +170,8 @@ else {
                                     echo "<tr>";
                                     echo "<td class='text-center'>$stt</td>";
                                     echo "<td class='text-center'>{$row['id']}</td>";
-                                    echo "<td class='text-center'>{$row['hoTen']}</td>";
+                                    echo "<td class='text-center'>{$row['hoNV']}</td>";
+                                    echo "<td class='text-center'>{$row['tenNV']}</td>";
                                     echo "<td class='text-center'><img width='80' src='$base_url/Images/{$row['Images']}'/></td>";
                                     echo "<td class='text-center'>" . date("d/m/Y", strtotime($row['ngaySinh'])) . "</td>";
                                     echo "<td class='text-center'>" . ($row['gioiTinh'] == 1 ? 'Nam' : 'Nữ') . "</td>";
