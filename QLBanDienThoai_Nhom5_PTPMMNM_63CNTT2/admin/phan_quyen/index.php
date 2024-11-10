@@ -66,7 +66,7 @@ $result = mysqli_query($connect, $sql);
                                     echo "<td class='text-center'>{$row['tenTaiKhoan']}</td>";
                                     echo "<td class='text-center'>{$row['maNV']}</td>";
                                     echo "<td class='text-center'>{$row['tenHienThi']}</td>";
-                                    echo "<td class='text-center'>{$row['phanQuyen']}</td>";
+                                    echo "<td class='text-center'>" . (!empty($row['phanQuyen']) ? $row['phanQuyen'] : 'Chưa thiết lập') . "</td>";
                                     echo "<td class='text-center'>
                                             <a href='$base_url/admin/phan_quyen/detail.php?id={$row['tk_id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
                                             <a href='$base_url/admin/phan_quyen/edit.php?id={$row['tk_id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
