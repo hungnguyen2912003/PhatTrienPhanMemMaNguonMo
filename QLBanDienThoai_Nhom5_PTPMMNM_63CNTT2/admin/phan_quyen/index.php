@@ -10,7 +10,8 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$sql = "SELECT tk.tenDangNhap, tk.maNV, tk.tenHienThi, tk.phanQuyen, nv.hoTen FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV = nv.id";
+$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.hoTen AS hoTen, tk.id AS tk_id FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV = nv.id";
+
 
 // Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
@@ -43,22 +44,6 @@ $result = mysqli_query($connect, $sql);
             </div>
             <div class="col-md-12">
                 <div class="card h-100">
-<!--                    <div class="card-header">-->
-<!--                        <div class="row">-->
-<!--                            <div class="col-md-4">-->
-<!--                            </div>-->
-<!--                            <div class="col-md-5">-->
-<!--<!--                                <form method="GET" action="">-->-->
-<!--<!--                                    <div class="input-group input-group-sm">-->-->
-<!--<!--                                        <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhà cung cấp bạn muốn tìm kiếm" value="-->--><?php ////echo isset($_GET['Searchtext']) ? $_GET['Searchtext'] : ''; ?><!--<!--">-->-->
-<!--<!--                                        <span class="input-group-append">-->-->
-<!--<!--                                            <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>-->-->
-<!--<!--                                        </span>-->-->
-<!--<!--                                    </div>-->-->
-<!--<!--                                </form>-->-->
-<!--                            </div>-->
-<!--                        </div>-->
-<!--                    </div>-->
                     <div class="card-body">
                         <div class="table-responsive">
                             <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
@@ -78,14 +63,14 @@ $result = mysqli_query($connect, $sql);
                                 while ($row = mysqli_fetch_assoc($result)) {
                                     echo "<tr>";
                                     echo "<td class='text-center'>$stt</td>";
-                                    echo "<td class='text-center'>{$row['tk.tenTaiKhoan']}</td>";
-                                    echo "<td class='text-center'>{$row['nv.id']}</td>";
-                                    echo "<td class='text-center'>{$row['tk.tenHienThi']}</td>";
-                                    echo "<td class='text-center'>{$row['tk.phanQuyen']}</td>";
+                                    echo "<td class='text-center'>{$row['tenTaiKhoan']}</td>";
+                                    echo "<td class='text-center'>{$row['maNV']}</td>";
+                                    echo "<td class='text-center'>{$row['tenHienThi']}</td>";
+                                    echo "<td class='text-center'>{$row['phanQuyen']}</td>";
                                     echo "<td class='text-center'>
-                                            <a href='$base_url/admin/phan_quyen/detail.php?id={$row['tk.id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
-                                            <a href='$base_url/admin/phan_quyen/edit.php?id={$row['tk.id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
-                                            <a href='$base_url/admin/phan_quyen/delete.php?id={$row['tk.id']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
+                                            <a href='$base_url/admin/phan_quyen/detail.php?id={$row['tk_id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
+                                            <a href='$base_url/admin/phan_quyen/edit.php?id={$row['tk_id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
+                                            <a href='$base_url/admin/phan_quyen/delete.php?id={$row['tk_id']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
                                         </td>";
                                     echo "</tr>";
                                     $stt++;
