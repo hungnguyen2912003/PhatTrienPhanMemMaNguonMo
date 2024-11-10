@@ -9,7 +9,6 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 //Kiểm tra đã login chưa?
 if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
-    $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     header("Location: index.php");
     exit;
 }
@@ -24,9 +23,6 @@ if (isset($_POST['dangNhap'])) {
         $pass = mysqli_real_escape_string($connect, $_POST['password']);
         //Truy vấn tài khoản và mật khẩu
         $query = "SELECT * FROM tai_khoan WHERE tenTaiKhoan = '$user' AND matKhau = '$pass'";
-
-
-
         //Gửi truy vấn đến cơ sở dữ liệu, và kết quả được lưu vào $result
         $result = mysqli_query($connect, $query);
 
@@ -112,9 +108,9 @@ if (isset($_POST['dangNhap'])) {
                     <div class="form-group form-group-default">
                         <p class="text-danger"><?php echo $error;?></p>
                         <?php
-                            if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
-                                echo "<p class='text-danger' style='text-align: center;'>Bạn cần đăng nhập lại để tiếp tục hoạt động!</p>";
-                            }
+                        if (isset($_GET['timeout']) && $_GET['timeout'] == 'true') {
+                            echo "<p class='text-danger' style='text-align: center;'>Bạn cần đăng nhập lại để tiếp tục hoạt động!</p>";
+                        }
                         ?>
                     </div>
                     <!-- /.col -->

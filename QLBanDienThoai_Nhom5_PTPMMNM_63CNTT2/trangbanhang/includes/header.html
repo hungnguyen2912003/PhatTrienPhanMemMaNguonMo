@@ -23,13 +23,8 @@
     <meta property="og:url" itemprop="url" content="https://www.megatech.com/" />
     <meta property="og:description" content="@ViewBag.SeoDescription" />
     <meta content="https://cdn.24h.com.vn/upload/2-2018/images/2018-06-14/logo-chan-trang-24h.png" property="og:image" itemprop="thumbnailUrl" />
-    <!--script_breadcrum-->
-    @*@RenderSection("css", required: false)*@
     <link rel="stylesheet" type="text/css" href="<?php echo $base_url; ?>/Content/assets/styles/responsive.css">
-    @*@Styles.Render("<?php echo $base_url; ?>/Content/css")*@
-    @Scripts.Render("<?php echo $base_url; ?>/bundles/modernizr")
     <script src="<?php echo $base_url; ?>/Content/assets/js/jquery-3.2.1.min.js"></script>
-    @Scripts.Render("~/bundles/jqueryval")
 </head>
 <body>
 
@@ -89,8 +84,8 @@
                     </div>
                     <div class="col-md-2 text-center">
                         <div class="top_nav_left">
-                            <a href="<?php echo $base_url?>/admin/index.php" style="padding: 5px 30px; border-radius: 10px; background-color: #ff9999; color: #cc0000; font-weight: bold;">
-                                ADMIN
+                            <a href="<?php echo $base_url?>/login.php" style="padding: 5px 30px; border-radius: 10px; background-color: #ff9999; color: #cc0000; font-weight: bold;">
+                                Đăng nhập
                             </a>
                         </div>
                     </div>
