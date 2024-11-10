@@ -22,12 +22,6 @@ $result = mysqli_query($connect, $sql);
 <head>
     <meta charset="UTF-8">
     <title>Quản lý phân quyền</title>
-    <style>
-        .custom-textbox {
-            height: 50px;
-            border: 2px solid #0094ff;
-        }
-    </style>
 </head>
 <body>
 <div class="main-panel">
