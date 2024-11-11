@@ -66,9 +66,7 @@ if (isset($_POST["capNhat"])) {
                 <div class="page-header">
                     <div class="col-md-12">
                         <div class="row">
-                            <div class="col-md-6">
-                                <h4 class="page-title">Cập nhật thông tin phân quyền</h4>
-                            </div>
+                            <h4 class="page-title">Cập nhật thông tin phân quyền: <?php echo $row['hoTen']; ?></h4>
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
                                     <li class="nav-home">
@@ -99,10 +97,7 @@ if (isset($_POST["capNhat"])) {
                             <form action="" method="post">
                                 <input type="hidden" name="id" value="<?php echo $row['ID']; ?>">
                                 <div class="card-body">
-                                    <div class="row">
-                                        <div class="col-md-12">
-                                            <h2 class="text-center m-3" style="font-weight: bold;">CẬP NHẬT THÔNG TIN PHÂN QUYỀN</h2>
-                                        </div>
+                                    <div class="row justify-content-center" >
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default">
                                                 <label>Phân quyền <span class="text-danger">*</span></label>

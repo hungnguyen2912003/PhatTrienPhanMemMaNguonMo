@@ -203,7 +203,7 @@ mysqli_close($connect);
                                                     </div>
                                                 </div>
                                                 <div class="form-group form-group-default">
-                                                    <label>Mô tả</label>
+                                                    <label>Mô tả<span class="text-danger">*</span></label>
                                                     <textarea name="moTa" placeholder="Nhập mô tả" class="form-control" style="resize: none; overflow: scroll" rows="5" ><?php echo $moTa; ?></textarea>
                                                 </div>
                                             </div>

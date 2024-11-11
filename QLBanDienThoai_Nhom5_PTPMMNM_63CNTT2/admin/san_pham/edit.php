@@ -35,23 +35,22 @@ if (isset($_POST["capNhat"])) {
     $soLuong = $_POST['soLuong'] ?? $sanpham['soLuong'];
     $giaBan = $_POST['giaBan'] ?? $sanpham['giaBan'];
     $moTa = $_POST['moTa'] ?? $sanpham['moTa'];
-    // Check if file input is properly set
+
+    // Giữ nguyên hình ảnh cũ nếu không có hình ảnh mới được tải lên
     if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
         $hinhAnh = $_FILES['fileInput']['name'];
     } else {
-        $hinhAnh = ""; // Default value if no file uploaded
+        $hinhAnh = $sanpham['hinhAnh']; // Giữ nguyên giá trị cũ
     }
 
-    if (!empty($ten_sp) && !empty($ma_ncc) && !empty($soLuong) && !empty($giaBan) && !empty($moTa) ) {
+    if (!empty($ten_sp) && !empty($ma_ncc) && !empty($soLuong) && !empty($giaBan) && !empty($moTa)) {
         if (!(ctype_digit($soLuong) && $soLuong > 0)) {
             $msg = "<span class='text-danger font-weight-bold'>Số lượng sản phẩm phải là con số nguyên lớn hơn 0. Vui lòng nhập lại!</span>";
-        }
-        // Kiểm tra xem số lượng và giá bán có lớn hơn 0 không
-        elseif (!(is_numeric($giaBan) && $giaBan > 0)) {
+        } elseif (!(is_numeric($giaBan) && $giaBan > 0)) {
             $msg = "<span class='text-danger font-weight-bold'>Giá bán phải là số lớn hơn 0. Vui lòng nhập lại!</span>";
-        }else {
+        } else {
             // Kiểm tra hình ảnh mới
-            if (!empty($_FILES['fileInput']['name'])) {
+            if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
                 $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
                 $file = $dir . basename($hinhAnh);
                 $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
@@ -65,12 +64,12 @@ if (isset($_POST["capNhat"])) {
                     // Tải file lên server
                     if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
                         // File uploaded successfully
-                    }
-                    else {
+                    } else {
                         $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
                     }
                 }
             }
+
             if (empty($msg)) {
                 $sql = "UPDATE san_pham SET ten_sp = '$ten_sp', ma_ncc = '$ma_ncc', soLuong = '$soLuong', giaBan = '$giaBan', moTa = '$moTa', hinhAnh = '$hinhAnh' WHERE ma_sp = '$masp'";
 
