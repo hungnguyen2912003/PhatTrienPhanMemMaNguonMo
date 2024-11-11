@@ -1,5 +1,5 @@
 <?php
-include('../timeOutSession.php');
+include('../../timeOutSession.php');
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include ('../_PartialSideBar.html');
@@ -155,6 +155,7 @@ else {
                                     <th>STT</th>
                                     <th>Mã nhân viên</th>
                                     <th>Họ nhân viên</th>
+                                    <th>Tên lót</th>
                                     <th>Tên nhân viên</th>
                                     <th>Hình ảnh</th>
                                     <th>Ngày sinh</th>
@@ -171,6 +172,7 @@ else {
                                     echo "<td class='text-center'>$stt</td>";
                                     echo "<td class='text-center'>{$row['id']}</td>";
                                     echo "<td class='text-center'>{$row['hoNV']}</td>";
+                                    echo "<td class='text-center'>{$row['tenlot']}</td>";
                                     echo "<td class='text-center'>{$row['tenNV']}</td>";
                                     echo "<td class='text-center'><img width='80' src='$base_url/Images/{$row['Images']}'/></td>";
                                     echo "<td class='text-center'>" . date("d/m/Y", strtotime($row['ngaySinh'])) . "</td>";

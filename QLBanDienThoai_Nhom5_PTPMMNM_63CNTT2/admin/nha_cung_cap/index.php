@@ -1,5 +1,5 @@
 <?php
-include('../timeOutSession.php');
+include('../../timeOutSession.php');
 // Khai báo đường dẫn
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');

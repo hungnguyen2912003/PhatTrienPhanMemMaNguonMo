@@ -1,7 +1,7 @@
 <?php
-include('../timeOutSession.php');
 // Khai báo đường dẫn
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
+include('../../timeOutSession.php');
 include('../includes/header.html');
 include('../_PartialSideBar.html');
 include('../includes/footer.html');
@@ -10,8 +10,7 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.tenNV AS hoTen, tk.id AS tk_id FROM tai_khoan tk JOIN nhan_vien nv ON tk.maNV_KH = nv.id";
-
+$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen FROM user JOIN nhan_vien nv ON user.user_id = nv.id";
 
 // Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
@@ -46,7 +45,7 @@ $result = mysqli_query($connect, $sql);
                                     <th>STT</th>
                                     <th>Tên đăng nhập</th>
                                     <th>Mã nhân viên</th>
-                                    <th>Tên hiển thị</th>
+                                    <th>Họ tên nhân viên</th>
                                     <th>Phân quyền</th>
                                     <th>Chức năng</th>
                                 </tr>
@@ -59,12 +58,21 @@ $result = mysqli_query($connect, $sql);
                                     echo "<td class='text-center'>$stt</td>";
                                     echo "<td class='text-center'>{$row['tenTaiKhoan']}</td>";
                                     echo "<td class='text-center'>{$row['maNV']}</td>";
-                                    echo "<td class='text-center'>{$row['tenHienThi']}</td>";
-                                    echo "<td class='text-center'>" . (!empty($row['phanQuyen']) ? $row['phanQuyen'] : 'Chưa thiết lập') . "</td>";
+                                    echo "<td class='text-center'>{$row['hoTen']}</td>";
+                                    // Kiểm tra phân quyền và hiển thị tương ứng
+                                    $phanQuyen = $row['phanQuyen'];
+                                    if ($phanQuyen == 'ADMIN') {
+                                        $phanQuyenShow = 'Admin';
+                                    } elseif ($phanQuyen == 'NV') {
+                                        $phanQuyenShow = 'Nhân viên';
+                                    } else {
+                                        $phanQuyenShow = 'Chưa thiết lập';
+                                    }
+                                    echo "<td class='text-center'>$phanQuyenShow</td>";
                                     echo "<td class='text-center'>
-                                            <a href='$base_url/admin/phan_quyen/detail.php?id={$row['tk_id']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
-                                            <a href='$base_url/admin/phan_quyen/edit.php?id={$row['tk_id']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
-                                            <a href='$base_url/admin/phan_quyen/delete.php?id={$row['tk_id']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
+                                            <a href='$base_url/admin/phan_quyen/detail.php?id={$row['ID']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
+                                            <a href='$base_url/admin/phan_quyen/edit.php?id={$row['ID']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
+                                            <a href='$base_url/admin/phan_quyen/delete.php?id={$row['ID']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
                                         </td>";
                                     echo "</tr>";
                                     $stt++;

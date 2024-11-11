@@ -1,4 +1,5 @@
 <?php
+include('../../timeOutSession.php');
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include ('../_PartialSideBar.html');
@@ -23,7 +24,6 @@ include('../includes/footer.html');
         <div class="page-inner">
             <div class="page-header">
                 <div class="col-md-12">
-
                     <div class="row">
                         <div class="col-md-6">
                             <h4 class="page-title">Danh sách khách hàng</h4>
