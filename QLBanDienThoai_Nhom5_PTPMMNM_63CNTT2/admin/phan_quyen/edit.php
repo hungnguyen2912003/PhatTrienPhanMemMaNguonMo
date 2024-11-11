@@ -53,85 +53,85 @@ if (isset($_POST["capNhat"])) {
 ?>
 
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Chỉnh sửa phân quyền</title>
-</head>
-<body>
-<div class="main-panel">
-    <div class="content">
-        <div class="page-inner">
-            <div class="page-header">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="page-title">Cập nhật thông tin phân quyền</h4>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <ul class="breadcrumbs">
-                                <li class="nav-home">
-                                    <a href="<?php echo $base_url?>/admin/index.php">
-                                        <i class="flaticon-home"></i>
-                                    </a>
-                                </li>
-                                <li class="separator">
-                                    <i class="flaticon-right-arrow"></i>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/phan_quyen/index.php">Danh mục phân quyền</a>
-                                </li>
-                                <li class="separator">
-                                    <i class="flaticon-right-arrow"></i>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/phan_quyen/edit.php">Chỉnh sửa</a>
-                                </li>
-                            </ul>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chỉnh sửa phân quyền</title>
+    </head>
+    <body>
+    <div class="main-panel">
+        <div class="content">
+            <div class="page-inner">
+                <div class="page-header">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="page-title">Cập nhật thông tin phân quyền</h4>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <ul class="breadcrumbs">
+                                    <li class="nav-home">
+                                        <a href="<?php echo $base_url?>/admin/index.php">
+                                            <i class="flaticon-home"></i>
+                                        </a>
+                                    </li>
+                                    <li class="separator">
+                                        <i class="flaticon-right-arrow"></i>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $base_url?>/admin/phan_quyen/index.php">Danh mục phân quyền</a>
+                                    </li>
+                                    <li class="separator">
+                                        <i class="flaticon-right-arrow"></i>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $base_url?>/admin/phan_quyen/edit.php">Chỉnh sửa</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card h-100">
-                        <form action="" method="post">
-                            <input type="hidden" name="id" value="<?php echo $row['ID']; ?>">
-                            <div class="card-body">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h2 class="text-center m-3" style="font-weight: bold;">CẬP NHẬT THÔNG TIN PHÂN QUYỀN</h2>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default">
-                                            <label>Phân quyền <span class="text-danger">*</span></label>
-                                            <select class="form-control" name="phanQuyen">
-                                                <option value="admin" <?php echo ($row['phanQuyen'] == 'ADMIN') ? 'selected' : ''; ?>>Admin</option>
-                                                <option value="nhanvien" <?php echo ($row['phanQuyen'] == 'NV') ? 'selected' : ''; ?>>Nhân viên</option>
-                                            </select>
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card h-100">
+                            <form action="" method="post">
+                                <input type="hidden" name="id" value="<?php echo $row['ID']; ?>">
+                                <div class="card-body">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2 class="text-center m-3" style="font-weight: bold;">CẬP NHẬT THÔNG TIN PHÂN QUYỀN</h2>
                                         </div>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default">
+                                                <label>Phân quyền <span class="text-danger">*</span></label>
+                                                <select class="form-control" name="phanQuyen">
+                                                    <option value="admin" <?php echo ($row['phanQuyen'] == 'ADMIN') ? 'selected' : ''; ?>>Admin</option>
+                                                    <option value="nhanvien" <?php echo ($row['phanQuyen'] == 'NV') ? 'selected' : ''; ?>>Nhân viên</option>
+                                                </select>
+                                            </div>
+                                        </div>
+
                                     </div>
 
+                                    <div class="form-group text-center">
+                                        <button type="submit" name="capNhat" class="btn btn-primary">Cập nhật</button>
+                                        <a href="<?php echo $base_url?>/admin/phan_quyen/index.php" class="btn btn-danger btnBack">Quay lại</a>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <?php echo $msg ?>
+                                    </div>
                                 </div>
-
-                                <div class="form-group text-center">
-                                    <button type="submit" name="capNhat" class="btn btn-primary">Cập nhật</button>
-                                    <a href="<?php echo $base_url?>/admin/phan_quyen/index.php" class="btn btn-danger btnBack">Quay lại</a>
-                                </div>
-                                <div class="form-group text-center">
-                                    <?php echo $msg ?>
-                                </div>
-                            </div>
-                        </form>
+                            </form>
+                        </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</body>
-</html>
+    </body>
+    </html>
 <?php else: ?>
     <div class="main-panel">
         <div class="content">

@@ -102,7 +102,7 @@ if (isset($_POST['capNhat']))
             $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
 
             if (mysqli_query($connect, $sql)) {
-                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $tenNV thành công!</span>";
+                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoNV thành công!</span>";
                 echo "<script>window.location.href = '$base_url/admin/nhan_vien/index.php';</script>";
             } else {
                 $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
