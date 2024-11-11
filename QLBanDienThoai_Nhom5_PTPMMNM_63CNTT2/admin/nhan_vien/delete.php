@@ -20,17 +20,16 @@ if (empty($manv)) {
     $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
 } else {
     // Truy vấn thông tin nhân viên trực tiếp
-    $sql = "SELECT nv.*
+    $sql = "SELECT nv.*, user.username AS username, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
             FROM nhan_vien nv 
+            LEFT JOIN user ON nv.id = user.user_id 
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);
-
     if (!$nhanVien) {
         $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
     }
 }
-
 if(isset($_POST['deleteBtn'])){
     // Xóa nhân viên theo mã nhân viên
     $sqlDelete = "DELETE FROM nhan_vien WHERE id = '$manv'";
@@ -104,13 +103,19 @@ if(isset($_POST['deleteBtn'])){
                                                     <span class="form-control"><?php if(isset($nhanVien['id'])) echo $nhanVien['id']; ?></span>
                                                 </div>
                                                 <div class="row">
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
                                                         <div class="form-group form-group-default">
                                                             <label>Họ nhân viên</label>
                                                             <span class="form-control"><?php if(isset($nhanVien['hoNV'])) echo $nhanVien['hoNV']; ?></span>
                                                         </div>
                                                     </div>
-                                                    <div class="col-md-6">
+                                                    <div class="col-md-4">
+                                                        <div class="form-group form-group-default">
+                                                            <label>Tên lót</label>
+                                                            <span class="form-control"><?php if(isset($nhanVien['tenlot'])) echo $nhanVien['tenlot']; ?></span>
+                                                        </div>
+                                                    </div>
+                                                    <div class="col-md-4">
                                                         <div class="form-group form-group-default">
                                                             <label>Tên nhân viên</label>
                                                             <span class="form-control"><?php if(isset($nhanVien['tenNV'])) echo $nhanVien['tenNV']; ?></span>
@@ -156,23 +161,13 @@ if(isset($_POST['deleteBtn'])){
                                                         <span class="form-control">Chưa thêm hình ảnh cho nhân viên này</span>
                                                     <?php endif; ?>
                                                 </div>
-
                                                 <label class="mb-3" style="font-weight: bold;">TÀI KHOẢN</label>
-                                                <div class="row">
-                                                    <div class="col-md-6">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Tên tài khoản</label>
-                                                            <span class="form-control text-warning"><?php echo $nhanVien['tenTaiKhoan'] ?? 'Chưa thiết lập tài khoản'; ?></span>
-                                                        </div>
+                                                    <div class="form-group form-group-default">
+                                                        <label>Tên tài khoản</label>
+                                                        <?php echo "<span>{$nhanVien['username']}</span>" ?? "<span class='text-warning'>Chưa thiết lập</span>"; ?>
                                                     </div>
-                                                    <div class="col-md-6">
-                                                        <div class="form-group form-group-default">
-                                                            <label>Tên hiển thị tài khoản</label>
-                                                            <span class="form-control text-warning"><?php echo $nhanVien['tenHienThi'] ?? 'Chưa thiết lập tài khoản'; ?></span>
-                                                        </div>
-                                                    </div>
-                                                </div>
                                             </div>
+
                                         </div>
                                     <div class="form-group text-center">
                                         <button type="submit" name="deleteBtn" class="btn btn-info">Xoá</button>

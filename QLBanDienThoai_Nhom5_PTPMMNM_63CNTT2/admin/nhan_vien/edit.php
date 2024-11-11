@@ -34,6 +34,7 @@ if (empty($manv)) {
 if (isset($_POST['capNhat']))
 {
     $hoNV = $_POST["hoNV"];
+    $tenlot = $_POST["tenlot"];
     $tenNV = $_POST["tenNV"];
     $ngaySinh = $_POST["ngaySinh"];
     $gioiTinh = $_POST["gioiTinh"];
@@ -44,6 +45,9 @@ if (isset($_POST['capNhat']))
 
     if(empty($hoNV)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ</span>";
+    }
+    elseif(empty($tenlot)){
+        $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập tên lót</span>";
     }
     elseif(empty($tenNV)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập tên</span>";
@@ -95,7 +99,7 @@ if (isset($_POST['capNhat']))
         }
         if (empty($msg)) {
             // Cập nhật thông tin nhân viên
-            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
+            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
 
             if (mysqli_query($connect, $sql)) {
                 $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $tenNV thành công!</span>";
@@ -178,13 +182,19 @@ if (isset($_POST['capNhat']))
                                         </div>
                                         <div class="col-md-6">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group form-group-default">
                                                         <label>Họ nhân viên <span class="text-danger">*</span></label>
                                                         <input type="text" name="hoNV" class="form-control" value="<?php echo isset($_POST['hoNV']) ? $_POST['hoNV'] : $nhanVien['hoNV']; ?>">
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Tên lót nhân viên <span class="text-danger">*</span></label>
+                                                        <input type="text" name="tenlot" class="form-control" value="<?php echo isset($_POST['tenlot']) ? $_POST['tenlot'] : $nhanVien['tenlot']; ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
                                                     <div class="form-group form-group-default">
                                                         <label>Tên nhân viên <span class="text-danger">*</span></label>
                                                         <input type="text" name="tenNV" class="form-control" value="<?php echo isset($_POST['tenNV']) ? $_POST['tenNV'] : $nhanVien['tenNV']; ?>">
