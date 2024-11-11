@@ -17,10 +17,8 @@ $mapq = $_GET['id'];
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
-$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.tenNV AS hoTen, tk.id AS tk_id 
-        FROM tai_khoan tk 
-        JOIN nhan_vien nv ON tk.maNV_KH = nv.id 
-        WHERE tk.id = '$mapq'";
+
+$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen FROM user JOIN nhan_vien nv ON user.user_id = nv.id";
 
 // Gửi truy vấn đến cơ sở dữ liệu và kiểm tra kết quả
 $result = mysqli_query($connect, $sql);
@@ -59,7 +57,7 @@ if(isset($_POST['deleteBtn'])){
                 <div class="col-md-12">
                     <div class="row">
                         <div class="col-md-6">
-                            <h4 class="page-title">Chi tiết thông tin phân quyền: <?php echo $phan_quyen['tenTaiKhoan']; ?></h4>
+                            <h4 class="page-title">Xóa thông tin phân quyền: <?php echo $phan_quyen['hoTen']; ?></h4>
                         </div>
                         <div class="col-md-6 text-right">
                             <ul class="breadcrumbs">
@@ -109,8 +107,8 @@ if(isset($_POST['deleteBtn'])){
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
-                                            <label>Tên hiển thị </label>
-                                            <span class="form-control"><?php if(isset($phan_quyen['tenHienThi'])) echo $phan_quyen['tenHienThi']; ?></span>
+                                            <label>Họ tên nhân viên </label>
+                                            <span class="form-control"><?php if(isset($phan_quyen['hoTen'])) echo $phan_quyen['hoTen']; ?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">

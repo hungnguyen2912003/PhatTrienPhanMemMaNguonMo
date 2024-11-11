@@ -19,7 +19,7 @@ if (empty($manv)) {
     $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
 } else {
     // Truy vấn thông tin nhân viên trực tiếp
-    $sql = "SELECT nv.*
+    $sql = "SELECT nv.*, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
             FROM nhan_vien nv 
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
@@ -141,7 +141,7 @@ if (isset($_POST['capNhat']))
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="page-title">Chỉnh sửa thông tin nhân viên: <?php if(isset($nhanVien['tenNV'])) echo $nhanVien['tenNV']; else echo 'Không xác định';?></h4>
+                                <h4 class="page-title">Chỉnh sửa thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['tenNV']; else echo 'Không xác định';?></h4>
                             </div>
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
