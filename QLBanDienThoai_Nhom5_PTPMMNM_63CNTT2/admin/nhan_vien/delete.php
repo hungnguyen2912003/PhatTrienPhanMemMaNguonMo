@@ -20,9 +20,8 @@ if (empty($manv)) {
     $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
 } else {
     // Truy vấn thông tin nhân viên trực tiếp
-    $sql = "SELECT nv.*, tk.tenTaiKhoan, tk.tenHienThi
+    $sql = "SELECT nv.*
             FROM nhan_vien nv 
-             LEFT JOIN tai_khoan tk ON nv.id = tk.maNV_KH 
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);

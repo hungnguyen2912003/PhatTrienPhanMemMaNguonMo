@@ -72,7 +72,6 @@ mysqli_close($connect);
                 if (fileInput.files.length > 0) {
                     // Extract the file name
                     const fileName = fileInput.files[0].name;
-
                     // Display the file name in the hinhAnh input field
                     document.getElementById('hinhAnh').value = fileName;
                 }
