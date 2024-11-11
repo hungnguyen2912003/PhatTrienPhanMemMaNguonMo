@@ -5,31 +5,29 @@ include('../includes/header.html');
 include('../_PartialSideBar.html');
 include('../includes/footer.html');
 
-// Kết nối vào cơ sở dữ liệu và hiển thị thông báo lỗi nếu không kết nối được
-$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
+/// Kết nối cơ sở dữ liệu
+$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
+OR die('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-// Kiểm tra và lấy mã phân quyền từ URL
-if (!isset($_GET['id'])) {
-    echo "<h4>Không tìm thấy mã phân quyền.</h4>";
-    exit();
-}
-$mapq = $_GET['id'];
+$mapq = isset($_GET['id']) ? $_GET['id'] : ""; // Lấy id từ URL
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
+$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, 
+        CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+        FROM user 
+        JOIN nhan_vien nv ON user.user_id = nv.id
+        WHERE user.id = '$mapq'";
 
-$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen FROM user JOIN nhan_vien nv ON user.user_id = nv.id";
-
-// Gửi truy vấn đến cơ sở dữ liệu và kiểm tra kết quả
 $result = mysqli_query($connect, $sql);
 $phan_quyen = mysqli_fetch_assoc($result);
 
 if (!$phan_quyen) {
-    echo "<h4>Không tìm thấy thông tin phân quyền.</h4>";
+    echo "<h4>Không tìm thấy thông tin phân quyền cho mã ID này.</h4>";
     exit();
 }
 ?>
-<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
+<?php if (isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'): ?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -84,6 +84,16 @@ $result = mysqli_query($connect, $sql);
                                     echo "<td class='text-center'>{$row['maNV']}</td>";
                                     echo "<td class='text-center'>{$row['hoTen']}</td>";
                                     echo "<td class='text-center'>{$row['phanQuyen']}</td>";
+//                                     //Kiểm tra phân quyền và hiển thị tương ứng
+//                                    $phanQuyen = $row['phanQuyen'];
+//                                    if ($phanQuyen == 'ADMIN') {
+//                                        $phanQuyenShow = 'Admin';
+//                                    } elseif ($phanQuyen == 'NV') {
+//                                        $phanQuyenShow = 'Nhân viên';
+//                                    } else {
+//                                        $phanQuyenShow = 'Chưa thiết lập';
+//                                    }
+//                                    echo "<td class='text-center'>$phanQuyenShow</td>";
                                     echo "<td class='text-center'>
                                             <a href='$base_url/admin/phan_quyen/detail.php?id={$row['ID']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
                                             <a href='$base_url/admin/phan_quyen/edit.php?id={$row['ID']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
