@@ -39,12 +39,15 @@ if (isset($_POST['dangKy'])) {
                 $check_username = "SELECT * FROM user WHERE username = '$username'";
                 $result_username = mysqli_query($connect, $check_username);
                 if (mysqli_num_rows($result_username) != 0)
-                    $msg = "<span class='text-danger font-weight-bold'>Tên đăng nhập đã tồn tại. Vui lòng chọn tên đăng nhập khác!</span>";
+                    $msg = "<span class='text-danger font-weight-bold'>Tên đăng nhập đã tồn tại. Vui lòng nhập tên đăng nhập khác!</span>";
                 else {
                     // Thêm mới tài khoản
                     $sql = "INSERT INTO user (username, password, user_id) VALUES ('$username', '$pass', '$maNV')";
                     if (mysqli_query($connect, $sql))
-                        $msg = "<span class='text-success font-weight-bold'>Đăng ký tài khoản thành công</span>";
+                        echo "<script>
+                            alert('Đăng ký tài khoản thành công');
+                            window.location.href = '$base_url/admin/login.php';
+                        </script>";
                     else
                         $msg = "<span class='text-danger font-weight-bold'>Đã có lỗi trong quá trình đăng ký</span>";
                 }
@@ -70,6 +73,15 @@ if (isset($_POST['dangKy'])) {
     <!-- Theme style -->
     <link rel="stylesheet" href="<?php echo $base_url; ?>/Content/assets/dist/css/adminlte.min.css">
     <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url(../Images/wallpaper2.jpg) no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
         #toggle-password{
             cursor: pointer;
         }
@@ -80,12 +92,14 @@ if (isset($_POST['dangKy'])) {
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-    <div class="login-logo">
-        <a href="/admin" style="font-weight: bold; color: black;">MEGA<span style="color: deepskyblue;">TECH</span></a>
-    </div>
     <!-- /.login-logo -->
     <div class="card">
         <div class="card-body login-card-body">
+            <div class="col-md-12">
+                <div class="login-logo">
+                    <a href="#" style="font-weight: bold; color: black;">MEGA<span style="color: deepskyblue;">TECH</span></a>
+                </div>
+            </div>
             <h5 class="login-box-msg font-weight-bold">Đăng ký tài khoản nhân viên</h5>
             <form action="" method="post">
                 <fieldset>

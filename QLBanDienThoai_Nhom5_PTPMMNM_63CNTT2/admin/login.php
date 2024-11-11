@@ -82,6 +82,15 @@ if (isset($_POST['dangNhap'])) {
     <!-- Theme style -->
     <link rel="stylesheet" href="<?php echo $base_url; ?>/Content/assets/dist/css/adminlte.min.css">
     <style>
+        body{
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+            background: url(../Images/wallpaper4.jpg) no-repeat;
+            background-size: cover;
+            background-position: center;
+        }
         #toggle-password{
             cursor: pointer;
         }
@@ -89,13 +98,15 @@ if (isset($_POST['dangNhap'])) {
 </head>
 <body class="hold-transition login-page">
 <div class="login-box">
-    <div class="login-logo">
-        <a href="<?php echo $base_url; ?>/admin/index.php" style="font-weight: bold; color: black;">MEGA<span style="color: deepskyblue;">TECH</span></a>
-    </div>
     <!-- /.login-logo -->
     <div class="card">
         <div class="card-body login-card-body">
-            <h5 class="login-box-msg font-weight-bold">Đăng nhập tài khoản nhân viên</h5>
+            <div class="col-md-12">
+                <div class="login-logo">
+                    <a href="#" style="font-weight: bold; color: black;">MEGA<span style="color: deepskyblue;">TECH</span></a>
+                </div>
+            </div>
+            <h5 class="login-box-msg font-weight-bold">Đăng nhập tài khoản</h5>
             <form action="" method="post">
                 <fieldset>
                     <div class="form-group form-group-default">

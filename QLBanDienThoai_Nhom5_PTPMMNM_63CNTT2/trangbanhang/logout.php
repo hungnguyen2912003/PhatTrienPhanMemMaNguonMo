@@ -9,6 +9,8 @@ session_unset();
 //Phá hủy hoàn toàn phiên làm việc
 session_destroy();
 
-header("Location:".$base_url."/admin/login.php");
+$_SESSION['logged_kh'] = false;
+header("Location:".$base_url."/trangbanhang/index.php");
+
 exit;
 ?>

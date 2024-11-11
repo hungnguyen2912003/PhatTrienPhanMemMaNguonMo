@@ -1,6 +1,7 @@
 <?php
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 $title = "Trang liên hệ MEGATECH";
+include('../timeOutSession.php');
 ?>
 <?php
 include('includes/header.html');
@@ -18,6 +19,7 @@ include('includes/header.html');
 </head>
 <body>
     <div class="main-panel">
+
         <section class="contact" id="contact">
             <section class="banner">
                 <h1 class="text-white" style="color: white">LIÊN HỆ VỚI CHÚNG TÔI</h1>
@@ -25,6 +27,7 @@ include('includes/header.html');
 
             <div class="row">
                 <div class="mess">
+                    <p><?php echo $_SESSION['redirect_to'];?></p>
                     <form action="">
                         <h2>GỬI TIN NHẮN</h2>
                         <input type="text" placeholder="Họ và tên" class="box">

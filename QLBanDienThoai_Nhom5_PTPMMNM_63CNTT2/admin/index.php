@@ -1,6 +1,6 @@
 <?php
-include('timeOutSession.php');
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
+include('../timeOutSession.php');
 ?>
 
 <?php
