@@ -83,7 +83,8 @@ $result = mysqli_query($connect, $sql);
                                     echo "<td class='text-center'>{$row['tenTaiKhoan']}</td>";
                                     echo "<td class='text-center'>{$row['maNV']}</td>";
                                     echo "<td class='text-center'>{$row['hoTen']}</td>";
-                                    // Kiểm tra phân quyền và hiển thị tương ứng
+
+                                     //Kiểm tra phân quyền và hiển thị tương ứng
                                     $phanQuyen = $row['phanQuyen'];
                                     if ($phanQuyen == 'ADMIN') {
                                         $phanQuyenShow = 'Admin';

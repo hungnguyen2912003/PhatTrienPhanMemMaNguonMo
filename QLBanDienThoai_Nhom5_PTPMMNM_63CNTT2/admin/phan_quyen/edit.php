@@ -9,15 +9,11 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$mapq = $_GET['id'];
-
+$mapq= isset($_GET['id']) ? $_GET['id'] : "";
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
-$sql = "SELECT tk.tenTaiKhoan AS tenTaiKhoan, tk.maNV_KH AS maNV, tk.tenHienThi AS tenHienThi, tk.phanQuyen AS phanQuyen, nv.tenNV AS hoTen, tk.id AS tk_id 
-        FROM tai_khoan tk 
-        JOIN nhan_vien nv ON tk.maNV_KH = nv.id 
-        WHERE tk.id = '$mapq'";
+$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen FROM user JOIN nhan_vien nv ON user.user_id = nv.id";
 
 $result = mysqli_query($connect, $sql);
 $row = mysqli_fetch_assoc($result);
@@ -30,17 +26,16 @@ if (!$row) {
 
 if (isset($_POST["capNhat"])) {
     // Lấy tên hiển thị, phân quyền từ form
-    $tenHT = $_POST["tenHienThi"];
     $phanquyen = $_POST["phanQuyen"];
 
     // Kiểm tra dữ liệu đầu vào
-    if (empty($tenHT) || empty($phanquyen)) {
+    if (empty($phanquyen)) {
         $msg = "<span class='text-danger font-weight-bold'>Tất cả các trường đều phải điền đầy đủ.</span>";
     }
 
     // Nếu không có lỗi thì thực hiện cập nhật
     if (empty($msg)) {
-        $sql_update = "UPDATE tai_khoan SET tenHienThi='$tenHT', phanQuyen='$phanquyen' WHERE id='$mapq'";
+        $sql_update = "UPDATE user SET  phanQuyen='$phanquyen' WHERE id='$mapq'";
 
         if (mysqli_query($connect, $sql_update)) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin phân quyền thành công!</span>";
@@ -98,7 +93,7 @@ if (isset($_POST["capNhat"])) {
                 <div class="col-md-12">
                     <div class="card h-100">
                         <form action="" method="post">
-                            <input type="hidden" name="id" value="<?php echo $row['tk_id']; ?>">
+                            <input type="hidden" name="id" value="<?php echo $row['ID']; ?>">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -106,16 +101,10 @@ if (isset($_POST["capNhat"])) {
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
-                                            <label>Tên hiển thị <span class="text-danger">*</span></label>
-                                            <input type="text" name="tenHienThi" placeholder="Nhập tên hiển thị" class="form-control" value="<?php echo $row['tenHienThi']; ?>"/>
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default">
                                             <label>Phân quyền <span class="text-danger">*</span></label>
                                             <select class="form-control" name="phanQuyen">
-                                                <option value="admin" <?php echo ($row['phanQuyen'] == 'admin') ? 'selected' : ''; ?>>Admin</option>
-                                                <option value="nhanvien" <?php echo ($row['phanQuyen'] == 'nhanvien') ? 'selected' : ''; ?>>Nhân viên</option>
+                                                <option value="admin" <?php echo ($row['phanQuyen'] == 'ADMIN') ? 'selected' : ''; ?>>Admin</option>
+                                                <option value="nhanvien" <?php echo ($row['phanQuyen'] == 'NV') ? 'selected' : ''; ?>>Nhân viên</option>
                                             </select>
                                         </div>
                                     </div>
