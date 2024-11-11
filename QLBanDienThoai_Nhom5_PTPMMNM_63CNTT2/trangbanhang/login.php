@@ -37,13 +37,18 @@ if (isset($_POST['dangNhap'])) {
         if (mysqli_num_rows($result) != 0) {
             $_SESSION['logged_kh'] = true;
             // Truy vấn thông tin người dùng tài khoản
-            $sql = "SELECT khach_hang.ten_khach_hang AS hoTen, user.phanQuyen as phanQuyen
+            $sql = "SELECT 
+                        khach_hang.ten_khach_hang AS hoTenKH, 
+                        CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTenNV, 
+                        user.phanQuyen as phanQuyen
                     FROM user 
-                    INNER JOIN khach_hang ON user.user_id = khach_hang.ma_khach_hang 
+                    LEFT JOIN khach_hang ON user.user_id = khach_hang.ma_khach_hang
+                    LEFT JOIN nhan_vien ON user.user_id = nhan_vien.id
                     WHERE user.username = '$username'";
             $result = mysqli_query($connect, $sql);
             $row = mysqli_fetch_array($result);
-            $_SESSION['hoTenKH'] = $row['hoTen'];
+            $_SESSION['hoTenKH'] = $row['hoTenKH'];
+            $_SESSION['hoTenNV'] = $row['hoTenNV'];
             $_SESSION['phanQuyen'] = $row['phanQuyen'];
 
             // Chuyển hướng về trang yêu cầu sau khi đăng nhập thành công

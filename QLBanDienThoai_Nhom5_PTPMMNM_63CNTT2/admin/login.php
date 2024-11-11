@@ -33,14 +33,21 @@ if (isset($_POST['dangNhap'])) {
     elseif(empty($pass))
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập mật khẩu</span>";
     else {
-        // Truy vấn tài khoản và mật khẩu
+        // Kiểm tra tài khỏan, mật khẩu
         $sql_check_account = "SELECT * FROM user WHERE username = '$username' AND password = '$pass'";
+        $result_check_account = mysqli_query($connect, $sql_check_account);
+        // Kiểm tra quyền
+        $sql_check_quyen = "SELECT * FROM user WHERE username = '$username' AND phanQuyen = 'KH'";
+        $result_check_quyen = mysqli_query($connect, $sql_check_quyen);
 
-        // Gửi truy vấn đến cơ sở dữ liệu, và kết quả được lưu vào $result
-        $result = mysqli_query($connect, $sql_check_account);
-
+        if(mysqli_num_rows($result_check_account) == 0) {
+            $msg = "<span class='text-danger font-weight-bold'>Tên tài khoản hoặc mật khẩu không hợp lệ</span>";
+        }
+        elseif (mysqli_num_rows($result_check_quyen) != 0) {
+            $msg = "<span class='text-danger font-weight-bold'>Tài khoản của bạn không có quyền đăng nhập</span>";
+        }
         // Tên đăng nhập và mật khẩu trùng khớp với tên đăng nhập và mật khẩu trong CSDL.
-        if (mysqli_num_rows($result) != 0) {
+        else{
             // Gán vào phiên $_SESSION['logged'] là true
             $_SESSION['logged'] = true;
             // Truy vấn thông tin người dùng tài khoản
@@ -58,8 +65,6 @@ if (isset($_POST['dangNhap'])) {
             unset($_SESSION['redirect_to']);
             header("Location: $redirect_url");
             exit;
-        } else {
-            $msg = "<span class='text-danger font-weight-bold'>Tên tài khoản hoặc mật khẩu không hợp lệ!</span>";
         }
     }
 }

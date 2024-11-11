@@ -84,7 +84,12 @@
                         <div class="top_nav_left">
                             <?php
                                 if (isset($_SESSION['logged_kh']) && $_SESSION['logged_kh'] == true) {
-                                    echo "<span class='mr-4'>Chào mừng: " . $_SESSION['hoTenKH'] . "</span>";
+                                    if (isset($_SESSION['hoTenKH']) && !empty($_SESSION['hoTenKH'])) {
+                                        echo "<span class='mr-4'>Chào mừng: " . $_SESSION['hoTenKH'] . "</span>";
+                                    } elseif (isset($_SESSION['hoTenNV']) && !empty($_SESSION['hoTenNV'])) {
+                                        echo "<span class='mr-4'>Chào mừng: " . $_SESSION['hoTenNV'] . "</span>";
+                                    }
+                                    // Nút đăng xuất
                                     echo "<a href='{$base_url}/trangbanhang/logout.php' style='padding: 5px 30px; border-radius: 10px; background-color: #6699ff; color: #0000cc; font-weight: bold;'>Đăng xuất</a>";
                                 } else {
                                     echo "<a href='{$base_url}/trangbanhang/login.php' style='padding: 5px 30px; border-radius: 10px; background-color: #ff9999; color: #cc0000; font-weight: bold;'>Đăng nhập</a>";
