@@ -51,7 +51,7 @@ if (isset($_POST['dangNhap'])) {
             // Gán vào phiên $_SESSION['logged'] là true
             $_SESSION['logged'] = true;
             // Truy vấn thông tin người dùng tài khoản
-            $sql = "SELECT CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTen, user.phanQuyen AS phanQuyen 
+            $sql = "SELECT CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTen, user.phanQuyen AS phanQuyen, user.user_id AS USERID 
                     FROM user 
                     INNER JOIN nhan_vien ON user.user_id = nhan_vien.id 
                     WHERE user.username = '$username'";
@@ -59,6 +59,7 @@ if (isset($_POST['dangNhap'])) {
             $row = mysqli_fetch_array($result);
             $_SESSION['hoTen'] = $row['hoTen'];
             $_SESSION['phanQuyen'] = $row['phanQuyen'];
+            $_SESSION['id'] = $row['USERID'];
             // Chuyển hướng về trang yêu cầu sau khi đăng nhập thành công
             $redirect_url = $_SESSION['redirect_to'] ?? $base_url . '/admin/index.php';
             // Xóa redirect_to để tránh vòng lặp

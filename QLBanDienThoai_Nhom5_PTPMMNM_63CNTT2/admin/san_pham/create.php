@@ -60,7 +60,7 @@ $suppliers = mysqli_query($connect, "SELECT * FROM nha_cung_cap");
 // Đóng kết nối sau khi hoàn tất
 mysqli_close($connect);
 ?>
-
+<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -210,3 +210,21 @@ mysqli_close($connect);
         $('.select').select2()
     });
 </script>
+<?php else: ?>
+    <div class="main-panel">
+        <div class="content">
+            <div class="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <?php echo "<h2 class='text-center font-weight-bold text-danger'>Tài khoản của bạn không đủ quyền để truy cập</h2>"?>
+                                <img src="<?php echo $base_url?>/Images/norule.jpg" style="max-width: 100%; height: auto;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>

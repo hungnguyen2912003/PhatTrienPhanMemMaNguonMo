@@ -109,180 +109,199 @@ if (isset($_POST['capNhat']))
     }
 }
 ?>
+<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
+    <!DOCTYPE html>
+    <html lang="en">
+    <head>
+        <meta charset="UTF-8">
+        <title>Chỉnh sửa nhân viên</title>
+        <link href="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
+        <script>
+            function layAnh(event) {
+                // Get the selected file
+                const fileInput = document.getElementById('fileInput');
+                if (fileInput.files.length > 0) {
+                    // Extract the file name
+                    const fileName = fileInput.files[0].name;
 
-<!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <title>Chỉnh sửa nhân viên</title>
-    <link href="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.min.css" rel="stylesheet" />
-    <script>
-        function layAnh(event) {
-            // Get the selected file
-            const fileInput = document.getElementById('fileInput');
-            if (fileInput.files.length > 0) {
-                // Extract the file name
-                const fileName = fileInput.files[0].name;
-
-                // Display the file name in the hinhAnh input field
-                document.getElementById('hinhAnh').value = fileName;
+                    // Display the file name in the hinhAnh input field
+                    document.getElementById('hinhAnh').value = fileName;
+                }
             }
-        }
-    </script>
-</head>
-<body>
-<div class="main-panel">
-    <div class="content">
-        <div class="page-inner">
-            <div class="page-header">
-                <div class="col-md-12">
-                    <div class="row">
-                        <div class="col-md-6">
-                            <h4 class="page-title">Chỉnh sửa thông tin nhân viên: <?php if(isset($nhanVien['tenNV'])) echo $nhanVien['tenNV']; else echo 'Không xác định';?></h4>
-                        </div>
-                        <div class="col-md-6 text-right">
-                            <ul class="breadcrumbs">
-                                <li class="nav-home">
-                                    <a href="<?php echo $base_url?>/admin/index.php">
-                                        <i class="flaticon-home"></i>
-                                    </a>
-                                </li>
-                                <li class="separator">
-                                    <i class="flaticon-right-arrow"></i>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/nhan_vien/index.php">Danh sách nhân viên</a>
-                                </li>
-                                <li class="separator">
-                                    <i class="flaticon-right-arrow"></i>
-                                </li>
-                                <li class="nav-item">
-                                    <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php">Chỉnh sửa</a>
-                                </li>
-                            </ul>
+        </script>
+    </head>
+    <body>
+    <div class="main-panel">
+        <div class="content">
+            <div class="page-inner">
+                <div class="page-header">
+                    <div class="col-md-12">
+                        <div class="row">
+                            <div class="col-md-6">
+                                <h4 class="page-title">Chỉnh sửa thông tin nhân viên: <?php if(isset($nhanVien['tenNV'])) echo $nhanVien['tenNV']; else echo 'Không xác định';?></h4>
+                            </div>
+                            <div class="col-md-6 text-right">
+                                <ul class="breadcrumbs">
+                                    <li class="nav-home">
+                                        <a href="<?php echo $base_url?>/admin/index.php">
+                                            <i class="flaticon-home"></i>
+                                        </a>
+                                    </li>
+                                    <li class="separator">
+                                        <i class="flaticon-right-arrow"></i>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $base_url?>/admin/nhan_vien/index.php">Danh sách nhân viên</a>
+                                    </li>
+                                    <li class="separator">
+                                        <i class="flaticon-right-arrow"></i>
+                                    </li>
+                                    <li class="nav-item">
+                                        <a href="<?php echo $base_url?>/admin/nhan_vien/edit.php">Chỉnh sửa</a>
+                                    </li>
+                                </ul>
+                            </div>
                         </div>
                     </div>
                 </div>
-            </div>
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="card h-100">
-                        <div class="card-body">
-<!--                            --><?php //if (!empty($msg)): ?>
-<!--                                --><?php //echo $msg; ?>
-<!--                            --><?php //else: ?>
-                            <form action="" method="POST" enctype="multipart/form-data">
-                                <input type="hidden" name="id" value="<?php echo $nhanVien['id']; ?>">
-                                <div class="row">
-                                    <div class="col-md-12">
-                                        <h2 class="text-center m-3" style="font-weight: bold;">CHỈNH SỬA THÔNG TIN NHÂN VIÊN</h2>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Họ nhân viên <span class="text-danger">*</span></label>
-                                                    <input type="text" name="hoNV" class="form-control" value="<?php echo isset($_POST['hoNV']) ? $_POST['hoNV'] : $nhanVien['hoNV']; ?>">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card h-100">
+                            <div class="card-body">
+                                <!--                            --><?php //if (!empty($msg)): ?>
+                                <!--                                --><?php //echo $msg; ?>
+                                <!--                            --><?php //else: ?>
+                                <form action="" method="POST" enctype="multipart/form-data">
+                                    <input type="hidden" name="id" value="<?php echo $nhanVien['id']; ?>">
+                                    <div class="row">
+                                        <div class="col-md-12">
+                                            <h2 class="text-center m-3" style="font-weight: bold;">CHỈNH SỬA THÔNG TIN NHÂN VIÊN</h2>
+                                        </div>
+                                        <div class="col-md-6">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Họ nhân viên <span class="text-danger">*</span></label>
+                                                        <input type="text" name="hoNV" class="form-control" value="<?php echo isset($_POST['hoNV']) ? $_POST['hoNV'] : $nhanVien['hoNV']; ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Tên nhân viên <span class="text-danger">*</span></label>
+                                                        <input type="text" name="tenNV" class="form-control" value="<?php echo isset($_POST['tenNV']) ? $_POST['tenNV'] : $nhanVien['tenNV']; ?>">
+                                                    </div>
                                                 </div>
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Tên nhân viên <span class="text-danger">*</span></label>
-                                                    <input type="text" name="tenNV" class="form-control" value="<?php echo isset($_POST['tenNV']) ? $_POST['tenNV'] : $nhanVien['tenNV']; ?>">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Ngày sinh <span class="text-danger">*</span></label>
+                                                        <input type="text" name="ngaySinh" class="form-control picker" placeholder="yyyy/mm/dd" autocomplete="off" value="<?php echo isset($_POST['ngaySinh']) ? $_POST['ngaySinh'] : $nhanVien['ngaySinh']; ?>"/>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Giới tính <span class="text-danger">*</span></label>
+                                                        <select name="gioiTinh" class="custom-select form-control select">
+                                                            <option value="1" <?php if(isset($nhanVien['gioiTinh']) && $nhanVien['gioiTinh'] == "1") echo 'selected'; ?>>Nam</option>
+                                                            <option value="0" <?php if(isset($nhanVien['gioiTinh']) && $nhanVien['gioiTinh'] == "0") echo 'selected'; ?>>Nữ</option>
+                                                        </select>
+                                                    </div>
                                                 </div>
                                             </div>
-                                        </div>
-                                        <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Ngày sinh <span class="text-danger">*</span></label>
-                                                    <input type="text" name="ngaySinh" class="form-control picker" placeholder="yyyy/mm/dd" autocomplete="off" value="<?php echo isset($_POST['ngaySinh']) ? $_POST['ngaySinh'] : $nhanVien['ngaySinh']; ?>"/>
-                                                </div>
+                                            <div class="form-group form-group-default">
+                                                <label>Số điện thoại <span class="text-danger">*</span></label>
+                                                <input type="text" name="soDienThoai" class="form-control" value="<?php echo isset($_POST['soDienThoai']) ? $_POST['soDienThoai'] : $nhanVien['soDienThoai']; ?>">
                                             </div>
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Giới tính <span class="text-danger">*</span></label>
-                                                    <select name="gioiTinh" class="custom-select form-control select">
-                                                        <option value="1" <?php if(isset($nhanVien['gioiTinh']) && $nhanVien['gioiTinh'] == "1") echo 'selected'; ?>>Nam</option>
-                                                        <option value="0" <?php if(isset($nhanVien['gioiTinh']) && $nhanVien['gioiTinh'] == "0") echo 'selected'; ?>>Nữ</option>
-                                                    </select>
-                                                </div>
+                                            <div class="form-group form-group-default">
+                                                <label>Địa chỉ <span class="text-danger">*</span></label>
+                                                <input type="text" name="diaChi" class="form-control" value="<?php echo isset($_POST['diaChi']) ? $_POST['diaChi'] : $nhanVien['diaChi']; ?>">
+                                            </div>
+                                            <div class="form-group form-group-default">
+                                                <label>Email <span class="text-danger">*</span></label>
+                                                <input type="email" name="email" class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : $nhanVien['email']; ?>">
                                             </div>
                                         </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Số điện thoại <span class="text-danger">*</span></label>
-                                            <input type="text" name="soDienThoai" class="form-control" value="<?php echo isset($_POST['soDienThoai']) ? $_POST['soDienThoai'] : $nhanVien['soDienThoai']; ?>">
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Địa chỉ <span class="text-danger">*</span></label>
-                                            <input type="text" name="diaChi" class="form-control" value="<?php echo isset($_POST['diaChi']) ? $_POST['diaChi'] : $nhanVien['diaChi']; ?>">
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" class="form-control" value="<?php echo isset($_POST['email']) ? $_POST['email'] : $nhanVien['email']; ?>">
-                                        </div>
-                                    </div>
-                                    <div class="col-md-6">
-                                        <div class="form-group form-group-default text-center">
-                                            <label>Hình ảnh nhân viên <span class="text-danger">*</span></label><br>
-                                            <?php if ($nhanVien['Images']): ?>
-                                                <img src='<?php echo $base_url; ?>/Images/<?php echo $nhanVien['Images']; ?>' alt='Hình ảnh đại diện' width="200" class='img-fluid mb-2'>
-                                                <div>Tên hình ảnh: <strong><?php echo $nhanVien['Images']; ?></strong></div>
-                                            <?php else: ?>
-                                                <div>Không có hình ảnh hiện tại.</div>
-                                            <?php endif; ?>
+                                        <div class="col-md-6">
+                                            <div class="form-group form-group-default text-center">
+                                                <label>Hình ảnh nhân viên <span class="text-danger">*</span></label><br>
+                                                <?php if ($nhanVien['Images']): ?>
+                                                    <img src='<?php echo $base_url; ?>/Images/<?php echo $nhanVien['Images']; ?>' alt='Hình ảnh đại diện' width="200" class='img-fluid mb-2'>
+                                                    <div>Tên hình ảnh: <strong><?php echo $nhanVien['Images']; ?></strong></div>
+                                                <?php else: ?>
+                                                    <div>Không có hình ảnh hiện tại.</div>
+                                                <?php endif; ?>
 
-                                            <div class="input-group mb-2 mt-2">
-                                                <div class="col-md-12">
-                                                    <div class="row">
-                                                        <div class="col-md-9">
-                                                            <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php if (isset($_FILES['hinhAnh'])) echo $_FILES['hinhAnh']['name']; else echo $nhanVien['Images']; ?>"/>
-                                                        </div>
-                                                        <div class="col-md-3">
-                                                            <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
-                                                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Chọn ảnh</button>
+                                                <div class="input-group mb-2 mt-2">
+                                                    <div class="col-md-12">
+                                                        <div class="row">
+                                                            <div class="col-md-9">
+                                                                <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php if (isset($_FILES['hinhAnh'])) echo $_FILES['hinhAnh']['name']; else echo $nhanVien['Images']; ?>"/>
+                                                            </div>
+                                                            <div class="col-md-3">
+                                                                <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
+                                                                <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Chọn ảnh</button>
+                                                            </div>
                                                         </div>
                                                     </div>
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="form-group text-center">
-                                    <button type="submit" name="capNhat" class="btn btn-primary">Cập nhật</button>
-                                    <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
-                                </div>
-                                <div class="form-group text-center">
-                                    <?php echo $msg?>
-                                </div>
-                            </form>
-<!--                            --><?php //endif; ?>
+                                    <div class="form-group text-center">
+                                        <button type="submit" name="capNhat" class="btn btn-primary">Cập nhật</button>
+                                        <a href="<?php echo $base_url?>/admin/nhan_vien/index.php" class="btn btn-danger btnBack">Quay lại</a>
+                                    </div>
+                                    <div class="form-group text-center">
+                                        <?php echo $msg?>
+                                    </div>
+                                </form>
+                                <!--                            --><?php //endif; ?>
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
         </div>
     </div>
-</div>
-</body>
-</html>
+    </body>
+    </html>
 
-<script src="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.full.js"></script>
-<script>
-    $(function () {
-        $('.select').select2();
-    });
-</script>
-
-<script>
-    $(document).ready(function () {
-        $('.picker').datetimepicker({
-            autoclose: true,
-            timepicker: false,
-            datepicker: true,
-            format: "Y-m-d",
-            weeks: true
+    <script src="<?php echo $base_url?>/Content/datepicker/jquery.datetimepicker.full.js"></script>
+    <script>
+        $(function () {
+            $('.select').select2();
         });
-        $.datetimepicker.setLocale('vi');
-    });
-</script>
+    </script>
+
+    <script>
+        $(document).ready(function () {
+            $('.picker').datetimepicker({
+                autoclose: true,
+                timepicker: false,
+                datepicker: true,
+                format: "Y-m-d",
+                weeks: true
+            });
+            $.datetimepicker.setLocale('vi');
+        });
+    </script>
+<?php else: ?>
+    <div class="main-panel">
+        <div class="content">
+            <div class="page-inner">
+                <div class="row">
+                    <div class="col-md-12">
+                        <div class="card h-100">
+                            <div class="card-body d-flex flex-column align-items-center justify-content-center">
+                                <?php echo "<h2 class='text-center font-weight-bold text-danger'>Tài khoản của bạn không đủ quyền để truy cập</h2>"?>
+                                <img src="<?php echo $base_url?>/Images/norule.jpg" style="max-width: 100%; height: auto;"/>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+<?php endif; ?>
+
