@@ -2,6 +2,7 @@
 include('../thoihanSession.php');
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
+include('../menu.html');
 include('../includes/footer.html');
 
 // Kết nối cơ sở dữ liệu
