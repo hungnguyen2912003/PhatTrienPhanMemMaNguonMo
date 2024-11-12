@@ -3,7 +3,7 @@
 session_start();
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 // SESSION_TIMEOUT được định nghĩa là 600 giây (10 phút)
-const SESSION_TIMEOUT = 20;
+const SESSION_TIMEOUT = 900;
 
 $hetHanPhien = false;
 

@@ -79,7 +79,7 @@ if (isset($_POST["capNhat"])) {
                     $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
                 }
                 // Redirect về trang index
-                echo "<script>window.location.href = '$base_url/admin/san_pham/trangchu.php';</script>";
+                echo "<script>window.location.href = '$base_url/admin/san_pham/hienthi.php';</script>";
             }
         }
     } else {

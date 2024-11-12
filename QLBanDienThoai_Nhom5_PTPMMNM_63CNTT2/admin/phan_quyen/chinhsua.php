@@ -43,10 +43,9 @@ if (isset($_POST["capNhat"])) {
 
         if (mysqli_query($connect, $sql_update)) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin phân quyền thành công!</span>";
-            echo "<script>window.location.href = '$base_url/admin/phan_quyen/trangchu.php';</script>";
+            echo "<script>window.location.href = '$base_url/admin/phan_quyen/hienthi.php';</script>";
         } else {
-            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
-            echo "<script>window.location.href = '$base_url/admin/phan_quyen/trangchu.php';</script>";
+            $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
         }
     }
 }

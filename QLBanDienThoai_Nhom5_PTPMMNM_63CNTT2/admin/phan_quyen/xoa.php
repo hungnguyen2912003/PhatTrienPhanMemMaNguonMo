@@ -38,9 +38,9 @@ if(isset($_POST['deleteBtn'])){
     if (mysqli_query($connect, $sqlDelete)) {
         // Lưu thông báo thành công vào session
         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công  $mapq  </span>";
-        echo "<script>window.location.href = '$base_url/admin/phan_quyen/trangchu.php';</script>";
+        echo "<script>window.location.href = '$base_url/admin/phan_quyen/hienthi.php';</script>";
     } else {
-        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
+        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
     }
 }
 
@@ -117,7 +117,21 @@ if(isset($_POST['deleteBtn'])){
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label>Phân quyền </label>
-                                                        <span class="form-control"><?php if(isset($phan_quyen['phanQuyen'])) echo $phan_quyen['phanQuyen']; ?></span>
+                                                        <span class="form-control">
+                                                            <?php
+                                                            if (isset($phan_quyen['phanQuyen'])){
+                                                                $phanQuyen = $phan_quyen['phanQuyen'];
+                                                                if ($phanQuyen == 'ADMIN') {
+                                                                    $phanQuyenShow = 'Admin';
+                                                                } elseif ($phanQuyen == 'NV') {
+                                                                    $phanQuyenShow = 'Nhân viên';
+                                                                } else {
+                                                                    $phanQuyenShow = 'Chưa thiết lập';
+                                                                }
+                                                                echo $phanQuyenShow;
+                                                            }
+                                                            ?>
+                                                        </span>
                                                     </div>
                                                 </div>
                                             </div>

@@ -18,10 +18,9 @@ if (isset($_POST['deleteBtn']) && !empty($masp)) {
 
     if (mysqli_query($connect, $sqlDelete)) {
         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công sản phẩm có mã $masp</span>";
-        echo "<script>window.location.href = '$base_url/admin/san_pham/trangchu.php';</script>";
-        exit();
+        echo "<script>window.location.href = '$base_url/admin/san_pham/hienthi.php';</script>";
     } else {
-        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá: " . mysqli_error($connect) . "</span>";
+        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá: " . mysqli_error($connect) . "</span>";
     }
 }
 

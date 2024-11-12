@@ -79,10 +79,9 @@ if (isset($_POST["capNhat"])) {
         $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email', Images='$hinhAnh' WHERE id='$maNCC'";
         if (mysqli_query($connect, $sql)) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
-            echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/trangchu.php';</script>";
+            echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/hienthi.php';</script>";
         } else {
-            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
-            echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/trangchu.php';</script>";
+            $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
         }
     }
 }

@@ -93,7 +93,7 @@ if (isset($_POST["themMoi"])) {
                 $sql = "INSERT INTO nhan_vien (id, hoNV, tenlot, tenNV, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoNV','$tenlot','$tenNV', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
                 if (mysqli_query($connect, $sql)) {
                     $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $tenNV thành công!</span>";
-                    echo "<script>window.location.href = '$base_url/admin/nhan_vien/trangchu.php';</script>";
+                    echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
                 } else {
                     $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
                 }

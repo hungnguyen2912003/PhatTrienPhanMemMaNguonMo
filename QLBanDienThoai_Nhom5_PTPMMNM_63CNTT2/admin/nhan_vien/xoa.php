@@ -37,7 +37,7 @@ if(isset($_POST['deleteBtn'])){
     if (mysqli_query($connect, $sqlDelete)) {
         // Lưu thông báo thành công vào session
         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công nhân viên có mã $manv</span>";
-        echo "<script>window.location.href = '$base_url/admin/nhan_vien/trangchu.php';</script>";
+        echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
     } else {
         $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
     }

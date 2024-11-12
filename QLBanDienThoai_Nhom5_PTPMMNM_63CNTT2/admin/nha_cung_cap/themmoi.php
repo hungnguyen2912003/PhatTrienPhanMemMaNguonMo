@@ -51,10 +51,9 @@ if (isset($_POST["themMoi"])) { // Kiểm tra nếu form được gửi với n�
                     $sql = "INSERT INTO nha_cung_cap (id, tenNCC, soDienThoai, email, Images) VALUES ('$maNCC', '$tenNCC', '$soDienThoai', '$email', '$hinhAnh')"; // Chuẩn bị câu lệnh SQL để chèn dữ liệu vào cơ sở dữ liệu.
                     if (mysqli_query($connect, $sql)) { // Thực hiện câu lệnh SQL.
                         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhà cung cấp $tenNCC thành công!</span>"; // Thông báo thành công.
-                        echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/trangchu.php';</script>"; // Chuyển hướng trang.
+                        echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/hienthi.php';</script>"; // Chuyển hướng trang.
                     } else {
-                        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới: " . mysqli_error($connect) . "</span>"; // Thông báo lỗi thêm mới.
-                        echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/trangchu.php';</script>"; // Chuyển hướng trang.
+                        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới: " . mysqli_error($connect) . "</span>"; // Thông báo lỗi thêm mới.
                     }
                 }
             }

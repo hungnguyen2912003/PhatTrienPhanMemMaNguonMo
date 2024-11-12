@@ -15,10 +15,12 @@ $manv = $_GET['manv'] ?? "";
 //biến thông báo nhập liệu
 $msg = "";
 
+//biến thông báo mã nhân viên bị trống và không tìm thấy nhân viên
+$error = "";
 
 // Kiểm tra mã nhân viên
 if (empty($manv)) {
-    $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
+    $error = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
 } else {
     // Truy vấn thông tin nhân viên trực tiếp
     $sql = "SELECT nv.*, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
@@ -28,7 +30,7 @@ if (empty($manv)) {
     $nhanVien = mysqli_fetch_assoc($result);
 
     if (!$nhanVien) {
-        $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
+        $error = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
     }
 }
 
@@ -80,12 +82,14 @@ if (isset($_POST['capNhat']))
         // Định dạng số điện thoại
         elseif (!preg_match("/^\d{10,11}$/", $soDienThoai))
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 10 đến 11 chữ số.</span>";
-        //Kiểm tra hình ảnh mới
+        //Kiểm tra hình ảnh
+        $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
+        $file = $dir . basename($_FILES["fileInput"]["name"]);
+        $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+        //Hình ảnh cũ
+        $hinhAnh = basename($_POST['hinhAnh']);
+        //Hình ảnh mới
         if (!empty($_FILES['fileInput']['name'])) {
-            $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
-            $file = $dir . basename($_FILES["fileInput"]["name"]);
-            $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
             // Kiểm tra loại file ảnh
             if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg")
             $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG & GIF.</span>";
@@ -109,7 +113,7 @@ if (isset($_POST['capNhat']))
             $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
             if (mysqli_query($connect, $sql)) {
                 $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoNV thành công!</span>";
-                echo "<script>window.location.href = '$base_url/admin/nhan_vien/trangchu.php';</script>";
+                echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
             } else {
                 $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
             }
@@ -174,8 +178,8 @@ mysqli_close($connect);
                     <div class="col-md-12">
                         <div class="card h-100">
                             <div class="card-body">
-                                <?php if (!empty($msg)): ?>
-                                    <?php echo $msg; ?>
+                                <?php if (!empty($error)): ?>
+                                    <?php echo $error; ?>
                                 <?php else: ?>
                                 <form action="" method="POST" enctype="multipart/form-data">
                                     <input type="hidden" name="id" value="<?php echo $nhanVien['id']; ?>">
@@ -248,7 +252,7 @@ mysqli_close($connect);
                                                     <div class="col-md-12">
                                                         <div class="row">
                                                             <div class="col-md-9">
-                                                                <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly/>
+                                                                <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php echo $_POST['fileInput'] ?? $nhanVien['Images']; ?>">
                                                             </div>
                                                             <div class="col-md-3">
                                                                 <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>

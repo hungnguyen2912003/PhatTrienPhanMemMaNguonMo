@@ -69,10 +69,9 @@ if (isset($_POST["themMoi"])) {
                 $sql = "INSERT INTO san_pham (ma_sp, ma_ncc, ten_sp, hinhAnh, moTa, soLuong, giaBan) VALUES ('$maSP', '$supplierID', '$tenSP', '$hinhAnh', '$moTa', '$soLuong', '$giaBan')";
                 if (mysqli_query($connect, $sql)) {
                     $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới sản phẩm $tenSP thành công!</span>";
-                    echo "<script>window.location.href = '$base_url/admin/san_pham/trangchu.php';</script>";
+                    echo "<script>window.location.href = '$base_url/admin/san_pham/hienthi.php';</script>";
                 } else {
-                    $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
-                    echo "<script>window.location.href = '$base_url/admin/san_pham/trangchu.php';</script>";
+                    $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
                 }
             }
             // Giải phóng kết quả sau khi kiểm tra
