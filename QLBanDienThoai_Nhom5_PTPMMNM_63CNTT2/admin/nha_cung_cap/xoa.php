@@ -116,6 +116,7 @@ if(isset($_POST['deleteBtn']) && !empty($maNCC)){
                                             <label>Hình ảnh nhà cung cấp</label><br />
                                             <?php if (!empty($nhacungcap['Images'])): ?>
                                                 <img src="<?php echo $base_url; ?>/Images/<?php echo $nhacungcap['Images']; ?>" alt="Hình ảnh nhà cung cấp" width="200" class="img-fluid">
+                                                <div class="mt-1">Tên hình ảnh: <strong><?php echo $nhacungcap['Images']; ?></strong></div>
                                             <?php else: ?>
                                                 <span class="form-control">Chưa thêm hình ảnh cho nhà cung cấp này</span>
                                             <?php endif; ?>

@@ -117,6 +117,7 @@ if (!$sanpham) {
                                             <label>Hình ảnh sản phẩm</label><br />
                                             <?php if (!empty($sanpham['hinhAnh'])): ?>
                                                 <img src="<?php echo $base_url; ?>/Images/<?php echo $sanpham['hinhAnh']; ?>" alt="Hình ảnh sản phẩm" width="200" class="img-fluid">
+                                                <div class="mt-1">Tên hình ảnh: <strong><?php echo $sanpham['hinhAnh']; ?></strong></div>
                                             <?php else: ?>
                                                 <span class="form-control">Chưa thêm hình ảnh cho sản phẩm này</span>
                                             <?php endif; ?>

@@ -121,10 +121,12 @@ $sanpham = mysqli_fetch_assoc($result);
                                             <div class="form-group form-group-default text-center ">
                                                 <label>Hình ảnh sản phẩm</label><br />
                                                 <?php if (!empty($sanpham['hinhAnh'])): ?>
-                                                    <img src="<?php echo $base_url; ?>/Images/<?php echo $sanpham['hinhAnh']; ?>" alt="Hình ảnh sản phẩm" width="200" class="img-fluid">
+                                                    <img src="<?php echo $base_url; ?>/Images/<?php echo $sanpham['hinhAnh']; ?> "alt="Hình ảnh sản phẩm" width="200" class="img-fluid">
+                                                    <div class="mt-1">Tên hình ảnh: <strong><?php echo $sanpham['hinhAnh']; ?></strong></div>
                                                 <?php else: ?>
-                                                    <span class="form-control">Chưa thêm hình ảnh cho sản phẩm này</span>
+                                                    <span class="form-control">Chưa thêm hình ảnh cho nhân viên này</span>
                                                 <?php endif; ?>
+
                                             </div>
                                             <div class="form-group form-group-default">
                                                 <label>Mô tả</label>
