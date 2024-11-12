@@ -1,0 +1,125 @@
+
+<style>
+    i {
+        font-size: 20px;
+    }
+</style>
+
+<div class="sidebar">
+    <div class="sidebar-background"></div>
+    <div class="sidebar-wrapper scrollbar-inner">
+        <div class="sidebar-content">
+            <div class="user">
+                <div class="avatar-sm float-left mr-2">
+                    <img src="<?php echo $base_url; ?>/Content/clients/dist/img/avatar5.png" class="avatar-img rounded-circle">
+                </div>
+                <div class="info">
+                    <a data-toggle="collapse" href="#collapseExample" aria-expanded="true">
+                    <span>
+                        <span><?php if(isset($_SESSION['hoTen'])) echo $_SESSION['hoTen']; ?></span>
+                        <span class="user-level">
+                            Phân quyền:
+                            <?php
+                                if (isset($_SESSION['phanQuyen'])) {
+                                    if ($_SESSION['phanQuyen'] == 'ADMIN') {
+                                        echo "Admin";
+                                    } elseif ($_SESSION['phanQuyen'] == 'NV') {
+                                        echo "Nhân viên";
+                                    }
+                                }
+                            ?>
+                        </span>
+                        <span class="caret"></span>
+                    </span>
+                    </a>
+                    <div class="clearfix"></div>
+                    <div class="collapse in" id="collapseExample">
+                        <ul class="nav">
+                            <li>
+                                <a href="<?php echo $base_url; ?>/admin/nhan_vien/chitiet.php?manv=<?php echo $_SESSION['id']; ?>">
+                                    <span class="link-collapse">Hồ sơ của tôi</span>
+                                </a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+            <ul class="nav">
+                <li class="nav-item">
+                    <a href="<?php echo $base_url; ?>/admin/trangchu.php">
+                        <i class="fa-solid fa-house"></i>
+                        <p>Trang chủ</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?php echo $base_url; ?>/trangbanhang/trangchu.php" name="trangbanhang">
+                        <i class="fa-solid fa-globe-asia"></i>
+                        <p>Trang bán hàng</p>
+                    </a>
+                </li>
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">Quản lý</h4>
+                </li>
+                <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'): ?>
+                <li class="nav-item">
+                    <a href="<?php echo $base_url; ?>/admin/phan_quyen/hienthi.php">
+                        <i class="fas fa-user-tie"></i>
+                        <p>Phân quyền</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?php echo $base_url; ?>/admin/nhan_vien/hienthi.php">
+                        <i class="fas fa-address-book"></i>
+                        <p>Nhân viên</p>
+                    </a>
+                </li>
+                <?php endif; ?>
+
+                <?php if(isset($_SESSION['phanQuyen']) && ($_SESSION['phanQuyen'] == 'ADMIN' || $_SESSION['phanQuyen'] == 'NV')): ?>
+<!--                <li class="nav-item">-->
+<!--                    <a href="<?php echo $base_url; ?>/admin/don_hang/trangchu.php">-->
+<!--                        <i class="fa-solid fa-file-invoice-dollar"></i>-->
+<!--                        <p>Đơn hàng</p>-->
+<!--                    </a>-->
+<!--                </li>-->
+                <li class="nav-item">
+                    <a href="<?php echo $base_url; ?>/admin/khach_hang/hienthi.php">
+                        <i class="fa-solid fa-address-book"></i>
+                        <p>Khách hàng</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?php echo $base_url; ?>/admin/nha_cung_cap/hienthi.php">
+                        <i class="fa-solid fa-parachute-box"></i>
+                        <p>Nhà cung cấp</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="<?php echo $base_url; ?>/admin/san_pham/hienthi.php">
+                        <i class="fa-solid fa-box"></i>
+                        <p>Sản phẩm</p>
+                    </a>
+                </li>
+                <?php endif; ?>
+                <li class="nav-section">
+                    <span class="sidebar-mini-icon">
+                        <i class="fa fa-ellipsis-h"></i>
+                    </span>
+                    <h4 class="text-section">Hệ thống</h4>
+                </li>
+
+                <li class="nav-item">
+                    <a href="<?php echo $base_url; ?>/admin/dangxuat.php" class="nav-link">
+                        <i class="fa-solid fa-right-from-bracket"></i>
+                        <p>Đăng xuất</p>
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>
+
+

@@ -90,9 +90,9 @@
                                         echo "<span class='mr-4'>Chào mừng: " . $_SESSION['hoTenNV'] . "</span>";
                                     }
                                     // Nút đăng xuất
-                                    echo "<a href='{$base_url}/trangbanhang/logout.php' style='padding: 5px 30px; border-radius: 10px; background-color: #6699ff; color: #0000cc; font-weight: bold;'>Đăng xuất</a>";
+                                    echo "<a href='{$base_url}/trangbanhang/dangxuat.php' style='padding: 5px 30px; border-radius: 10px; background-color: #6699ff; color: #0000cc; font-weight: bold;'>Đăng xuất</a>";
                                 } else {
-                                    echo "<a href='{$base_url}/trangbanhang/login.php' style='padding: 5px 30px; border-radius: 10px; background-color: #ff9999; color: #cc0000; font-weight: bold;'>Đăng nhập</a>";
+                                    echo "<a href='{$base_url}/trangbanhang/dangnhap.php' style='padding: 5px 30px; border-radius: 10px; background-color: #ff9999; color: #cc0000; font-weight: bold;'>Đăng nhập</a>";
                                 }
                             ?>
                         </div>
@@ -113,13 +113,13 @@
                         <nav class="navbar">
                             <ul class="navbar_menu">
                                 <li>
-                                    <a href="<?php echo $base_url; ?>/trangbanhang/index.php">Trang chủ</a>
+                                    <a href="<?php echo $base_url; ?>/trangbanhang/trangchu.php">Trang chủ</a>
                                 </li>
                                 <li>
                                     <a href="#">Sản phẩm</a>
                                 </li>
                                 <li>
-                                    <a href="<?php echo $base_url; ?>/trangbanhang/contact.php">Liên hệ</a>
+                                    <a href="<?php echo $base_url; ?>/trangbanhang/tranglienhe.php">Liên hệ</a>
                                 </li>
                             </ul>
                             <ul class="navbar_user">
