@@ -80,7 +80,12 @@
                             <span>Email: Megatech@gmail.com</span>
                         </div>
                     </div>
-                    <div class="col-md-6 text-right">
+                    <div class="col-md-3 text-right">
+                        <div class="top_nav_left">
+                            <a class="btnadmin" href='<?php echo $base_url?>/admin/trangchu.php' style='padding: 5px 30px; border-radius: 10px; background-color: #ff9966; color: #663300; font-weight: bold;'>Quản trị viên</a>
+                        </div>
+                    </div>
+                    <div class="col-md-3 text-left">
                         <div class="top_nav_left">
                             <?php
                                 if (isset($_SESSION['logged_kh']) && $_SESSION['logged_kh'] == true) {
