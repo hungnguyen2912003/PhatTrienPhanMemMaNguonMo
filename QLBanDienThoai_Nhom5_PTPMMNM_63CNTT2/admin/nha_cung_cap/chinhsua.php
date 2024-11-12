@@ -36,55 +36,59 @@ if (!$row) {
 
 // Kiểm tra nếu form được gửi với nút "Cập nhật" được nhấn.
 if (isset($_POST["capNhat"])) {
-    // Lấy tên ncc, email, sdt, tên file hình ảnh từ form.
-    $tenNCC = $_POST["tenNhaCungCap"];
+    // Lấy tên ncc, email, sdt, từ form.
+    $tenNCC = $_POST["tenNCC"];
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
-    // Nếu có hình ảnh mới
-    $hinhAnh = !empty($_FILES['Images']['name']) ? $_FILES['Images']['name'] : $_POST['hinhAnh'];
-
+    //Hình ảnh cũ
+    $hinhAnh = basename($_POST['hinhAnh']);
     // Kiểm tra các trường bắt buộc
     if (empty($tenNCC) || empty($email) || empty($soDienThoai) || empty($hinhAnh)) {
         $msg = "<span class='text-danger font-weight-bold'>Tất cả các trường đều phải điền đầy đủ.</span>";
     } else {
         // Kiểm tra số điện thoại
-        if (!preg_match("/^\d{8,11}$/", $soDienThoai)) {
+        if (!preg_match("/^\d{8,11}$/", $soDienThoai))
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 8 đến 11 chữ số.</span>";
-        } elseif (!empty($_FILES['Images']['name'])) {
-            // Kiểm tra hình ảnh mới
-            $file_name = $_FILES['Images']['name'];
-            $file_size = $_FILES['Images']['size'];
-            $file_tmp = $_FILES['Images']['tmp_name'];
+        //Kiểm tra hình ảnh
+        $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
+        $file = $dir . basename($_FILES["fileInput"]["name"]);
+        $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-            $array = explode('.', $file_name); // Tách tên file để lấy phần đuôi.
-            $file_ext = strtolower(end($array)); // Lấy phần đuôi file và chuyển về chữ thường.
-            $allowed_ext = array("jpeg", "jpg", "png"); // Các đuôi file hình ảnh hợp lệ.
 
-            // Kiểm tra xem phần mở rộng của file có hợp lệ không
-            if (!in_array($file_ext, $allowed_ext)) {
-                $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận jpeg, jpg, png.</span>";
-            }
-            // Kiểm tra kích thước file có vượt quá 2MB không
-            elseif ($file_size > 2097152) {
-                $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>";
-            } else {
-                // Nếu tất cả các điều kiện trên đều hợp lệ, di chuyển file từ thư mục tạm thời đến thư mục mong muốn
-                move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/" . $file_name);
+        //Hình ảnh mới
+        if (!empty($_FILES['fileInput']['name'])) {
+            // Kiểm tra loại file ảnh
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg")
+                $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG & GIF.</span>";
+            // Kiểm tra kích thước file
+            elseif ($_FILES["fileInput"]["size"] > 2097152)
+                $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
+
+            //Nếu không còn báo lỗi gì nữa thì tiến hành đưa ảnh lên server
+            if(empty($msg)) {
+                // Tải file lên server
+                if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
+                    $hinhAnh = basename($_FILES["fileInput"]["name"]); // lưu tên file mới
+                } else {
+                    $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
+                }
             }
         }
-    }
-
-    // Cập nhật thông tin nhà cung cấp
-    if (empty($msg)) {
-        $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email', Images='$hinhAnh' WHERE id='$maNCC'";
-        if (mysqli_query($connect, $sql)) {
-            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
-            echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/hienthi.php';</script>";
-        } else {
-            $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
+        //Nếu không còn báo lỗi gì nữa thì tiến hành cập nhật nhân viên
+        if (empty($msg)) {
+            // Cập nhật thông tin nhân viên
+            $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email', Images='$hinhAnh' WHERE id='$maNCC'";
+            if (mysqli_query($connect, $sql)) {
+                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
+                echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/hienthi.php';</script>";
+            } else {
+                $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
+            }
         }
     }
 }
+// Đóng kết nối sau khi hoàn tất
+mysqli_close($connect);
 ?>
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
 <!DOCTYPE html>
@@ -145,7 +149,7 @@ if (isset($_POST["capNhat"])) {
             <div class="row">
                 <div class="col-md-12">
                     <div class="card h-100">
-                        <form action="" method="post">
+                        <form action="" method="POST" enctype="multipart/form-data">
                             <input type="hidden" name="id" value="<?php echo $row['id']; ?>">
                             <div class="card-body">
                                 <div class="row">
@@ -155,15 +159,15 @@ if (isset($_POST["capNhat"])) {
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Tên nhà cung cấp <span class="text-danger">*</span></label>
-                                            <input type="text" name="tenNhaCungCap" placeholder="Nhập tên nhà cung cấp" class="form-control" value="<?php echo $row['tenNCC']; ?>"/>
+                                            <input type="text" name="tenNCC" placeholder="Nhập tên nhà cung cấp" class="form-control" value="<?php echo $_POST['tenNCC'] ?? $row['tenNCC']; ?>"/>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Số điện thoại <span class="text-danger">*</span></label>
-                                            <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhà cung cấp" class="form-control" value="<?php echo $row['soDienThoai']; ?>"/>
+                                            <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhà cung cấp" class="form-control" value="<?php echo $_POST['soDienThoai'] ?? $row['soDienThoai']; ?>"/>
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" placeholder="Nhập email nhà cung cấp" class="form-control" value="<?php echo $row['email']; ?>"/>
+                                            <input type="email" name="email" placeholder="Nhập email nhà cung cấp" class="form-control" value="<?php echo $_POST['email'] ?? $row['email']; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
@@ -180,14 +184,14 @@ if (isset($_POST["capNhat"])) {
                                                     <div class="row">
                                                         <div class="col-md-9">
                                                             <!-- input hiển thị tên hình ảnh, được điền giá trị bằng cách kiểm tra trạng thái của tệp đã chọn -->
-                                                            <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
-                                                                   value="<?php if (isset($_FILES['Images']) && $_FILES['Images']['error'] == 0) echo $_FILES['Images']['name']; else echo 'Chưa thêm hình ảnh'; ?>" style="text-align: center;" readonly />
+                                                            <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php echo $_POST['fileInput'] ?? $row['Images']; ?>">
                                                         </div>
                                                         <div class="col-md-3">
                                                             <!-- input kiểu file để người dùng chọn hình ảnh, mặc định là ẩn -->
-                                                            <input type="file" id="fileInput" name="Images" accept="image/*" onchange="layAnh(event)" style="display: none;" />
+                                                            <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
                                                             <!-- Nút tải ảnh, khi nhấn trường input file ẩn để chọn hình ảnh -->
-                                                            <button style="width: 80px;" type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
+
+                                                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Chọn ảnh</button>
                                                         </div>
                                                     </div>
                                                 </div>
