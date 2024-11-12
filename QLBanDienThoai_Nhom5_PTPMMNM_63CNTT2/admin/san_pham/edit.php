@@ -29,31 +29,56 @@ if (!$sanpham) {
 
 // Xử lý form chỉnh sửa sản phẩm
 if (isset($_POST["capNhat"])) {
-    $ten_sp = $_POST['ten_sp'];
-    $ma_ncc = $_POST['ma_ncc'];
-    $soLuong = $_POST['soLuong'];
-    $giaBan = $_POST['giaBan'];
-    $moTa = $_POST['moTa'];
-    $hinhAnh = $_POST['hinhAnh']; // Đã sửa biến này cho khớp
+    // Duy trì giá trị cũ trong trường hợp không có thay đổi
+    $ten_sp = $_POST['ten_sp'] ?? $sanpham['ten_sp'];
+    $ma_ncc = $_POST['ma_ncc'] ?? $sanpham['ma_ncc'];
+    $soLuong = $_POST['soLuong'] ?? $sanpham['soLuong'];
+    $giaBan = $_POST['giaBan'] ?? $sanpham['giaBan'];
+    $moTa = $_POST['moTa'] ?? $sanpham['moTa'];
 
-    if (!empty($ten_sp) && !empty($ma_ncc) && !empty($soLuong) && !empty($giaBan) && !empty($moTa) && !empty($hinhAnh)) {
+    // Giữ nguyên hình ảnh cũ nếu không có hình ảnh mới được tải lên
+    if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
+        $hinhAnh = $_FILES['fileInput']['name'];
+    } else {
+        $hinhAnh = $sanpham['hinhAnh']; // Giữ nguyên giá trị cũ
+    }
+
+    if (!empty($ten_sp) && !empty($ma_ncc) && !empty($soLuong) && !empty($giaBan) && !empty($moTa)) {
         if (!(ctype_digit($soLuong) && $soLuong > 0)) {
             $msg = "<span class='text-danger font-weight-bold'>Số lượng sản phẩm phải là con số nguyên lớn hơn 0. Vui lòng nhập lại!</span>";
-        }
-        // Kiểm tra xem số lượng và giá bán có lớn hơn 0 không
-        elseif (!(is_numeric($giaBan) && $giaBan > 0)) {
+        } elseif (!(is_numeric($giaBan) && $giaBan > 0)) {
             $msg = "<span class='text-danger font-weight-bold'>Giá bán phải là số lớn hơn 0. Vui lòng nhập lại!</span>";
         } else {
-            // Cập nhật thông tin sản phẩm vào cơ sở dữ liệu
-            $sql = "UPDATE san_pham SET ten_sp = ?, ma_ncc = ?, soLuong = ?, giaBan = ?, moTa = ?, hinhAnh = ? WHERE ma_sp = ?";
-            $stmt = mysqli_prepare($connect, $sql);
-            mysqli_stmt_bind_param($stmt, 'ssissss', $ten_sp, $ma_ncc, $soLuong, $giaBan, $moTa, $hinhAnh, $masp);
+            // Kiểm tra hình ảnh mới
+            if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
+                $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
+                $file = $dir . basename($hinhAnh);
+                $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
-            if (mysqli_stmt_execute($stmt)) {
-                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin sản phẩm $ten_sp thành công!</span>";
-                echo "<script>window.location.href = '$base_url/admin/san_pham/index.php';</script>";
-            } else {
-                $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
+                // Kiểm tra kích thước file
+                if ($_FILES["fileInput"]["size"] > 2097152) {
+                    $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
+                } elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                    $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG.</span>";
+                } else {
+                    // Tải file lên server
+                    if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
+                        // File uploaded successfully
+                    } else {
+                        $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
+                    }
+                }
+            }
+
+            if (empty($msg)) {
+                $sql = "UPDATE san_pham SET ten_sp = '$ten_sp', ma_ncc = '$ma_ncc', soLuong = '$soLuong', giaBan = '$giaBan', moTa = '$moTa', hinhAnh = '$hinhAnh' WHERE ma_sp = '$masp'";
+
+                if (mysqli_query($connect, $sql)) {
+                    $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin sản phẩm $ten_sp thành công!</span>";
+                } else {
+                    $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
+                }
+                // Redirect về trang index
                 echo "<script>window.location.href = '$base_url/admin/san_pham/index.php';</script>";
             }
         }
@@ -61,14 +86,8 @@ if (isset($_POST["capNhat"])) {
         $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
     }
 }
-
+$suppliers = mysqli_query($connect, "SELECT * FROM nha_cung_cap");
 // Truy vấn thông tin nhà cung cấp theo mã
-$sql = "SELECT * FROM san_pham WHERE ma_sp = ?";
-$stmt = mysqli_prepare($connect, $sql);
-mysqli_stmt_bind_param($stmt, 'i', $masp);
-mysqli_stmt_execute($stmt);
-$result = mysqli_stmt_get_result($stmt);
-$row = mysqli_fetch_assoc($result);
 ?>
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
 <!DOCTYPE html>
@@ -128,7 +147,7 @@ $row = mysqli_fetch_assoc($result);
                 <div class="col-md-12">
                     <div class="card h-100">
                         <div class="card-body">
-                            <form action="" method="POST">
+                            <form action="" method="post" enctype="multipart/form-data">
                                 <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
@@ -162,21 +181,20 @@ $row = mysqli_fetch_assoc($result);
                                         <div class="form-group form-group-default text-center">
                                             <label>Hình ảnh sản phẩm <span class="text-danger">*</span></label>
                                             <?php if ($sanpham['hinhAnh']): ?>
-                                                <img src='<?php echo $base_url; ?>/Images/<?php echo $sanpham['hinhAnh']; ?>' alt='Hình ảnh đại diện' width="200" class='img-fluid mb-3 mt-3'>
+                                                <img src='<?php echo $base_url; ?>/Images/<?php echo $sanpham['hinhAnh']; ?>' alt='Hình ảnh đại diện' width="200" class='img-fluid mb-2'>
                                                 <div>Tên hình ảnh: <strong><?php echo $sanpham['hinhAnh']; ?></strong></div>
                                             <?php else: ?>
                                                 <div>Không có hình ảnh hiện tại.</div>
                                             <?php endif; ?>
-                                            <div class="input-group">
+                                            <div class="input-group ">
                                                 <div class="col-md-12">
                                                     <div class="row">
                                                         <div class="col-md-9">
-                                                            <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
-                                                                   value="<?php if(isset($sanpham['hinhAnh'])) echo $sanpham['hinhAnh']; else echo "Chưa thêm hình ảnh"?>" style="text-align: center;" readonly />
+                                                            <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php if (isset($_FILES['hinhAnh'])) echo $_FILES['hinhAnh']['name']; else echo $sanpham['hinhAnh']; ?>"/>
                                                         </div>
                                                         <div class="col-md-3">
-                                                            <input type="file" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" />
-                                                            <button style="width: 80px;" type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
+                                                            <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
+                                                            <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Chọn ảnh</button>
                                                         </div>
                                                     </div>
                                                 </div>

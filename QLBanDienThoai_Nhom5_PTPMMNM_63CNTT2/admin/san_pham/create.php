@@ -8,7 +8,7 @@ include('../includes/footer.html');
 // Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die('Không thể kết nối MySQL: ' . mysqli_connect_error());
-
+$suppliers = mysqli_query($connect, "SELECT * FROM nha_cung_cap");
 $msg = "";
 $tenSP = "";
 $supplierID = "";
@@ -17,29 +17,55 @@ $giaBan = "";
 $hinhAnh = "";
 $moTa = "";
 $maSP = rand(10000000, 99999999);
-
 if (isset($_POST["themMoi"])) {
     $tenSP = $_POST["ten_sp"];
     $supplierID = $_POST["ma_ncc"];
     $soLuong = $_POST["soLuong"];
     $giaBan = $_POST["giaBan"];
     $moTa = $_POST["moTa"];
-    $hinhAnh = $_POST["hinhAnh"];
+
+    // Check if file input is properly set
+    if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
+        $hinhAnh = $_FILES['fileInput']['name'];
+    } else {
+        $hinhAnh = ""; // Default value if no file uploaded
+    }
+
     // Kiểm tra các trường bắt buộc và điều kiện số lượng và giá bán
-    if (!empty($tenSP) && !empty($supplierID) && !empty($soLuong) && !empty($giaBan) && !empty($moTa) && !empty($hinhAnh)) {
-        if(!(ctype_digit($soLuong) || $soLuong < 0))
+    if (!empty($tenSP) && !empty($supplierID) && !empty($soLuong) && !empty($giaBan) && !empty($moTa)) {
+        if (!(ctype_digit($soLuong) && $soLuong > 0))
             $msg = "<span class='text-danger font-weight-bold'>Số lượng sản phẩm phải là con số nguyên lớn hơn 0. Vui lòng nhập lại!</span>";
-        // Kiểm tra xem số lượng và giá bán có lớn hơn 0 không
-        elseif (!(is_numeric($giaBan) || $giaBan < 0)) {
+        elseif (!(is_numeric($giaBan) && $giaBan > 0)) {
             $msg = "<span class='text-danger font-weight-bold'>Giá bán phải là số lớn hơn 0. Vui lòng nhập lại!</span>";
         }
-        else {
+
+        // Kiểm tra hình ảnh mới
+        if (!empty($hinhAnh)) {
+            $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
+            $file = $dir . basename($hinhAnh);
+            $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+
+            // Kiểm tra kích thước file
+            if ($_FILES["fileInput"]["size"] > 2097152) {
+                $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
+            } elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG.</span>";
+            } else {
+                // Tải file lên server
+                if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
+                    // File uploaded successfully
+                } else {
+                    $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
+                }
+            }
+        }
+        if (empty($msg)) {
+            // Kiểm tra mã nhân viên đã tồn tại
             $check_maSP = mysqli_query($connect, "SELECT * FROM san_pham WHERE ma_sp = '$maSP'");
             if (mysqli_num_rows($check_maSP) != 0) {
                 $msg = "<span class='text-danger font-weight-bold'>Đã có mã sản phẩm này rồi. Vui lòng thử lại.</span>";
             } else {
-
-                // Thực hiện truy vấn INSERT vào bảng sản phẩm
+                // Thực hiện thêm mới
                 $sql = "INSERT INTO san_pham (ma_sp, ma_ncc, ten_sp, hinhAnh, moTa, soLuong, giaBan) VALUES ('$maSP', '$supplierID', '$tenSP', '$hinhAnh', '$moTa', '$soLuong', '$giaBan')";
                 if (mysqli_query($connect, $sql)) {
                     $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới sản phẩm $tenSP thành công!</span>";
@@ -49,17 +75,18 @@ if (isset($_POST["themMoi"])) {
                     echo "<script>window.location.href = '$base_url/admin/san_pham/index.php';</script>";
                 }
             }
+            // Giải phóng kết quả sau khi kiểm tra
+            mysqli_free_result($check_maSP);
         }
-    } else {
-        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống và giá bán phải là số dương. Vui lòng nhập đầy đủ thông tin!</span>";
+    }
+    else {
+        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
     }
 }
-
-$suppliers = mysqli_query($connect, "SELECT * FROM nha_cung_cap");
-
 // Đóng kết nối sau khi hoàn tất
 mysqli_close($connect);
 ?>
+
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
 <!DOCTYPE html>
 <html lang="en">
@@ -81,7 +108,6 @@ mysqli_close($connect);
     </script>
 </head>
 <body>
-
 <div class="main-panel">
     <div class="content">
         <div class="page-inner">
@@ -118,7 +144,7 @@ mysqli_close($connect);
             <div class="row">
                 <div class="col-md-12">
                     <div class="card h-100">
-                        <form action="" method="post" >
+                        <form action="" method="post" enctype="multipart/form-data">
                             <div class="card-body">
                                 <div class="row">
                                     <div class="col-md-12">
@@ -166,20 +192,18 @@ mysqli_close($connect);
                                                         <div class="col-md-12">
                                                             <div class="row">
                                                                 <div class="col-md-9">
-                                                                    <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
-                                                                           value="<?php if(isset($row['Images'])) echo $row['Images']; else echo "Chưa thêm hình ảnh"?>" style="text-align: center;" readonly />
+                                                                    <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php if (isset($_FILES['fileInput'])) echo $_FILES['fileInput']['name']; else echo 'Chưa thêm hình ảnh'; ?>"/>
                                                                 </div>
                                                                 <div class="col-md-3">
-                                                                    <input type="file" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;" />
-                                                                    <button style="width: 80px;" type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Tải ảnh</button>
+                                                                    <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
+                                                                    <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Chọn ảnh</button>
                                                                 </div>
                                                             </div>
                                                         </div>
                                                     </div>
                                                 </div>
-
                                                 <div class="form-group form-group-default">
-                                                    <label>Mô tả</label>
+                                                    <label>Mô tả<span class="text-danger">*</span></label>
                                                     <textarea name="moTa" placeholder="Nhập mô tả" class="form-control" style="resize: none; overflow: scroll" rows="5" ><?php echo $moTa; ?></textarea>
                                                 </div>
                                             </div>
