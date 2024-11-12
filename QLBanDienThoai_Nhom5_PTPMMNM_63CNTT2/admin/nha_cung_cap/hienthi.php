@@ -20,12 +20,20 @@ $sql = "SELECT * FROM nha_cung_cap WHERE tenNCC LIKE '%$searchText%'";
 $result = mysqli_query($connect, $sql);
 
 // Kiểm tra kết quả tìm kiếm
-if ((mysqli_num_rows($result) > 0) && !empty($searchText)) {//nếu có kết quả tìm kiếm và người dùng đã nhập gì đó vào ô tìm kiếm
-    $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả có từ khoá: '$searchText'</span>";
-} elseif(mysqli_num_rows($result) < 0){////nếu không có kết quả tìm kiếm và người dùng đã nhập gì đó vào ô tìm kiếm. Hiện báo lỗi
-    $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả có từ khoá: '$searchText'</span>";
+// Kiểm tra kết quả tìm kiếm
+// Kiểm tra kết quả tìm kiếm
+if (!empty($searchText)) {
+    if (mysqli_num_rows($result) > 0) {
+        // Nếu người dùng đã nhập từ khóa vào ô tìm kiếm và có kết quả tìm kiếm
+        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả có từ khóa: '$searchText'</span>";
+    } else {
+        // Nếu người dùng đã nhập từ khóa vào ô tìm kiếm nhưng không có kết quả
+        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả có từ khóa: '$searchText'</span>";
+    }
+} else {
+    // Nếu người dùng không nhập từ khóa nào vào ô tìm kiếm
+    $_SESSION['msg'] = "";
 }
-
 ?>
 
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN' || isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'NV'):?>

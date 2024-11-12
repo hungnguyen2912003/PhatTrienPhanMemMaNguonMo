@@ -65,7 +65,10 @@ if (isset($_POST["capNhat"])) {
                 <div class="page-header">
                     <div class="col-md-12">
                         <div class="row">
-                            <h4 class="page-title">Cập nhật thông tin phân quyền: <?php echo $row['hoTen']; ?></h4>
+                            <div class="col-md-6">
+                                <h4 class="page-title">Cập nhật thông tin phân quyền: <?php echo $row['tenTaiKhoan']; ?></h4>
+                            </div>
+
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
                                     <li class="nav-home">

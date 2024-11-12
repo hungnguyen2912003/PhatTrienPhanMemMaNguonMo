@@ -15,7 +15,7 @@ if(isset($_GET['id'])){
 }
 $msg = "";
 
-// Truy vấn thông tin nhà cung cấp
+// Truy vấn thông tin nhà cung cấp theo mã nahf cung cấp
 $sql = "SELECT * FROM nha_cung_cap WHERE id = '$maNCC'";
 $result = mysqli_query($connect, $sql);
 $nhacungcap = mysqli_fetch_assoc($result);

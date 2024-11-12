@@ -20,7 +20,6 @@ if (!isset($_GET['page']))
 //Xác định vị trí của bản ghi đầu tiên trong câu truy vấn SQL. Nó tính toán dựa trên số trang hiện tại và số bản ghi trên mỗi trang.
 $offset =($_GET['page']-1)*$rowsPerPage;
 
-// Lọc sản phẩm theo nhà cung cấp nếu có
 $sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
 $result = mysqli_query($connect, $sql);
 

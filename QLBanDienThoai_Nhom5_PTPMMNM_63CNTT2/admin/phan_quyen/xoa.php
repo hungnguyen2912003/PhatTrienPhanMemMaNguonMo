@@ -60,7 +60,7 @@ if(isset($_POST['deleteBtn'])){
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="page-title">Chi tiết thông tin phân quyền: <?php echo $phan_quyen['tenTaiKhoan']; ?></h4>
+                                <h4 class="page-title">Xóa thông tin phân quyền: <?php echo $phan_quyen['tenTaiKhoan']; ?></h4>
                             </div>
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
