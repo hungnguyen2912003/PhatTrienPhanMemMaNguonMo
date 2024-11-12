@@ -21,15 +21,9 @@ if (!isset($_GET['page']))
 $offset =($_GET['page']-1)*$rowsPerPage;
 
 // Lọc sản phẩm theo nhà cung cấp nếu có
-if (isset($_POST['nha_cung_cap']) && !empty($_POST['nha_cung_cap'])) {
-    $nhaCungCapId = $_POST['nha_cung_cap'];
-    $sql = "SELECT * FROM san_pham WHERE ma_ncc = '$nhaCungCapId' LIMIT $offset, $rowsPerPage";
-    $result = mysqli_query($connect, $sql);
-} else {
-    // Nếu không có nhà cung cấp được chọn thì lấy tất cả sản phẩm
-    $sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
-    $result = mysqli_query($connect, $sql);
-}
+$sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
+$result = mysqli_query($connect, $sql);
+
 
 // Xử lý tìm kiếm
 $searchResult = false; // Biến kiểm tra kết quả tìm kiếm
@@ -128,32 +122,15 @@ if (isset($_POST['btnTimKiem'])) {
                 <div class="card h-100" >
                     <div class="card-header">
                         <div class="row">
-                            <div class="col-md-2">
+                            <div class="col-md-4">
                                 <div class="card-tools">
                                     <a href="<?php echo $base_url?>/admin/san_pham/themmoi.php" class="btn btn-rounded btn-primary">Thêm mới</a>
                                 </div>
                             </div>
-                            <div class="col-md-4">
-                                <form action="" method="post">
-                                    <select name="nha_cung_cap" id="nha_cung_cap" class="form-control p-2" >
-                                        <option value="">Chọn nhà cung cấp</option>
-                                        <?php
-                                        // Truy vấn dữ liệu nhà cung cấp từ cơ sở dữ liệu
-                                        $sqlNhaCungCap = "SELECT * FROM nha_cung_cap";
-                                        $resultNhaCungCap = mysqli_query($connect, $sqlNhaCungCap);
-
-                                        // Lặp qua các nhà cung cấp và tạo các option
-                                        while($rowNCC = mysqli_fetch_assoc($resultNhaCungCap)) {
-                                            echo "<option value='{$rowNCC['id']}'>{$rowNCC['tenNCC']}</option>";
-                                        }
-                                        ?>
-                                    </select>
-                                </form>
-                            </div>
                             <div class="col-md-5">
                                 <form action="" method="post">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin sản phẩm bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
+                                        <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập tên sản phẩm bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
                                         <span class="input-group-append">
                                             <button type="submit" name="btnTimKiem" class="btn btn-info btn-flat">Tìm kiếm</button>
                                         </span>

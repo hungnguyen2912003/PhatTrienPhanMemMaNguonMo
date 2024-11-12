@@ -26,7 +26,10 @@ $searchResult = false; // Biến kiểm tra kết quả tìm kiếm
 if (isset($_POST['btnTimKiem'])) {
     $str = trim($_POST['searchtext']);
     if (empty($str)) {
-        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Họ tên nhân viên cần tìm kiếm không được bỏ trống</span>";
+        // Nếu input tìm kiếm rỗng, lấy tất cả nhân viên
+        $sql = "SELECT *,CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTen 
+                FROM nhan_vien LIMIT $offset, $rowsPerPage";
+        $result = mysqli_query($connect, $sql);
     } else {
         // Truy vấn tìm kiếm
         $sql = "SELECT *, CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTen 
@@ -35,11 +38,12 @@ if (isset($_POST['btnTimKiem'])) {
         $result = mysqli_query($connect, $sql);
 
         // Kiểm tra nếu không có kết quả tìm kiếm
-        if (mysqli_num_rows($result) > 0) {
+        if ($result && mysqli_num_rows($result) > 0) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả họ tên có từ khoá: '$str'</span>";
             $searchResult = true; // Đặt biến kiểm tra kết quả tìm kiếm là true
         } else {
             $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khoá: '$str'</span>";
+            $searchResult = false; // Đảm bảo không hiển thị kết quả không hợp lệ
         }
     }
 }
