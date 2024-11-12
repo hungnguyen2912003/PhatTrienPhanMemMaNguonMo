@@ -12,12 +12,12 @@ $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
         top: 50%;
         left: 50%;
         transform: translate(-50%, -50%);
-        background-color: rgba(255, 255, 255, 0.8); /* Màu nền trong suốt */
+        background-color: rgba(255, 255, 255, 0.8);
         color: red;
         font-weight: bold;
-        padding: 15px 15px; /* Tăng độ dài ngang */
-        z-index: 2; /* Đảm bảo nó hiển thị trên hình ảnh sản phẩm */
-        width: 100%; /* Bề ngang mở rộng ra tận khung */
+        padding: 15px 15px;
+        z-index: 2;
+        width: 100%;
         text-align: center;
         font-size: 20px;
     }
@@ -30,34 +30,24 @@ $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
                 <div class="product-grid" data-isotope='{ "itemSelector": ".product-item", "layoutMode": "fitRows" }'>
                     <?php
                     // Kết nối cơ sở dữ liệu
-                    $conn = new mysqli("localhost", "root", "", "qlbandienthoai");
+                    $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-                    // Kiểm tra kết nối
-                    if ($conn->connect_error) {
-                        die("Kết nối thất bại: " . $conn->connect_error);
-                    }
+                    $sql = "SELECT * FROM san_pham";
+                    $result = mysqli_query($connect, $sql);
 
-                    // Truy vấn lấy thông tin sản phẩm
-                    $sql = "SELECT * FROM san_pham"; // Bạn cần thay đổi tên bảng và cột cho phù hợp
-                    $result = $conn->query($sql);
-
-                    if ($result->num_rows > 0) {
+                    if (mysqli_num_rows($result) > 0) {
                         // Lặp qua các sản phẩm
-                        while ($row = $result->fetch_assoc()) {
+                        while ($row = mysqli_fetch_assoc($result)) {
                             $soLuong = $row['soLuong'];
                             $image = $row['hinhAnh'];
                             $tensp = $row['ten_sp'];
                             $giaBan = $row['giaBan'];
-                            $maSanPham = $row['ma_sp'];
                             ?>
                             <!-- Product Item -->
                             <div class="product-item" data-quantity="<?php echo $soLuong; ?>">
                                 <div class="product discount product_filter">
-                                    <div class="product_image">
-                                        <img src="<?php echo $base_url; ?>/Images/<?php echo $image; ?>" alt="<?php echo $tensp; ?>">
-                                        <?php if ($soLuong <= 0) { ?>
-                                            <div class="out-of-stock">Hết hàng</div>
-                                        <?php } ?>
+                                    <div class="product_image text-center">
+                                        <img src="<?php echo $base_url; ?>/Images/<?php echo $image; ?>" alt="<?php echo $tensp; ?>" style="width: auto; height: 200px;">
                                     </div>
                                     <div class="favorite favorite_left"></div>
                                     <div class="product_info">
@@ -66,9 +56,7 @@ $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
                                         <p>Số lượng còn: <?php echo $soLuong; ?></p>
                                     </div>
                                 </div>
-                                <?php if ($soLuong > 0) { ?>
-                                    <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart" data-id="<?php echo $maSanPham; ?>">Thêm vào giỏ hàng</a></div>
-                                <?php } ?>
+                                <div class="red_button add_to_cart_button"><a href="#" class="btnAddToCart">Thêm vào giỏ hàng</a></div>
                             </div>
                             <?php
                         }
@@ -77,7 +65,7 @@ $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
                     }
 
                     // Đóng kết nối
-                    $conn->close();
+                    mysqli_close($connect);
                     ?>
                 </div>
             </div>

@@ -37,17 +37,17 @@ if (isset($_POST['dangNhap'])) {
         $sql_check_account = "SELECT * FROM user WHERE username = '$username' AND password = '$pass'";
         $result_check_account = mysqli_query($connect, $sql_check_account);
         // Kiểm tra quyền
-        $sql_check_quyen = "SELECT * FROM user WHERE username = '$username' AND phanQuyen = 'KH'";
+        $sql_check_quyen = "SELECT * FROM user WHERE username = '$username' AND phanQuyen IN ('ADMIN', 'NV')";
         $result_check_quyen = mysqli_query($connect, $sql_check_quyen);
 
         if(mysqli_num_rows($result_check_account) == 0) {
             $msg = "<span class='text-danger font-weight-bold'>Tên tài khoản hoặc mật khẩu không hợp lệ</span>";
         }
-        elseif (mysqli_num_rows($result_check_quyen) != 0) {
+        elseif (mysqli_num_rows($result_check_quyen) == 0) {
             $msg = "<span class='text-danger font-weight-bold'>Tài khoản của bạn không có quyền đăng nhập</span>";
         }
         // Tên đăng nhập và mật khẩu trùng khớp với tên đăng nhập và mật khẩu trong CSDL.
-        else{
+        if(empty($msg)){
             // Gán vào phiên $_SESSION['logged'] là true
             $_SESSION['logged'] = true;
             // Truy vấn thông tin người dùng tài khoản

@@ -1,21 +1,16 @@
 <?php
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../timeOutSession.php');
-?>
 
-<?php
-include('includes/header.html');
+if (!isset($_SESSION['logged']) || !$_SESSION['logged']) {
+    header("Location: login.php");
+    exit;
+} else {
+    include('includes/header.html');
+    include('_PartialSideBar.html');
+    echo "<div class='main-panel'>";
+    include('home.html');
+    echo "</div>";
+    include('includes/footer.html');
+}
 ?>
-
-<!-- Sidebar -->
-<?php
-    include ('_PartialSideBar.html');
-?>
-<!-- End Sidebar -->
-<div class="main-panel">
-    <?php
-        include ('home.html');
-    ?>
-</div>
-
-<?php include 'includes/footer.html'; ?>

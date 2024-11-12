@@ -2,8 +2,8 @@
 include('../timeOutSession.php');
 $title = "Trang bán hàng MEGATECH";
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
-$hoTenKH = isset($_SESSION['hoTenKH']) ? $_SESSION['hoTenKH'] : null;
-$hoTenNV = isset($_SESSION['hoTenNV']) ? $_SESSION['hoTenNV'] : null;
+$hoTenKH = $_SESSION['hoTenKH'] ?? null;
+$hoTenNV = $_SESSION['hoTenNV'] ?? null;
 
 // Kiểm tra nếu thông báo chào mừng chưa hiển thị
 $showWelcome = false;

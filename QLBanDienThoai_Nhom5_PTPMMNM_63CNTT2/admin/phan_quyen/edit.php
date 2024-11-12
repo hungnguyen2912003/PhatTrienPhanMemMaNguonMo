@@ -9,7 +9,7 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$mapq = isset($_GET['id']) ? $_GET['id'] : ""; // Lấy id từ URL
+$matk = isset($_GET['id']) ? $_GET['id'] : ""; // Lấy id từ URL
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
@@ -17,14 +17,14 @@ $sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV
         CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
         FROM user 
         JOIN nhan_vien nv ON user.user_id = nv.id
-        WHERE user.id = '$mapq'";
+        WHERE user.id = '$matk'";
 
 $result = mysqli_query($connect, $sql);
 $row = mysqli_fetch_assoc($result);
 
 // Kiểm tra nếu không có mã phân quyền thông báo lỗi
 if (!$row) {
-    echo "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin phân quyền có mã: " . $mapq . "</h2>";
+    echo "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin phân quyền có mã: " . $matk . "</h2>";
     exit();
 }
 
@@ -39,7 +39,7 @@ if (isset($_POST["capNhat"])) {
 
     // Nếu không có lỗi thì thực hiện cập nhật
     if (empty($msg)) {
-        $sql_update = "UPDATE user SET  phanQuyen='$phanquyen' WHERE id='$mapq'";
+        $sql_update = "UPDATE user SET  phanQuyen='$phanquyen' WHERE id='$matk'";
 
         if (mysqli_query($connect, $sql_update)) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin phân quyền thành công!</span>";
@@ -102,8 +102,8 @@ if (isset($_POST["capNhat"])) {
                                             <div class="form-group form-group-default">
                                                 <label>Phân quyền <span class="text-danger">*</span></label>
                                                 <select class="form-control" name="phanQuyen">
-                                                    <option value="admin" <?php echo ($row['phanQuyen'] == 'ADMIN') ? 'selected' : ''; ?>>Admin</option>
-                                                    <option value="nhanvien" <?php echo ($row['phanQuyen'] == 'NV') ? 'selected' : ''; ?>>Nhân viên</option>
+                                                    <option value="ADMIN" <?php echo ($row['phanQuyen'] == 'ADMIN') ? 'selected' : ''; ?>>Admin</option>
+                                                    <option value="NV" <?php echo ($row['phanQuyen'] == 'NV') ? 'selected' : ''; ?>>Nhân viên</option>
                                                 </select>
                                             </div>
                                         </div>

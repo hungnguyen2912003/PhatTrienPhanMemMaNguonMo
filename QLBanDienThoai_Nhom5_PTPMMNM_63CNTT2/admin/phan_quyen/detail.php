@@ -103,7 +103,21 @@ if (!$phan_quyen) {
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default">
                                                 <label>Phân quyền </label>
-                                                <span class="form-control"><?php if(isset($phan_quyen['phanQuyen'])) echo $phan_quyen['phanQuyen']; ?></span>
+                                                <span class="form-control">
+                                                    <?php
+                                                    if (isset($phan_quyen['phanQuyen'])){
+                                                        $phanQuyen = $phan_quyen['phanQuyen'];
+                                                        if ($phanQuyen == 'ADMIN') {
+                                                            $phanQuyenShow = 'Admin';
+                                                        } elseif ($phanQuyen == 'NV') {
+                                                            $phanQuyenShow = 'Nhân viên';
+                                                        } else {
+                                                            $phanQuyenShow = 'Chưa thiết lập';
+                                                        }
+                                                        echo $phanQuyenShow;
+                                                    }
+                                                    ?>
+                                                </span>
                                             </div>
                                         </div>
                                     </div>
