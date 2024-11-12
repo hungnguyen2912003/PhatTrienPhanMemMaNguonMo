@@ -150,6 +150,9 @@ if (isset($_POST['dangKy'])) {
                 <a href="<?php echo $base_url; ?>/admin/login.php" type="submit">Đăng nhập ngay</a>
             </div>
             <!-- /.col -->
+            <div class="col-12 mt-3 text-center">
+                <a id="backButton" href="javascript:window.history.back(-1);">Quay lại</a>
+            </div>
         </div>
         <!-- /.login-card-body -->
     </div>
@@ -178,6 +181,13 @@ if (isset($_POST['dangKy'])) {
             icon.classList.remove('fa-eye-slash');
             icon.classList.add('fa-eye');
         }
+    }
+</script>
+<script>
+    // Kiểm tra nếu có trang trước đó để quay lại
+    if (!document.referrer) {
+        // Nếu không có trang trước đó, ẩn nút "Quay lại"
+        document.getElementById("backButton").style.display = "none";
     }
 </script>
 </body>
