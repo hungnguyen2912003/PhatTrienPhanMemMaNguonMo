@@ -85,16 +85,16 @@ if (!empty($searchText)) {
                     </div>
                     <div class="card-body">
                         <div class="message-container text-center">
-                            <!-- Hiển thị dòng thông báo tìm kiếm -->
+                            <!-- Hiển thị dòng thông báo -->
                             <?php
-                            // Hiển thị thông báo khác nếu có
-                            if (isset($_SESSION['msg'])) {
+                            if (isset($_SESSION['msg']))
+                            {
                                 echo $_SESSION['msg'];
+                                // Sau khi hiển thị, xóa thông báo để không hiển thị lại sau khi tải lại trang
                                 unset($_SESSION['msg']);
                             }
                             ?>
                         </div>
-
                         <div class="table-responsive">
                             <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
                                 <thead>

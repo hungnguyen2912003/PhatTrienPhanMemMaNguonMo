@@ -9,7 +9,7 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$matk = isset($_GET['id']) ? $_GET['id'] : ""; // Lấy id từ URL
+$matk = $_GET['id'] ?? ""; // Lấy id từ URL
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
@@ -42,7 +42,7 @@ if (isset($_POST["capNhat"])) {
         $sql_update = "UPDATE user SET  phanQuyen='$phanquyen' WHERE id='$matk'";
 
         if (mysqli_query($connect, $sql_update)) {
-            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin phân quyền thành công!</span>";
+            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin phân quyền cho tài khoản có mã $matk thành công!</span>";
             echo "<script>window.location.href = '$base_url/admin/phan_quyen/hienthi.php';</script>";
         } else {
             $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";

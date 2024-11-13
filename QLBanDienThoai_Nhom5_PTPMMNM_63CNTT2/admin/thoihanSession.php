@@ -2,12 +2,13 @@
 // Bắt đầu phiên (session)
 session_start();
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
-// SESSION_TIMEOUT được định nghĩa là 600 giây (10 phút)
+// Set thời gian hết hạn của Session
 const SESSION_TIMEOUT = 900;
 
+//Đặt biến báo hiệu hết thời gian session
 $hetHanPhien = false;
 
-// Kiểm tra phiên đăng nhập của nhân viên: Nếu chưa hoặc false thì chuyển đến login
+// Kiểm tra phiên đăng nhập: Nếu chưa hoặc false thì chuyển đến login
 if (!isset($_SESSION['logged']) || !$_SESSION['logged']) {
     $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
     unset($_SESSION['last_activity']);
@@ -34,6 +35,7 @@ if (isset($_POST['continues'])) {
 // Xử lý xóa phiên khi người dùng chọn "Không"
 if (isset($_POST['cancel'])) {
     $_SESSION['redirect_to'] = $_SERVER['REQUEST_URI'];
+    //Xóa các session liên quan đến nhân viên
     unset($_SESSION['hoTen']);
     unset($_SESSION['phanQuyen']);
     unset($_SESSION['id']);

@@ -53,8 +53,6 @@ if (isset($_POST["capNhat"])) {
         $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
         $file = $dir . basename($_FILES["fileInput"]["name"]);
         $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-
         //Hình ảnh mới
         if (!empty($_FILES['fileInput']['name'])) {
             // Kiểm tra loại file ảnh
