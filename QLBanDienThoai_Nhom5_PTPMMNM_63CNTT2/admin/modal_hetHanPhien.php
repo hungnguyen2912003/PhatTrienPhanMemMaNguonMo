@@ -84,6 +84,7 @@ global$hetHanPhien;
 
 <script>
     // Kiểm tra biến $session_expired từ PHP
+    //chuyển đổi biến PHP $hetHanPhien sang định dạng JSON trước khi truyền vào JavaScript
     const sessionExpired = <?php echo json_encode($hetHanPhien); ?>;
     if (sessionExpired) {
         // Hiển thị modal khi phiên hết hạn

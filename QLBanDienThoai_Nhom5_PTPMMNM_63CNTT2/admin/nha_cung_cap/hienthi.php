@@ -1,6 +1,5 @@
 <?php
 include('../thoihanSession.php');
-// Khai báo đường dẫn
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
 include('../includes/header.html');
 include('../menu.html');
@@ -20,20 +19,18 @@ $sql = "SELECT * FROM nha_cung_cap WHERE tenNCC LIKE '%$searchText%'";
 $result = mysqli_query($connect, $sql);
 
 // Kiểm tra kết quả tìm kiếm
-// Kiểm tra kết quả tìm kiếm
-// Kiểm tra kết quả tìm kiếm
-if (!empty($searchText)) {
-    if (mysqli_num_rows($result) > 0) {
-        // Nếu người dùng đã nhập từ khóa vào ô tìm kiếm và có kết quả tìm kiếm
-        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả có từ khóa: '$searchText'</span>";
-    } else {
-        // Nếu người dùng đã nhập từ khóa vào ô tìm kiếm nhưng không có kết quả
-        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả có từ khóa: '$searchText'</span>";
+if(isset($_POST['timKiem'])){
+    if (!empty($searchText)) {
+        if (mysqli_num_rows($result) > 0) {
+            // Nếu người dùng đã nhập từ khóa vào ô tìm kiếm và có kết quả tìm kiếm
+            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả có từ khóa: '$searchText'</span>";
+        } else {
+            // Nếu người dùng đã nhập từ khóa vào ô tìm kiếm nhưng không có kết quả
+            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả có từ khóa: '$searchText'</span>";
+        }
     }
-} else {
-    // Nếu người dùng không nhập từ khóa nào vào ô tìm kiếm
-    $_SESSION['msg'] = "";
 }
+
 ?>
 
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN' || isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'NV'):?>
@@ -59,6 +56,21 @@ if (!empty($searchText)) {
                         <div class="col-md-6">
                             <h4 class="page-title">Danh mục nhà cung cấp</h4>
                         </div>
+                        <div class="col-md-6 text-right">
+                            <ul class="breadcrumbs">
+                                <li class="nav-home">
+                                    <a href="<?php echo $base_url?>/admin/trangchu.php">
+                                        <i class="flaticon-home"></i>
+                                    </a>
+                                </li>
+                                <li class="separator">
+                                    <i class="flaticon-right-arrow"></i>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="<?php echo $base_url?>/admin/nha_cung_cap/hienthi.php">Danh sách nhà cung cấp</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </div>
             </div>
@@ -76,7 +88,7 @@ if (!empty($searchText)) {
                                     <div class="input-group input-group-sm">
                                         <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhà cung cấp bạn muốn tìm kiếm" value="<?php echo isset($_GET['Searchtext']) ? $_GET['Searchtext'] : ''; ?>">
                                         <span class="input-group-append">
-                                            <button type="submit" class="btn btn-info btn-flat">Tìm kiếm</button>
+                                            <button type="submit" name="timKiem" class="btn btn-info btn-flat">Tìm kiếm</button>
                                         </span>
                                     </div>
                                 </form>
@@ -140,16 +152,18 @@ if (!empty($searchText)) {
 </body>
 </html>
 
-<script>
-    $(document).ready(function () {
-        function hideMessage() {
-            $('.message-container').fadeOut(); // Ẩn thông báo sau khi hiển thị một thời gian
-        }
-        if ($('.message-container').length) { // Nếu có thông báo
-            setTimeout(hideMessage, 5000); // Đặt thời gian ẩn thông báo sau 5 giây
-        }
-    });
-</script>
+    <script>
+        $(document).ready(function () {
+            // Hàm để ẩn thông báo sau 5 giây
+            function hideMessage() {
+                $('.message-container').fadeOut(); // Ẩn thông báo
+            }
+            // Nếu có thông báo, thiết lập timeout để tự động ẩn sau 5 giây
+            if ($('.message-container').length) {
+                setTimeout(hideMessage, 5000); // 5000 milliseconds = 5 seconds
+            }
+        });
+    </script>
 <?php else: ?>
     <div class="main-panel">
         <div class="content">

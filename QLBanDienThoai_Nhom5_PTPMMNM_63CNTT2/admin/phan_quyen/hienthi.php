@@ -6,6 +6,13 @@ include('../includes/header.html');
 include('../menu.html');
 include('../includes/footer.html');
 
+//Phân trang
+$rowsPerPage = 5;
+if (!isset($_GET['page'])) {
+    $_GET['page'] = 1;
+}
+$offset = ($_GET['page']-1) * $rowsPerPage;
+
 // Kết nối vào cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
@@ -21,6 +28,39 @@ $result = mysqli_query($connect, $sql);
     <head>
         <meta charset="UTF-8">
         <title>Quản lý phân quyền</title>
+        <style>
+            .custom-textbox {
+                height: 50px;
+                border: 2px solid #0094ff;
+            }
+            .pagination-container {
+                display: flex;
+                justify-content: center;
+                margin-top: 10px;
+            }
+
+            .pagination a, .pagination b {
+                display: inline-block;
+                padding: 6px 12px;
+                margin: 5px;
+                text-align: center;
+                text-decoration: none;
+                color: #fff;
+                background-color: #007bff;
+                border-radius: 20px; /* Tạo bo tròn cho nút */
+                font-weight: bold;
+                transition: background-color 0.3s;
+            }
+
+            .pagination a:hover {
+                background-color: #0056b3; /* Màu khi hover */
+            }
+
+            .pagination b {
+                background-color: #0056b3; /* Màu của trang hiện tại */
+                color: #ffffff;
+            }
+        </style>
     </head>
     <body>
     <div class="main-panel">
@@ -87,7 +127,7 @@ $result = mysqli_query($connect, $sql);
                                     </thead>
                                     <tbody>
                                     <?php
-                                    $stt = 1;
+                                    $stt = $offset + 1;
                                     while ($row = mysqli_fetch_assoc($result)) {
                                         echo "<tr>";
                                         echo "<td class='text-center'>$stt</td>";
@@ -115,6 +155,43 @@ $result = mysqli_query($connect, $sql);
                                     ?>
                                     </tbody>
                                 </table>
+                                <div class="pagination-container">
+                                    <div class="pagination">
+                                        <?php
+                                        $re = mysqli_query($connect, "SELECT * FROM user WHERE phanQuyen != 'KH'");
+                                        $numRows = mysqli_num_rows($re);
+                                        $maxPage = ceil($numRows / $rowsPerPage);
+                                        $currentPage = $_GET['page'];
+                                        if ($currentPage > 1) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a>";
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "'>Trang trước</a>";
+                                        }
+                                        $pagesPerSet = 5;
+                                        $currentSet = ceil($_GET['page'] / $pagesPerSet);
+                                        $startPage = ($currentSet - 1) * $pagesPerSet + 1;
+                                        $endPage = min($startPage + $pagesPerSet - 1, $maxPage);
+                                        if ($startPage > 1) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($startPage - 1) . "'>...</a> ";
+                                        }
+                                        for ($i = $startPage; $i <= $endPage; $i++) {
+                                            if ($i == $currentPage) {
+                                                echo "<b>$i</b> ";
+                                            } else {
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $i . "'>$i</a> ";
+                                            }
+                                        }
+                                        if ($endPage < $maxPage) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($endPage + 1) . "'>...</a> ";
+                                        }
+
+                                        // Hiển thị "Trang sau" và "Trang cuối"
+                                        if ($currentPage < $maxPage) {
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "'>Trang sau</a>";
+                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$maxPage'>Trang cuối</a>";
+                                        }
+                                        ?>
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>

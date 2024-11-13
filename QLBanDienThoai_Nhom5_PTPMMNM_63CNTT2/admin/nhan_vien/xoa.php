@@ -39,7 +39,7 @@ if(isset($_POST['deleteBtn'])){
         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công nhân viên có mã $manv</span>";
         echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
     } else {
-        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
+        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
     }
 }
 

@@ -8,7 +8,7 @@ unset($_SESSION['hoTen']);
 unset($_SESSION['phanQuyen']);
 unset($_SESSION['id']);
 unset($_SESSION['logged']);
-unset($_SESSION['last_activity']);
+unset($_SESSION['activity']);
 unset($_SESSION['welcome_shown2']);
 header("Location:".$base_url."/admin/dangnhap.php");
 exit;
