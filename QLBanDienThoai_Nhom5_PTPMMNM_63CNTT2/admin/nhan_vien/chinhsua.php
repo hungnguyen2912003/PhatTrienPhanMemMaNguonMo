@@ -22,10 +22,15 @@ $error = "";
 if (empty($manv)) {
     $error = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
 } else {
-    // Truy vấn thông tin nhân viên trực tiếp
-    $sql = "SELECT nv.*, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
-            FROM nhan_vien nv 
+    $sql = "SELECT nv.*, user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, 
+            CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+            FROM nhan_vien nv
+            JOIN user ON user.user_id = nv.id
             WHERE nv.id = '$manv'";
+//    // Truy vấn thông tin nhân viên trực tiếp
+//    $sql = "SELECT nv.*,   CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
+//            FROM nhan_vien nv
+//            WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);
 
@@ -45,7 +50,7 @@ if (isset($_POST['capNhat']))
     $diaChi = $_POST["diaChi"];
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
-
+    $phanquyen = $_POST["phanQuyen"];
     //Kiểm tra nhập liệu
     if(empty($hoNV)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ</span>";
@@ -108,10 +113,24 @@ if (isset($_POST['capNhat']))
             }
         }
         //Nếu không còn báo lỗi gì nữa thì tiến hành cập nhật nhân viên
+
+//        if (empty($msg)) {
+//            // Cập nhật thông tin nhân viên
+//            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
+//            $sql_update = "UPDATE user SET  phanQuyen='$phanquyen' WHERE id='$manv'";
+//            if (mysqli_query($connect, $sql)) {
+//                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoNV thành công!</span>";
+//                echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
+//            } else {
+//                $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
+//            }
+//        }
+
         if (empty($msg)) {
-            // Cập nhật thông tin nhân viên
-            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
-            if (mysqli_query($connect, $sql)) {
+            $sql_nv = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
+            $sql_user = "UPDATE user SET phanQuyen='$phanquyen' WHERE user_id='$manv'";
+
+            if (mysqli_query($connect, $sql_nv) && mysqli_query($connect, $sql_user)) {
                 $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoNV thành công!</span>";
                 echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
             } else {
@@ -225,18 +244,34 @@ mysqli_close($connect);
                                                     </div>
                                                 </div>
                                             </div>
-                                            <div class="form-group form-group-default">
-                                                <label>Số điện thoại <span class="text-danger">*</span></label>
-                                                <input type="text" name="soDienThoai" class="form-control" value="<?php echo $_POST['soDienThoai'] ?? $nhanVien['soDienThoai']; ?>">
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Số điện thoại <span class="text-danger">*</span></label>
+                                                        <input type="text" name="soDienThoai" class="form-control" value="<?php echo $_POST['soDienThoai'] ?? $nhanVien['soDienThoai']; ?>">
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Email <span class="text-danger">*</span></label>
+                                                        <input type="email" name="email" class="form-control" value="<?php echo $_POST['email'] ?? $nhanVien['email']; ?>">
+                                                    </div>
+                                                </div>
+
                                             </div>
+
                                             <div class="form-group form-group-default">
                                                 <label>Địa chỉ <span class="text-danger">*</span></label>
                                                 <input type="text" name="diaChi" class="form-control" value="<?php echo $_POST['diaChi'] ?? $nhanVien['diaChi']; ?>">
                                             </div>
                                             <div class="form-group form-group-default">
-                                                <label>Email <span class="text-danger">*</span></label>
-                                                <input type="email" name="email" class="form-control" value="<?php echo $_POST['email'] ?? $nhanVien['email']; ?>">
+                                                <label>Phân quyền <span class="text-danger">*</span></label>
+                                                <select class="form-control" name="phanQuyen">
+                                                    <option value="ADMIN" <?php echo ($nhanVien['phanQuyen'] == 'ADMIN') ? 'selected' : ''; ?>>Admin</option>
+                                                    <option value="NV" <?php echo ($nhanVien['phanQuyen'] == 'NV') ? 'selected' : ''; ?>>Nhân viên</option>
+                                                </select>
                                             </div>
+
                                         </div>
                                         <div class="col-md-6">
                                             <div class="form-group form-group-default text-center">
