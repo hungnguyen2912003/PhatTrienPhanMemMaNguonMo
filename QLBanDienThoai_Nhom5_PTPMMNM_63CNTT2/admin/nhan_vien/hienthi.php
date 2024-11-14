@@ -192,7 +192,7 @@ else {
                                     ?>
                                     </tbody>
                                 </table>
-                                <?php if ($searchResult) {?>
+                                <?php if (!$searchResult) {?>
                                     <div class="pagination-container">
                                         <div class="pagination">
                                             <?php
