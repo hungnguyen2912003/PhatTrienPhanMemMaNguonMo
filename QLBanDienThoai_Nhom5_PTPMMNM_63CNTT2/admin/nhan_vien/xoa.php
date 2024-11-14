@@ -140,37 +140,21 @@ if(isset($_POST['deleteBtn'])){
                                                     </div>
                                                 </div>
                                             </div>
+                                            <div class="form-group form-group-default">
+                                                <label>Địa chỉ</label>
+                                                <span class="form-control"><?php if(isset($nhanVien['diaChi'])) echo $nhanVien['diaChi']; ?></span>
+                                            </div>
                                             <div class="row">
-                                                <div class="col-md-6">
-                                                    <div class="form-group form-group-default">
-                                                        <label>Địa chỉ</label>
-                                                        <span class="form-control"><?php if(isset($nhanVien['diaChi'])) echo $nhanVien['diaChi']; ?></span>
-                                                    </div>
-                                                </div>
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label>Số điện thoại</label>
                                                         <span class="form-control"><?php if(isset($nhanVien['soDienThoai'])) echo $nhanVien['soDienThoai']; ?></span>
                                                     </div>
                                                 </div>
-                                            </div>
-
-                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label>Email</label>
                                                         <span class="form-control"><?php if(isset($nhanVien['email'])) echo $nhanVien['email']; ?></span>
-                                                    </div>
-                                                </div>
-                                                <div class="col-md-6">
-                                                    <div class="form-group form-group-default">
-                                                        <label>Tên tài khoản</label>
-                                                        <?php
-                                                        if (!empty($nhanVien['username']))
-                                                            echo "<span>{$nhanVien['username']}</span>";
-                                                        else
-                                                            echo "<span class='text-warning'>Chưa thiết lập</span>";
-                                                        ?>
                                                     </div>
                                                 </div>
                                             </div>
@@ -184,6 +168,25 @@ if(isset($_POST['deleteBtn'])){
                                                 <?php else: ?>
                                                     <span class="form-control text-warning">Chưa thêm hình ảnh cho nhân viên này</span>
                                                 <?php endif; ?>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Tên tài khoản</label>
+                                                        <?php
+                                                        if (!empty($nhanVien['username']))
+                                                            echo "<span>{$nhanVien['username']}</span>";
+                                                        else
+                                                            echo "<span class='text-warning'>Chưa thiết lập</span>";
+                                                        ?>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-6">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Phân quyền</label>
+                                                        <span class="form-control"><?php if(isset($nhanVien['phanQuyen'])) echo $nhanVien['phanQuyen']; ?></span>
+                                                    </div>
+                                                </div>
                                             </div>
                                         </div>
                                     </div>

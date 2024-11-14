@@ -29,6 +29,9 @@ if(isset($_POST['timKiem'])){
             $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả có từ khóa: '$searchText'</span>";
         }
     }
+    else{
+        $_SESSION['msg'] = "";
+    }
 }
 
 ?>

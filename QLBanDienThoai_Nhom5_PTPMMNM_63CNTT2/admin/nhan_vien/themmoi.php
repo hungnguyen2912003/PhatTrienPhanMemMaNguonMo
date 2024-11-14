@@ -89,7 +89,16 @@ if (isset($_POST["themMoi"])) {
             }
             // Tiến hành tạo mới nhân viên
             else {
-                // Thực hiện thêm mới
+
+
+                $phanquyen = $_POST["phanquyen"];
+                // Kiểm tra phân quyền có được chọn
+                if (empty($phanquyen)) {
+                    $msg = "<span class='text-danger font-weight-bold'>Vui lòng chọn phân quyền</span>";
+                }
+
+
+               //Thực hiện thêm mới
                 $sql = "INSERT INTO nhan_vien (id, hoNV, tenlot, tenNV, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoNV','$tenlot','$tenNV', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
                 if (mysqli_query($connect, $sql)) {
                     $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $tenNV thành công!</span>";
@@ -101,6 +110,9 @@ if (isset($_POST["themMoi"])) {
         }
     }
 }
+// Truy vấn danh sách phân quyền từ bảng user
+$roles_query = "SELECT DISTINCT phanquyen FROM user";
+$roles_result = mysqli_query($connect, $roles_query);
 // Đóng kết nối sau khi hoàn tất
 mysqli_close($connect);
 ?>
@@ -233,18 +245,40 @@ mysqli_close($connect);
                                         </div>
                                     </div>
                                     <div class="col-md-6">
-                                        <div class="form-group form-group-default">
-                                            <label>Số điện thoại <span class="text-danger">*</span></label>
-                                            <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhân viên" class="form-control" value="<?php if(isset($_POST['soDienThoai'])) echo $soDienThoai; ?>"/>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Số điện thoại <span class="text-danger">*</span></label>
+                                                    <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhân viên" class="form-control" value="<?php if(isset($_POST['soDienThoai'])) echo $soDienThoai; ?>"/>
+                                                </div>
+
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Email <span class="text-danger">*</span></label>
+                                                    <input type="email" name="email" placeholder="Nhập email nhân viên" class="form-control" value="<?php if(isset($_POST['email'])) echo $email; ?>"/>
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
-                                            <label>Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" placeholder="Nhập email nhân viên" class="form-control" value="<?php if(isset($_POST['email'])) echo $email; ?>"/>
+                                            <label>Phân quyền <span class="text-danger">*</span></label>
+                                            <select name="phanquyen" class="custom-select form-control select">
+                                                <option value="">Chọn phân quyền</option>
+                                                <?php
+                                                if ($roles_result && mysqli_num_rows($roles_result) > 0) {
+                                                    while ($role = mysqli_fetch_assoc($roles_result)) {
+                                                        $selected = (isset($_POST['phanquyen']) && $_POST['phanquyen'] == $role['phanquyen']) ? 'selected' : '';
+                                                        echo "<option value='{$role['phanquyen']}' $selected>{$role['phanquyen']}</option>";
+                                                    }
+                                                }
+                                                ?>
+                                            </select>
                                         </div>
-
                                     </div>
+
+
                                 </div>
                                 <div class="form-group text-center">
                                     <button type="submit" name="themMoi" class="btn btn-success btnCreate">Thêm mới</button>
