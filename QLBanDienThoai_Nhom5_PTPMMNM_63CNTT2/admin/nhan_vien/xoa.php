@@ -63,7 +63,7 @@ if(isset($_POST['deleteBtn'])){
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="page-title">Xoá thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['tenNV']; else echo 'Không xác định';?></h4>
+                                <h4 class="page-title">Xoá thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; else echo 'Không xác định';?></h4>
                             </div>
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
