@@ -41,6 +41,10 @@ if(isset($_POST['deleteBtn'])){
     } else {
         $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
     }
+
+    //Đồng thời xóa tài khoản của nhân viên đó
+    $sqlDeleteAcc = "DELETE FROM user WHERE user_id = '$manv'";
+    mysqli_query($connect, $sqlDeleteAcc);
 }
 
 ?>
