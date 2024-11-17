@@ -175,7 +175,8 @@ if (isset($_POST['btnTimKiem'])) {
                                     echo "<td class='text-center'>{$row['ten_sp']}</td>";
                                     echo "<td class='text-center'><img width='80' src='$base_url/Images/{$row['hinhAnh']}'/></td>";
                                     echo "<td class='text-center'>{$row['soLuong']}</td>";
-                                    echo "<td class='text-center'>{$row['giaBan']}</td>";
+                                    $giaBan = number_format($row['giaBan'], 0, ',', '.'); // Định dạng giá bán với dấu chấm
+                                    echo "<td class='text-center'>{$giaBan} VND</td>";
                                     echo "<td class='text-center'>
                                                 <a href='$base_url/admin/san_pham/chitiet.php?ma_sp={$row['ma_sp']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
                                                 <a href='$base_url/admin/san_pham/chinhsua.php?ma_sp={$row['ma_sp']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>

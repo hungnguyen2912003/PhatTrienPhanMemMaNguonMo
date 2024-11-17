@@ -15,6 +15,8 @@ $msg = "";
 $tenNCC = "";
 $email = "";
 $soDienThoai = "";
+$diaChi = "";
+$webSite = "";
 $hinhAnh = "";
 $maNCC = rand(10000000, 99999999); // Tạo mã nhà cung cấp ngẫu nhiên từ 8 chữ số.
 
@@ -23,9 +25,11 @@ if (isset($_POST["themMoi"])) { // Kiểm tra nếu form được gửi với n�
     $tenNCC = $_POST["tenNhaCungCap"];
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
+    $diaChi = $_POST["diaChi"];
+    $webSite = $_POST["webSite"];
     $hinhAnh = $_FILES['Images']['name'];
     // Kiểm tra nếu các trường thông tin không trống.
-    if (!empty($tenNCC) && !empty($email) && !empty($soDienThoai) && !empty($hinhAnh)) {
+    if (!empty($tenNCC) && !empty($email) && !empty($soDienThoai) && !empty($diaChi) && !empty($webSite) && !empty($hinhAnh)) {
         if (!preg_match("/^\d{8,11}$/", $soDienThoai)) { // Kiểm tra số điện thoại có đúng 8-11 chữ số.
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 8 đến 11 chữ số.</span>"; // Thông báo lỗi.
         } else {
@@ -48,7 +52,7 @@ if (isset($_POST["themMoi"])) { // Kiểm tra nếu form được gửi với n�
                     $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>"; // Thông báo lỗi.
                 } else {
                     move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "\\QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2\\Images\\" . $file_name);// Di chuyển file hình ảnh đến thư mục lưu trữ.
-                    $sql = "INSERT INTO nha_cung_cap (id, tenNCC, soDienThoai, email, Images) VALUES ('$maNCC', '$tenNCC', '$soDienThoai', '$email', '$hinhAnh')"; // Chuẩn bị câu lệnh SQL để chèn dữ liệu vào cơ sở dữ liệu.
+                    $sql = "INSERT INTO nha_cung_cap (id, tenNCC, soDienThoai, email, diaChi,webSite, Images) VALUES ('$maNCC', '$tenNCC', '$soDienThoai', '$email','$diaChi', '$webSite', '$hinhAnh')"; // Chuẩn bị câu lệnh SQL để chèn dữ liệu vào cơ sở dữ liệu.
                     if (mysqli_query($connect, $sql)) { // Thực hiện câu lệnh SQL.
                         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhà cung cấp $tenNCC thành công!</span>"; // Thông báo thành công.
                         echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/hienthi.php';</script>"; // Chuyển hướng trang.
@@ -146,18 +150,28 @@ mysqli_close($connect); // Đóng kết nối cơ sở dữ liệu.
                                             <label>Tên nhà cung cấp <span class="text-danger">*</span></label>
                                             <input type="text" name="tenNhaCungCap" placeholder="Nhập tên nhà cung cấp" class="form-control" value="<?php echo $tenNCC; ?>"/>
                                         </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Hotline <span class="text-danger">*</span></label>
+                                                    <input type="text" name="soDienThoai" placeholder="Nhập hotline nhà cung cấp" class="form-control" value="<?php echo $soDienThoai; ?>"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Email <span class="text-danger">*</span></label>
+                                                    <input type="email" name="email" placeholder="Nhập email nhà cung cấp" class="form-control" value="<?php echo $email; ?>"/>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="form-group form-group-default">
-                                            <label>Số điện thoại <span class="text-danger">*</span></label>
-                                            <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhà cung cấp" class="form-control" value="<?php echo $soDienThoai; ?>"/>
+                                            <label>Địa chỉ <span class="text-danger">*</span></label>
+                                            <input type="text" name="diaChi" placeholder="Nhập địa chỉ nhà cung cấp" class="form-control" value="<?php echo $diaChi; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
-                                            <label>Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" placeholder="Nhập email nhà cung cấp" class="form-control" value="<?php echo $email; ?>"/>
-                                        </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Hình ảnh nhà cung cấp<span class="text-danger">*</span></label>
+                                            <label>Hình ảnh nhà cung cấp <span class="text-danger">*</span></label>
                                             <div class="input-group">
                                                 <div class="col-md-12">
                                                     <div class="row">
@@ -175,6 +189,10 @@ mysqli_close($connect); // Đóng kết nối cơ sở dữ liệu.
                                                     </div>
                                                 </div>
                                             </div>
+                                        </div>
+                                        <div class="form-group form-group-default">
+                                            <label>Website <span class="text-danger">*</span></label>
+                                            <input type="text" name="webSite" placeholder="Nhập website nhà cung cấp" class="form-control" value="<?php echo $webSite; ?>"/>
                                         </div>
                                     </div>
                                 </div>

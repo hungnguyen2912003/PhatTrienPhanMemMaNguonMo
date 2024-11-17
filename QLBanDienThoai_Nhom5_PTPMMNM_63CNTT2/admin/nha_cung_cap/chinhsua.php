@@ -39,11 +39,13 @@ if (isset($_POST["capNhat"])) {
     // Lấy tên ncc, email, sdt, từ form.
     $tenNCC = $_POST["tenNCC"];
     $email = $_POST["email"];
+    $diaChi = $_POST["diaChi"];
     $soDienThoai = $_POST["soDienThoai"];
+    $webSite = $_POST["webSite"];
     //Hình ảnh cũ
     $hinhAnh = basename($_POST['hinhAnh']);
     // Kiểm tra các trường bắt buộc
-    if (empty($tenNCC) || empty($email) || empty($soDienThoai) || empty($hinhAnh)) {
+    if (empty($tenNCC) || empty($email) || empty($soDienThoai) || empty($diaChi) || empty($webSite) || empty($hinhAnh)) {
         $msg = "<span class='text-danger font-weight-bold'>Tất cả các trường đều phải điền đầy đủ.</span>";
     } else {
         // Kiểm tra số điện thoại
@@ -75,7 +77,8 @@ if (isset($_POST["capNhat"])) {
         //Nếu không còn báo lỗi gì nữa thì tiến hành cập nhật nhân viên
         if (empty($msg)) {
             // Cập nhật thông tin nhân viên
-            $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email', Images='$hinhAnh' WHERE id='$maNCC'";
+            $sql = "UPDATE nha_cung_cap SET tenNCC='$tenNCC', soDienThoai='$soDienThoai', email='$email',diaChi = '$diaChi',
+                        webSite = '$webSite' ,Images='$hinhAnh' WHERE id='$maNCC'";
             if (mysqli_query($connect, $sql)) {
                 $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhà cung cấp $tenNCC thành công!</span>";
                 echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/hienthi.php';</script>";
@@ -159,13 +162,27 @@ mysqli_close($connect);
                                             <label>Tên nhà cung cấp <span class="text-danger">*</span></label>
                                             <input type="text" name="tenNCC" placeholder="Nhập tên nhà cung cấp" class="form-control" value="<?php echo $_POST['tenNCC'] ?? $row['tenNCC']; ?>"/>
                                         </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Số điện thoại <span class="text-danger">*</span></label>
-                                            <input type="text" name="soDienThoai" placeholder="Nhập số điện thoại nhà cung cấp" class="form-control" value="<?php echo $_POST['soDienThoai'] ?? $row['soDienThoai']; ?>"/>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Hotline <span class="text-danger">*</span></label>
+                                                    <input type="text" name="soDienThoai" placeholder="Nhập hotline nhà cung cấp" class="form-control" value="<?php echo $_POST['soDienThoai'] ?? $row['soDienThoai']; ?>"/>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Email <span class="text-danger">*</span></label>
+                                                    <input type="email" name="email" placeholder="Nhập email nhà cung cấp" class="form-control" value="<?php echo $_POST['email'] ?? $row['email']; ?>"/>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group form-group-default">
-                                            <label>Email <span class="text-danger">*</span></label>
-                                            <input type="email" name="email" placeholder="Nhập email nhà cung cấp" class="form-control" value="<?php echo $_POST['email'] ?? $row['email']; ?>"/>
+                                            <label>Địa chỉ <span class="text-danger">*</span></label>
+                                            <input type="text" name="diaChi" placeholder="Nhập địa chỉ nhà cung cấp" class="form-control" value="<?php echo $_POST['diaChi'] ?? $row['diaChi']; ?>"/>
+                                        </div>
+                                        <div class="form-group form-group-default">
+                                            <label>Website <span class="text-danger">*</span></label>
+                                            <input type="text" name="webSite" placeholder="Nhập website nhà cung cấp" class="form-control" value="<?php echo $_POST['webSite'] ?? $row['webSite']; ?>"/>
                                         </div>
                                     </div>
                                     <div class="col-md-6">

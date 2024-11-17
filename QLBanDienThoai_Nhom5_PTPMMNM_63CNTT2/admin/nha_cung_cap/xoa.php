@@ -102,13 +102,27 @@ if(isset($_POST['deleteBtn']) && !empty($maNCC)){
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Số điện thoại</label>
-                                            <span class="form-control"><?php if(isset($nhacungcap['soDienThoai'])) echo $nhacungcap['soDienThoai']; ?></span>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Hotline</label>
+                                                    <span class="form-control"><?php if(isset($nhacungcap['soDienThoai'])) echo $nhacungcap['soDienThoai']; ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Email</label>
+                                                    <span class="form-control"><?php if(isset($nhacungcap['email'])) echo $nhacungcap['email']; ?></span>
+                                                </div>
+                                            </div>
                                         </div>
                                         <div class="form-group form-group-default">
-                                            <label>Email</label>
-                                            <span class="form-control"><?php if(isset($nhacungcap['email'])) echo $nhacungcap['email']; ?></span>
+                                            <label>Địa chỉ</label>
+                                            <span class="form-control"><?php if(isset($nhacungcap['diaChi'])) echo $nhacungcap['diaChi']; ?></span>
+                                        </div>
+                                        <div class="form-group form-group-default">
+                                            <label>Website</label>
+                                            <span class="form-control"><?php if(isset($nhacungcap['webSite'])) echo $nhacungcap['webSite']; ?></span>
                                         </div>
                                     </div>
                                     <div class="col-md-6">

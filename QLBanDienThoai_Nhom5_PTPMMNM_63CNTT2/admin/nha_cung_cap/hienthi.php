@@ -118,7 +118,7 @@ if(isset($_POST['timKiem'])){
                                     <th>Mã nhà cung cấp</th>
                                     <th>Tên nhà cung cấp</th>
                                     <th>Hình ảnh</th>
-                                    <th>Số điện thoại</th>
+                                    <th>Hotline</th>
                                     <th>Email</th>
                                     <th>Chức năng</th>
                                 </tr>

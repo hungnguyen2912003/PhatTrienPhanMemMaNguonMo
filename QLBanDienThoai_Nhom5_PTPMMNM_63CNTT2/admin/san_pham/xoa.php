@@ -103,6 +103,52 @@ $sanpham = mysqli_fetch_assoc($result);
                                                 <span class="form-control"> <?php echo isset($sanpham['tenNCC']) ? $sanpham['tenNCC'] : ''; ?></span>
                                             </div>
                                             <div class="row">
+                                                <div class="col-md-4">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Màu sắc</label>
+                                                        <span class="form-control"> <?php echo isset($sanpham['mauSac']) ? $sanpham['mauSac'] : ''; ?></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Kích thước</label>
+                                                        <span class="form-control"> <?php echo isset($sanpham['kichThuoc']) ? $sanpham['kichThuoc']. ' mm' : ''; ?> </span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-4">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Trọng lượng</label>
+                                                        <span class="form-control"> <?php echo isset($sanpham['trongLuong']) ? $sanpham['trongLuong']. ' g' : ''; ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
+                                                <div class="col-md-3">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Pin</label>
+                                                        <span class="form-control"> <?php echo isset($sanpham['Pin']) ? $sanpham['Pin']. ' mAh' : ''; ?></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Cổng sạc</label>
+                                                        <span class="form-control"><?php echo isset($sanpham['congSac']) ? $sanpham['congSac'] : ''; ?></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group form-group-default">
+                                                        <label>RAM</label>
+                                                        <span class="form-control"> <?php echo isset($sanpham['RAM']) ? $sanpham['RAM']. ' GB' : ''; ?></span>
+                                                    </div>
+                                                </div>
+                                                <div class="col-md-3">
+                                                    <div class="form-group form-group-default">
+                                                        <label>Bộ nhớ</label>
+                                                        <span class="form-control"><?php echo isset($sanpham['boNho']) ? $sanpham['boNho']. ' GB' : ''; ?></span>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                            <div class="row">
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label>Số lượng</label>
@@ -112,7 +158,14 @@ $sanpham = mysqli_fetch_assoc($result);
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label>Giá bán</label>
-                                                        <span class="form-control"><?php echo isset($sanpham['giaBan']) ? $sanpham['giaBan'] : ''; ?></span>
+                                                        <span class="form-control">
+                                                        <?php
+                                                        if(isset($sanpham['giaBan'])) {
+                                                            // Định dạng giá bán với dấu "." và thêm "VND"
+                                                            echo number_format($sanpham['giaBan'], 0, ',', '.') . ' VND';
+                                                        }
+                                                        ?>
+                                                    </span>
                                                     </div>
                                                 </div>
                                             </div>

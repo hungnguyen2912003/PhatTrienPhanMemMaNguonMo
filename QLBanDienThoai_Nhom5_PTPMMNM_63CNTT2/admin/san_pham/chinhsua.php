@@ -32,6 +32,13 @@ if (isset($_POST["capNhat"])) {
     // Duy trì giá trị cũ trong trường hợp không có thay đổi
     $ten_sp = $_POST['ten_sp'] ?? $sanpham['ten_sp'];
     $ma_ncc = $_POST['ma_ncc'] ?? $sanpham['ma_ncc'];
+    $mauSac = $_POST["mauSac"] ?? $sanpham['mauSac'];
+    $kichThuoc = $_POST["kichThuoc"] ?? $sanpham['kichThuoc'];
+    $trongLuong = $_POST["trongLuong"] ?? $sanpham['trongLuong'];
+    $Pin = $_POST["Pin"] ?? $sanpham['Pin'];
+    $congSac = $_POST["congSac"] ?? $sanpham['congSac'];
+    $RAM = $_POST["RAM"] ?? $sanpham['RAM'];
+    $boNho = $_POST["boNho"] ?? $sanpham['boNho'];
     $soLuong = $_POST['soLuong'] ?? $sanpham['soLuong'];
     $giaBan = $_POST['giaBan'] ?? $sanpham['giaBan'];
     $moTa = $_POST['moTa'] ?? $sanpham['moTa'];
@@ -43,12 +50,18 @@ if (isset($_POST["capNhat"])) {
         $hinhAnh = $sanpham['hinhAnh']; // Giữ nguyên giá trị cũ
     }
 
-    if (!empty($ten_sp) && !empty($ma_ncc) && !empty($soLuong) && !empty($giaBan) && !empty($moTa)) {
-        if (!(ctype_digit($soLuong) && $soLuong > 0)) {
+    if (!empty($ten_sp) && !empty($ma_ncc) && !empty($mauSac)&& !empty($kichThuoc)&& !empty($trongLuong)&& !empty($Pin) && !empty($congSac)&& !empty($RAM) && !empty($boNho) && !empty($soLuong) && !empty($giaBan) && !empty($moTa)) {
+        if (!(is_numeric($trongLuong) && $trongLuong > 0))
+            $msg = "<span class='text-danger font-weight-bold'>Trọng lượng sản phẩm phải lớn hơn 0. Vui lòng nhập lại!</span>";
+        elseif (!(ctype_digit($RAM) && $RAM > 0))
+            $msg = "<span class='text-danger font-weight-bold'>RAM phải là con số nguyên lớn hơn 0. Vui lòng nhập lại!</span>";
+        elseif (!(ctype_digit($boNho) && $boNho> 0))
+            $msg = "<span class='text-danger font-weight-bold'>Bộ nhớ phải là con số nguyên lớn hơn 0. Vui lòng nhập lại!</span>";
+        elseif (!(ctype_digit($soLuong) && $soLuong > 0))
             $msg = "<span class='text-danger font-weight-bold'>Số lượng sản phẩm phải là con số nguyên lớn hơn 0. Vui lòng nhập lại!</span>";
-        } elseif (!(is_numeric($giaBan) && $giaBan > 0)) {
+        elseif (!(is_numeric($giaBan) && $giaBan > 0))
             $msg = "<span class='text-danger font-weight-bold'>Giá bán phải là số lớn hơn 0. Vui lòng nhập lại!</span>";
-        } else {
+        else {
             // Kiểm tra hình ảnh mới
             if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
                 $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
@@ -71,7 +84,7 @@ if (isset($_POST["capNhat"])) {
             }
 
             if (empty($msg)) {
-                $sql = "UPDATE san_pham SET ten_sp = '$ten_sp', ma_ncc = '$ma_ncc', soLuong = '$soLuong', giaBan = '$giaBan', moTa = '$moTa', hinhAnh = '$hinhAnh' WHERE ma_sp = '$masp'";
+                $sql = "UPDATE san_pham SET ten_sp = '$ten_sp', ma_ncc = '$ma_ncc',mauSac = '$mauSac', kichThuoc = '$kichThuoc', trongLuong = '$trongLuong', Pin = '$Pin', congSac = '$congSac', RAM = '$RAM', boNho = '$boNho', soLuong = '$soLuong', giaBan = '$giaBan', moTa = '$moTa', hinhAnh = '$hinhAnh' WHERE ma_sp = '$masp'";
 
                 if (mysqli_query($connect, $sql)) {
                     $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin sản phẩm $ten_sp thành công!</span>";
@@ -149,11 +162,11 @@ $suppliers = mysqli_query($connect, "SELECT * FROM nha_cung_cap");
                         <div class="card-body">
                             <form action="" method="post" enctype="multipart/form-data">
                                 <div class="row">
-                                            <div class="col-md-6">
-                                                <div class="form-group form-group-default">
-                                                    <label>Tên sản phẩm <span class="text-danger">*</span></label>
-                                                    <input type="text" class="form-control" name="ten_sp" value="<?php echo $sanpham['ten_sp']; ?>">
-                                                </div>
+                                    <div class="col-md-6">
+                                        <div class="form-group form-group-default">
+                                            <label>Tên sản phẩm <span class="text-danger">*</span></label>
+                                            <input type="text" class="form-control" name="ten_sp" value="<?php echo $sanpham['ten_sp']; ?>">
+                                        </div>
                                         <div class="form-group form-group-default">
                                             <label>Nhà cung cấp <span class="text-danger">*</span></label>
                                             <select class="form-control" name="ma_ncc">
@@ -168,13 +181,65 @@ $suppliers = mysqli_query($connect, "SELECT * FROM nha_cung_cap");
                                                 ?>
                                             </select>
                                         </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Số lượng <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control" name="soLuong" value="<?php echo $sanpham['soLuong']; ?>">
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group form-group-default">
+                                                    <label>Màu sắc <span class="text-danger">*</span></label>
+                                                    <input type="text" name="mauSac" class="form-control" value="<?php echo $sanpham['mauSac']; ?>" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group form-group-default">
+                                                    <label>Kích thước <span class="text-danger">*</span></label>
+                                                    <input type="text" name="kichThuoc" class="form-control" value="<?php echo $sanpham['kichThuoc']; ?>" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-4">
+                                                <div class="form-group form-group-default">
+                                                    <label>Trọng lượng <span class="text-danger">*</span></label>
+                                                    <input type="text" name="trongLuong" class="form-control" value="<?php echo $sanpham['trongLuong']; ?>" />
+                                                </div>
+                                            </div>
                                         </div>
-                                        <div class="form-group form-group-default">
-                                            <label>Giá bán <span class="text-danger">*</span></label>
-                                            <input type="number" class="form-control" name="giaBan" value="<?php echo $sanpham['giaBan']; ?>">
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>Pin <span class="text-danger">*</span></label>
+                                                    <input type="text" name="Pin" class="form-control" value="<?php echo $sanpham['Pin']; ?>" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>Cổng sạc<span class="text-danger">*</span></label>
+                                                    <input type="text" name="congSac" class="form-control" value="<?php echo $sanpham['congSac']; ?>" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>RAM <span class="text-danger">*</span></label>
+                                                    <input type="text" name="RAM" class="form-control" value="<?php echo $sanpham['RAM']; ?>" />
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>Bộ nhớ <span class="text-danger">*</span></label>
+                                                    <input type="text" name="boNho" class="form-control" value="<?php echo $sanpham['boNho']; ?>" />
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Số lượng <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" name="soLuong" value="<?php echo $sanpham['soLuong']; ?>">
+                                                </div>
+                                            </div>
+                                            <div class="col-md-6">
+                                                <div class="form-group form-group-default">
+                                                    <label>Giá bán <span class="text-danger">*</span></label>
+                                                    <input type="number" class="form-control" name="giaBan" value="<?php echo $sanpham['giaBan']; ?>">
+                                                </div>
+                                            </div>
                                         </div>
                                     </div>
                                     <div class="col-md-6">

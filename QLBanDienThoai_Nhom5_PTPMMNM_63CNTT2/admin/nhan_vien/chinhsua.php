@@ -117,7 +117,6 @@ if (isset($_POST['capNhat']))
 //        if (empty($msg)) {
 //            // Cập nhật thông tin nhân viên
 //            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
-//            $sql_update = "UPDATE user SET  phanQuyen='$phanquyen' WHERE id='$manv'";
 //            if (mysqli_query($connect, $sql)) {
 //                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoNV thành công!</span>";
 //                echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";

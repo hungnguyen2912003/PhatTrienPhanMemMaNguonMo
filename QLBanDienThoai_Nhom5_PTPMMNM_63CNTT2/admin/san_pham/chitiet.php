@@ -90,12 +90,58 @@ if (!$sanpham) {
                                                 </div>
                                             </div>
                                         </div>
-
                                             <div class="form-group form-group-default">
                                                 <label>Nhà cung cấp</label>
                                                 <span class="form-control"> <?php if(isset($sanpham['tenNCC'])) echo $sanpham['tenNCC']; ?></span>
                                             </div>
-
+                                        <div class="row">
+                                            <div class="col-md-4">
+                                                <div class="form-group form-group-default">
+                                                    <label>Màu sắc</label>
+                                                    <span class="form-control"> <?php if(isset($sanpham['mauSac'])) echo $sanpham['mauSac']; ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-5">
+                                                <div class="form-group form-group-default">
+                                                    <label>Kích thước</label>
+                                                    <span class="form-control"> <?php if(isset($sanpham['kichThuoc'])) echo htmlspecialchars ($sanpham['kichThuoc']) . ' mm' ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>Trọng lượng</label>
+                                                    <span class="form-control">
+                                                    <?php if (isset($sanpham['trongLuong'])) echo htmlspecialchars ($sanpham['trongLuong']) . ' g' ?>
+                                                    </span>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>Pin</label>
+                                                    <span class="form-control"> <?php if(isset($sanpham['Pin'])) echo htmlspecialchars ($sanpham['Pin']) . ' mAh' ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>Cổng sạc</label>
+                                                    <span class="form-control"> <?php if(isset($sanpham['congSac'])) echo $sanpham['congSac']; ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>RAM</label>
+                                                    <span class="form-control"> <?php if(isset($sanpham['RAM'])) echo htmlspecialchars ($sanpham['RAM']) . ' GB' ?></span>
+                                                </div>
+                                            </div>
+                                            <div class="col-md-3">
+                                                <div class="form-group form-group-default">
+                                                    <label>Bộ nhớ</label>
+                                                    <span class="form-control"> <?php if(isset($sanpham['boNho'])) echo htmlspecialchars ($sanpham['boNho']) . ' GB' ?></span>
+                                                </div>
+                                            </div>
+                                        </div>
                                         <div class="row">
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
@@ -106,11 +152,17 @@ if (!$sanpham) {
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Giá bán</label>
-                                                    <span class="form-control"><?php if(isset($sanpham['giaBan'])) echo $sanpham['giaBan']; ?></span>
+                                                    <span class="form-control">
+                                                        <?php
+                                                        if(isset($sanpham['giaBan'])) {
+                                                            // Định dạng giá bán với dấu "." và thêm "VND"
+                                                            echo number_format($sanpham['giaBan'], 0, ',', '.') . ' VND';
+                                                        }
+                                                        ?>
+                                                    </span>
                                                 </div>
                                             </div>
                                         </div>
-
                                     </div>
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default text-center ">
@@ -124,7 +176,7 @@ if (!$sanpham) {
                                         </div>
                                         <div class="form-group form-group-default">
                                             <label>Mô tả</label>
-                                            <textarea class="form-control" readonly><?php if(isset($sanpham['moTa'])) echo $sanpham['moTa']; ?></textarea>
+                                            <textarea class="form-control"  readonly><?php if(isset($sanpham['moTa'])) echo $sanpham['moTa']; ?></textarea>
                                         </div>
 
 
