@@ -21,7 +21,7 @@ if (isset($_POST["themMoi"])) {
     $diaChi = $_POST["diaChi"];
     $email = $_POST["email"];
     $soDienThoai = $_POST["soDienThoai"];
-
+    $phanQuyen = $_POST["phanQuyen"];
     //Kiểm tra nhập liệu
     if(empty($hoNV)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ</span>";
@@ -49,6 +49,9 @@ if (isset($_POST["themMoi"])) {
     }
     elseif (empty($_POST['hinhAnh'])){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng thêm một hình ảnh</span>";
+    }
+    elseif (empty($phanQuyen)){
+        $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập quyền</span>";
     }
     //Khi không có ô nhập liệu nào trống thì tiến hành kiểm tra định dạng
     else{
@@ -89,17 +92,8 @@ if (isset($_POST["themMoi"])) {
             }
             // Tiến hành tạo mới nhân viên
             else {
-
-
-                $phanquyen = $_POST["phanquyen"];
-                // Kiểm tra phân quyền có được chọn
-                if (empty($phanquyen)) {
-                    $msg = "<span class='text-danger font-weight-bold'>Vui lòng chọn phân quyền</span>";
-                }
-
-
                //Thực hiện thêm mới
-                $sql = "INSERT INTO nhan_vien (id, hoNV, tenlot, tenNV, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email) VALUES ('$maNV', '$hoNV','$tenlot','$tenNV', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email')";
+                $sql = "INSERT INTO nhan_vien (id, hoNV, tenlot, tenNV, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email, phanQuyen) VALUES ('$maNV', '$hoNV','$tenlot','$tenNV', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email','$phanQuyen')";
                 if (mysqli_query($connect, $sql)) {
                     $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $tenNV thành công!</span>";
                     echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
@@ -110,9 +104,6 @@ if (isset($_POST["themMoi"])) {
         }
     }
 }
-// Truy vấn danh sách phân quyền từ bảng user
-$roles_query = "SELECT DISTINCT phanquyen FROM user";
-$roles_result = mysqli_query($connect, $roles_query);
 // Đóng kết nối sau khi hoàn tất
 mysqli_close($connect);
 ?>
@@ -264,21 +255,12 @@ mysqli_close($connect);
                                     <div class="col-md-6">
                                         <div class="form-group form-group-default">
                                             <label>Phân quyền <span class="text-danger">*</span></label>
-                                            <select name="phanquyen" class="custom-select form-control select">
-                                                <option value="">Chọn phân quyền</option>
-                                                <?php
-                                                if ($roles_result && mysqli_num_rows($roles_result) > 0) {
-                                                    while ($role = mysqli_fetch_assoc($roles_result)) {
-                                                        $selected = (isset($_POST['phanquyen']) && $_POST['phanquyen'] == $role['phanquyen']) ? 'selected' : '';
-                                                        echo "<option value='{$role['phanquyen']}' $selected>{$role['phanquyen']}</option>";
-                                                    }
-                                                }
-                                                ?>
+                                            <select name="phanQuyen" class="custom-select form-control select">
+                                                <option value="ADMIN" <?php if(isset($_POST['phanQuyen']) && $_POST['phanQuyen'] == "Admin") echo 'selected'; ?>>Admin</option>
+                                                <option value="NV" <?php if(isset($_POST['phanQuyen']) && $_POST['phanQuyen'] == "Nhân viên") echo 'selected'; ?>>Nhân viên</option>
                                             </select>
                                         </div>
                                     </div>
-
-
                                 </div>
                                 <div class="form-group text-center">
                                     <button type="submit" name="themMoi" class="btn btn-success btnCreate">Thêm mới</button>

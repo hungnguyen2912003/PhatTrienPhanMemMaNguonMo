@@ -20,7 +20,7 @@ if (empty($manv))
     $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên đang để trống</h2>";
 else {
     // Truy vấn thông tin nhân viên trực tiếp
-    $sql = "SELECT nv.*, user.username, user.phanQuyen AS username, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
+    $sql = "SELECT nv.*, user.username AS username, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
             FROM nhan_vien nv 
             LEFT JOIN user ON nv.id = user.user_id 
             WHERE nv.id = '$manv'";
@@ -166,9 +166,18 @@ else {
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label>Phân quyền</label>
-                                                        <span class="form-control"><?php if(isset($nhanVien['phanQuyen'])) echo $nhanVien['phanQuyen']; ?></span>
+                                                        <span class="form-control">
+                                                            <?php
+                                                            if (isset($nhanVien['phanQuyen'])) {
+                                                                // Hiển thị quyền tương ứng
+                                                                echo ($nhanVien['phanQuyen'] === "ADMIN") ? "Admin" :
+                                                                    (($nhanVien['phanQuyen'] === "NV") ? "Nhân viên" : $nhanVien['phanQuyen']);
+                                                            }
+                                                            ?>
+                                                        </span>
                                                     </div>
                                                 </div>
+
                                             </div>
 
                                         </div>

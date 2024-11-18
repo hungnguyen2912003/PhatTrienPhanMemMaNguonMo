@@ -22,15 +22,10 @@ $error = "";
 if (empty($manv)) {
     $error = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
 } else {
-    $sql = "SELECT nv.*, user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, 
-            CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+    // Truy vấn thông tin nhân viên trực tiếp
+    $sql = "SELECT nv.*,   CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
             FROM nhan_vien nv
-            JOIN user ON user.user_id = nv.id
             WHERE nv.id = '$manv'";
-//    // Truy vấn thông tin nhân viên trực tiếp
-//    $sql = "SELECT nv.*,   CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
-//            FROM nhan_vien nv
-//            WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);
 
@@ -114,22 +109,10 @@ if (isset($_POST['capNhat']))
         }
         //Nếu không còn báo lỗi gì nữa thì tiến hành cập nhật nhân viên
 
-//        if (empty($msg)) {
-//            // Cập nhật thông tin nhân viên
-//            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
-//            if (mysqli_query($connect, $sql)) {
-//                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoNV thành công!</span>";
-//                echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
-//            } else {
-//                $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
-//            }
-//        }
-
         if (empty($msg)) {
-            $sql_nv = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email', Images='$hinhAnh' WHERE id='$manv'";
-            $sql_user = "UPDATE user SET phanQuyen='$phanquyen' WHERE user_id='$manv'";
-
-            if (mysqli_query($connect, $sql_nv) && mysqli_query($connect, $sql_user)) {
+            // Cập nhật thông tin nhân viên
+            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email',phanQuyen ='$phanquyen', Images='$hinhAnh' WHERE id='$manv'";
+            if (mysqli_query($connect, $sql)) {
                 $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoNV thành công!</span>";
                 echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
             } else {

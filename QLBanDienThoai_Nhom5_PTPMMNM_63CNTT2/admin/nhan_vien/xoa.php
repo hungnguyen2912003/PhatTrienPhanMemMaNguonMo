@@ -184,9 +184,20 @@ if(isset($_POST['deleteBtn'])){
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label>Phân quyền</label>
-                                                        <span class="form-control"><?php if(isset($nhanVien['phanQuyen'])) echo $nhanVien['phanQuyen']; ?></span>
+                                                        <span class="form-control">
+                                                            <?php
+                                                            if (isset($nhanVien['phanQuyen'])) {
+                                                                if ($nhanVien['phanQuyen'] === "ADMIN") {
+                                                                    echo "Admin";
+                                                                } elseif ($nhanVien['phanQuyen'] === "NV") {
+                                                                    echo "Nhân viên";
+                                                                }
+                                                            }
+                                                            ?>
+                                                        </span>
                                                     </div>
                                                 </div>
+
                                             </div>
                                         </div>
                                     </div>
