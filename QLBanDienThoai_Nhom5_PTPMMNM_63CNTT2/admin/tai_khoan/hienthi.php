@@ -17,7 +17,14 @@ $offset = ($_GET['page']-1) * $rowsPerPage;
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen FROM user JOIN nhan_vien nv ON user.user_id = nv.id";
+$sql = "SELECT 
+            user.id AS ID, 
+            user.username AS tenTaiKhoan, 
+            user.user_id AS maNV, 
+            nv.phanQuyen AS phanQuyen, 
+            CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+        FROM user 
+        JOIN nhan_vien nv ON user.user_id = nv.id";
 
 // Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
@@ -145,9 +152,9 @@ $result = mysqli_query($connect, $sql);
                                         }
                                         echo "<td class='text-center'>$phanQuyenShow</td>";
                                         echo "<td class='text-center'>
-                                            <a href='$base_url/admin/phan_quyen/chitiet.php?id={$row['ID']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
-                                            <a href='$base_url/admin/phan_quyen/chinhsua.php?id={$row['ID']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
-                                            <a href='$base_url/admin/phan_quyen/xoa.php?id={$row['ID']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
+                                            <a href='$base_url/admin/tai_khoan/chitiet.php?id={$row['ID']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
+                                            <a href='$base_url/admin/tai_khoan/chinhsua.php?id={$row['ID']}' class='btn btn-xs btn-primary'><i class='fa-solid fa-pen-to-square'></i></a>
+                                            <a href='$base_url/admin/tai_khoan/xoa.php?id={$row['ID']}' class='btn btn-xs btn-danger'><i class='fa-solid fa-trash-can'></i></a>
                                         </td>";
                                         echo "</tr>";
                                         $stt++;
@@ -158,7 +165,10 @@ $result = mysqli_query($connect, $sql);
                                 <div class="pagination-container">
                                     <div class="pagination">
                                         <?php
-                                        $re = mysqli_query($connect, "SELECT * FROM user WHERE phanQuyen != 'KH'");
+                                        $re = mysqli_query($connect, "SELECT user.id 
+                                            FROM user 
+                                            JOIN nhan_vien nv ON user.user_id = nv.id 
+                                            WHERE nv.phanQuyen != 'KH'");
                                         $numRows = mysqli_num_rows($re);
                                         $maxPage = ceil($numRows / $rowsPerPage);
                                         $currentPage = $_GET['page'];

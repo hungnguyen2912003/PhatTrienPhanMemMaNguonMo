@@ -20,7 +20,10 @@ $msg = "";
 // Lấy thông tin tài khoản theo mã phân quyền
 
 // Lấy thông tin tài khoản theo mã phân quyền
-$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, 
+$sql = "SELECT user.id AS ID, 
+            user.username AS tenTaiKhoan, 
+            user.user_id AS maNV, 
+            nv.phanQuyen AS phanQuyen, 
         CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
         FROM user 
         JOIN nhan_vien nv ON user.user_id = nv.id

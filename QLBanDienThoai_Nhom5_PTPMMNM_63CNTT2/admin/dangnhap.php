@@ -36,22 +36,21 @@ if (isset($_POST['dangNhap'])) {
         // Kiểm tra tài khỏan, mật khẩu
         $sql_check_account = "SELECT * FROM user WHERE username = '$username' AND password = '$pass'";
         $result_check_account = mysqli_query($connect, $sql_check_account);
-        // Kiểm tra quyền
-        $sql_check_quyen = "SELECT * FROM user WHERE username = '$username' AND phanQuyen IN ('ADMIN', 'NV')";
-        $result_check_quyen = mysqli_query($connect, $sql_check_quyen);
-
         if(mysqli_num_rows($result_check_account) == 0) {
             $msg = "<span class='text-danger font-weight-bold'>Tên tài khoản hoặc mật khẩu không hợp lệ</span>";
         }
-        elseif (mysqli_num_rows($result_check_quyen) == 0) {
-            $msg = "<span class='text-danger font-weight-bold'>Tài khoản của bạn không có quyền đăng nhập</span>";
+        // Kiểm tra quyền của nhân viên
+        $sql_check_quyen = "SELECT * FROM user JOIN nhan_vien ON user.user_id = nhan_vien.id WHERE user.username = '$username' AND nhan_vien.phanQuyen IN ('ADMIN', 'NV')";
+        $result_check_quyen = mysqli_query($connect, $sql_check_quyen);
+        if (mysqli_num_rows($result_check_quyen) == 0) {
+            $msg = "<span class='text-danger font-weight-bold'>Bạn không có quyền đăng nhập</span>";
         }
         // Tên đăng nhập và mật khẩu trùng khớp với tên đăng nhập và mật khẩu trong CSDL.
         if(empty($msg)){
             // Gán vào phiên $_SESSION['logged'] là true
             $_SESSION['logged'] = true;
             // Truy vấn thông tin người dùng tài khoản
-            $sql = "SELECT CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTen, user.phanQuyen AS phanQuyen, user.user_id AS USERID 
+            $sql = "SELECT CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTen, nhan_vien.phanQuyen AS phanQuyen, user.user_id AS USERID 
                     FROM user 
                     INNER JOIN nhan_vien ON user.user_id = nhan_vien.id 
                     WHERE user.username = '$username'";

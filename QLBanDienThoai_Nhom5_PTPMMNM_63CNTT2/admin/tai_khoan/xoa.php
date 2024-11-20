@@ -17,7 +17,10 @@ $mapq = $_GET['id'];
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
-$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, 
+$sql = "SELECT user.id AS ID, 
+        user.username AS tenTaiKhoan, 
+        user.user_id AS maNV, 
+        nv.phanQuyen AS phanQuyen, 
         CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
         FROM user 
         JOIN nhan_vien nv ON user.user_id = nv.id
@@ -38,7 +41,7 @@ if(isset($_POST['deleteBtn'])){
     if (mysqli_query($connect, $sqlDelete)) {
         // Lưu thông báo thành công vào session
         $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công  $mapq  </span>";
-        echo "<script>window.location.href = '$base_url/admin/phan_quyen/hienthi.php';</script>";
+        echo "<script>window.location.href = '$base_url/admin/tai_khoan/hienthi.php';</script>";
     } else {
         $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
     }

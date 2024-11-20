@@ -257,7 +257,7 @@ mysqli_close($connect);
                                             <label>Phân quyền <span class="text-danger">*</span></label>
                                             <select name="phanQuyen" class="custom-select form-control select">
                                                 <option value="ADMIN" <?php if(isset($_POST['phanQuyen']) && $_POST['phanQuyen'] == "Admin") echo 'selected'; ?>>Admin</option>
-                                                <option value="NV" <?php if(isset($_POST['phanQuyen']) && $_POST['phanQuyen'] == "Nhân viên") echo 'selected'; ?>>Nhân viên</option>
+                                                <option value="NV" selected <?php if(isset($_POST['phanQuyen']) && $_POST['phanQuyen'] == "Nhân viên") echo 'selected'; ?>>Nhân viên</option>
                                             </select>
                                         </div>
                                     </div>
