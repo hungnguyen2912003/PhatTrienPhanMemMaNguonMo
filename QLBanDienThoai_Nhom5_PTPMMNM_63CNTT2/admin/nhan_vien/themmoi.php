@@ -13,15 +13,15 @@ $msg = "";
 $maNV = rand(10000000, 99999999);
 
 if (isset($_POST["themMoi"])) {
-    $hoNV = $_POST["hoNV"];
-    $tenlot = $_POST["tenlot"];
-    $tenNV = $_POST["tenNV"];
-    $ngaySinh = $_POST["ngaySinh"];
-    $gioiTinh = $_POST["gioiTinh"];
-    $diaChi = $_POST["diaChi"];
-    $email = $_POST["email"];
-    $soDienThoai = $_POST["soDienThoai"];
-    $phanQuyen = $_POST["phanQuyen"];
+    $hoNV = mysqli_real_escape_string($connect, $_POST["hoNV"]);
+    $tenlot = mysqli_real_escape_string($connect,$_POST["tenlot"]);
+    $tenNV = mysqli_real_escape_string($connect,$_POST["tenNV"]);
+    $ngaySinh = mysqli_real_escape_string($connect,$_POST["ngaySinh"]);
+    $gioiTinh = mysqli_real_escape_string($connect,$_POST["gioiTinh"]);
+    $diaChi = mysqli_real_escape_string($connect,$_POST["diaChi"]);
+    $email = mysqli_real_escape_string($connect,$_POST["email"]);
+    $soDienThoai = mysqli_real_escape_string($connect,$_POST["soDienThoai"]);
+    $phanQuyen = mysqli_real_escape_string($connect,$_POST["phanQuyen"]);
     //Kiểm tra nhập liệu
     if(empty($hoNV)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ</span>";
@@ -92,10 +92,25 @@ if (isset($_POST["themMoi"])) {
             }
             // Tiến hành tạo mới nhân viên
             else {
-               //Thực hiện thêm mới
-                $sql = "INSERT INTO nhan_vien (id, hoNV, tenlot, tenNV, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email, phanQuyen) VALUES ('$maNV', '$hoNV','$tenlot','$tenNV', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email','$phanQuyen')";
-                if (mysqli_query($connect, $sql)) {
-                    $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới nhân viên $tenNV thành công!</span>";
+                //Thực hiện thêm mới nhân viên
+                $sql_nv = "INSERT INTO nhan_vien (id, hoNV, tenlot, tenNV, gioiTinh, ngaySinh, diaChi, soDienThoai, Images, email, phanQuyen) VALUES ('$maNV', '$hoNV','$tenlot','$tenNV', '$gioiTinh', '$ngaySinh', '$diaChi', '$soDienThoai', '$hinhAnh', '$email','$phanQuyen')";
+
+                //Thêm mới tài khoản
+                if($phanQuyen == 'ADMIN')
+                    $username = 'admin' . $maNV;
+                else $username = 'nvien' . $maNV;
+                $password = 'Abc@123';
+                $sql_tk = "INSERT INTO user (username, password, user_id) VALUES ('$username', '$password', '$maNV')";
+                //Thông báo thêm thành công
+                if (mysqli_query($connect, $sql_nv)) {
+                    mysqli_query($connect, $sql_tk);
+                    $_SESSION['msg'] =
+                    "<span class='text-success font-weight-bold'>
+                        Thêm mới nhân viên $tenNV thành công!<br>
+                        Tài khoản: $username<br>
+                        Mật khẩu mặc định: $password<br>
+                        Vui lòng truy cập vào trang đổi mật khẩu để đổi: <a class='text-info font-weight-bold' href='$base_url/admin/doimatkhau.php'>Nhấp vào đây</a>
+                    </span>";
                     echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
                 } else {
                     $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";

@@ -249,8 +249,8 @@ mysqli_close($connect);
                                             <div class="form-group form-group-default">
                                                 <label>Phân quyền <span class="text-danger">*</span></label>
                                                 <select class="form-control" name="phanQuyen">
-                                                    <option value="ADMIN" <?php if(isset($_POST['phanQuyen']) && $_POST['phanQuyen'] == "Admin") echo 'selected'; ?>>Admin</option>
-                                                    <option value="NV" <?php if(isset($_POST['phanQuyen']) && $_POST['phanQuyen'] == "Nhân viên") echo 'selected'; ?>>Nhân viên</option>
+                                                    <option value="ADMIN" <?php if(isset($nhanVien['phanQuyen']) && $nhanVien['phanQuyen'] == "ADMIN") echo 'selected'; ?>>Admin</option>
+                                                    <option value="NV" <?php if(isset($nhanVien['phanQuyen']) && $nhanVien['phanQuyen'] == "NV") echo 'selected'; ?>>Nhân viên</option>
                                                 </select>
                                             </div>
 

@@ -22,7 +22,7 @@ else {
     // Truy vấn thông tin nhân viên trực tiếp
     $sql = "SELECT nv.*, user.username AS username, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
             FROM nhan_vien nv 
-            LEFT JOIN user ON nv.id = user.user_id 
+            JOIN user ON nv.id = user.user_id 
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);
@@ -151,19 +151,21 @@ else {
                                                     <span class="form-control text-warning">Chưa thêm hình ảnh cho nhân viên này</span>
                                                 <?php endif; ?>
                                             </div>
+                                        </div>
+                                        <div class="col-md-12">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="offset-2 col-md-4">
                                                     <div class="form-group form-group-default">
                                                         <label>Tên tài khoản</label>
-                                                        <?php
-                                                        if (!empty($nhanVien['username']))
-                                                            echo "<span>{$nhanVien['username']}</span>";
-                                                        else
-                                                            echo "<span class='text-warning'>Chưa thiết lập</span>";
-                                                        ?>
+                                                        <span class="form-control">
+                                                            <?php
+                                                            if (!empty($nhanVien['username']))
+                                                                echo "<span>{$nhanVien['username']}</span>";
+                                                            ?>
+                                                        </span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group form-group-default">
                                                         <label>Phân quyền</label>
                                                         <span class="form-control">
@@ -177,11 +179,8 @@ else {
                                                         </span>
                                                     </div>
                                                 </div>
-
                                             </div>
-
                                         </div>
-
                                     </div>
                                     <div class="text-center">
                                         <a href="<?php echo $base_url ?>/admin/nhan_vien/chinhsua.php?manv=<?php echo $nhanVien['id']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>

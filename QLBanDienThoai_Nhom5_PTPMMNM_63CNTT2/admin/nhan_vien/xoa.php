@@ -30,6 +30,8 @@ if (empty($manv)) {
         $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
     }
 }
+
+
 if(isset($_POST['deleteBtn'])){
     // Xóa nhân viên theo mã nhân viên
     $sqlDelete = "DELETE FROM nhan_vien WHERE id = '$manv'";
@@ -63,7 +65,7 @@ if(isset($_POST['deleteBtn'])){
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="page-title">Xoá thông tin nhân viên: <?php if(isset($nhanVien['hoTen'])) echo $nhanVien['hoTen']; else echo 'Không xác định';?></h4>
+                                <h4 class="page-title">Xoá thông tin nhân viên: <?php echo $nhanVien['hoTen'] ?? 'Không xác định';?></h4>
                             </div>
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
@@ -169,35 +171,33 @@ if(isset($_POST['deleteBtn'])){
                                                     <span class="form-control text-warning">Chưa thêm hình ảnh cho nhân viên này</span>
                                                 <?php endif; ?>
                                             </div>
+                                        </div>
+                                        <div class="col-md-12">
                                             <div class="row">
-                                                <div class="col-md-6">
+                                                <div class="offset-2 col-md-4">
                                                     <div class="form-group form-group-default">
                                                         <label>Tên tài khoản</label>
-                                                        <?php
-                                                        if (!empty($nhanVien['username']))
-                                                            echo "<span>{$nhanVien['username']}</span>";
-                                                        else
-                                                            echo "<span class='text-warning'>Chưa thiết lập</span>";
-                                                        ?>
+                                                        <span class="form-control">
+                                                            <?php
+                                                                echo "<span>{$nhanVien['username']}</span>";
+                                                            ?>
+                                                        </span>
                                                     </div>
                                                 </div>
-                                                <div class="col-md-6">
+                                                <div class="col-md-4">
                                                     <div class="form-group form-group-default">
                                                         <label>Phân quyền</label>
                                                         <span class="form-control">
                                                             <?php
                                                             if (isset($nhanVien['phanQuyen'])) {
-                                                                if ($nhanVien['phanQuyen'] === "ADMIN") {
-                                                                    echo "Admin";
-                                                                } elseif ($nhanVien['phanQuyen'] === "NV") {
-                                                                    echo "Nhân viên";
-                                                                }
+                                                                // Hiển thị quyền tương ứng
+                                                                echo ($nhanVien['phanQuyen'] === "ADMIN") ? "Admin" :
+                                                                    (($nhanVien['phanQuyen'] === "NV") ? "Nhân viên" : $nhanVien['phanQuyen']);
                                                             }
                                                             ?>
                                                         </span>
                                                     </div>
                                                 </div>
-
                                             </div>
                                         </div>
                                     </div>

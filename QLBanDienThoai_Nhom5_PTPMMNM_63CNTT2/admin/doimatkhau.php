@@ -139,7 +139,7 @@ if (isset($_POST['doiMK'])) {
             </form>
             <!-- /.col -->
             <div class="col-12 mt-3 text-center">
-                <a href="<?php echo $base_url; ?>/admin/dangnhap.php" type="submit">Quay lại</a>
+                <a href="javascript:window.history.back(-1);">Quay lại</a>
             </div>
             <!-- /.col -->
         </div>

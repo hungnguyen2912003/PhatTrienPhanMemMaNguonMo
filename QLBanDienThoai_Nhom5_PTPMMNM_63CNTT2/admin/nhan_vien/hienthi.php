@@ -134,7 +134,7 @@ else {
                                 <div class="col-md-5">
                                     <form action="" method="post">
                                         <div class="input-group input-group-sm">
-                                            <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhân viên bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
+                                            <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập họ tên nhân viên bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
                                             <span class="input-group-append">
                                             <button type="submit" name="btnTimKiem" class="btn btn-info btn-flat">Tìm kiếm</button>
                                         </span>
@@ -252,7 +252,7 @@ else {
             }
             // Nếu có thông báo, thiết lập timeout để tự động ẩn sau 5 giây
             if ($('.message-container').length) {
-                setTimeout(hideMessage, 5000); // 5000 milliseconds = 5 seconds
+                setTimeout(hideMessage, 10000); // 5000 milliseconds = 5 seconds
             }
         });
     </script>
