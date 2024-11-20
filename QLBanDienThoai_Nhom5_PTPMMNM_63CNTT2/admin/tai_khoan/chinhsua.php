@@ -13,8 +13,12 @@ $matk = $_GET['id'] ?? ""; // Lấy id từ URL
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
-$sql = "SELECT user.id AS ID, user.username AS tenTaiKhoan, user.user_id AS maNV, user.phanQuyen AS phanQuyen, 
-        CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+$sql = "SELECT 
+            user.id AS ID, 
+            user.username AS tenTaiKhoan, 
+            user.user_id AS maNV, 
+            nv.phanQuyen AS phanQuyen, 
+            CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
         FROM user 
         JOIN nhan_vien nv ON user.user_id = nv.id
         WHERE user.id = '$matk'";
@@ -24,23 +28,17 @@ $row = mysqli_fetch_assoc($result);
 
 // Kiểm tra nếu không có mã phân quyền thông báo lỗi
 if (!$row) {
-    echo "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin phân quyền có mã: " . $matk . "</h2>";
+    echo "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin tài khoản có mã: " . $matk . "</h2>";
     exit();
 }
 
 if (isset($_POST["capNhat"])) {
     // Lấy tên hiển thị, phân quyền từ form
     $phanquyen = $_POST["phanQuyen"];
-
-    // Kiểm tra dữ liệu đầu vào
-    if (empty($phanquyen)) {
-        $msg = "<span class='text-danger font-weight-bold'>Tất cả các trường đều phải điền đầy đủ.</span>";
-    }
-
     // Nếu không có lỗi thì thực hiện cập nhật
     if (empty($msg)) {
-        $sql_update = "UPDATE user SET  phanQuyen='$phanquyen' WHERE id='$matk'";
-
+        $maNV = $row['maNV'];
+        $sql_update = "UPDATE nhan_vien SET phanQuyen='$phanquyen' WHERE id='$maNV'";
         if (mysqli_query($connect, $sql_update)) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin phân quyền cho tài khoản có mã $matk thành công!</span>";
             echo "<script>window.location.href = '$base_url/admin/tai_khoan/hienthi.php';</script>";
@@ -80,7 +78,7 @@ if (isset($_POST["capNhat"])) {
                                         <i class="flaticon-right-arrow"></i>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php">Danh mục phân quyền</a>
+                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh mục phân quyền</a>
                                     </li>
                                     <li class="separator">
                                         <i class="flaticon-right-arrow"></i>
@@ -114,7 +112,7 @@ if (isset($_POST["capNhat"])) {
 
                                     <div class="form-group text-center">
                                         <button type="submit" name="capNhat" class="btn btn-primary">Cập nhật</button>
-                                        <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
+                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
                                     </div>
                                     <div class="form-group text-center">
                                         <?php echo $msg ?>

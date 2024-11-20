@@ -17,11 +17,12 @@ $mapq = $_GET['id'];
 $msg = "";
 
 // Lấy thông tin tài khoản theo mã phân quyền
-$sql = "SELECT user.id AS ID, 
-        user.username AS tenTaiKhoan, 
-        user.user_id AS maNV, 
-        nv.phanQuyen AS phanQuyen, 
-        CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+$sql = "SELECT 
+            user.id AS ID, 
+            user.username AS tenTaiKhoan, 
+            user.user_id AS maNV, 
+            nv.phanQuyen AS phanQuyen, 
+            CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
         FROM user 
         JOIN nhan_vien nv ON user.user_id = nv.id
         WHERE user.id = '$mapq'";
@@ -35,8 +36,11 @@ if (!$phan_quyen) {
     exit();
 }
 if(isset($_POST['deleteBtn'])){
-    // Xóa
     $sqlDelete = "DELETE FROM user WHERE id = '$mapq'";
+
+    //Đồng thời xóa nhân viên
+    $manv = $row['maNV'];
+    $sql_del_nv = "DELETE FROM nhan_vien WHERE ";
 
     if (mysqli_query($connect, $sqlDelete)) {
         // Lưu thông báo thành công vào session
@@ -76,7 +80,7 @@ if(isset($_POST['deleteBtn'])){
                                         <i class="flaticon-right-arrow"></i>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php">Danh mục phân quyền</a>
+                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh mục phân quyền</a>
                                     </li>
                                     <li class="separator">
                                         <i class="flaticon-right-arrow"></i>
@@ -141,7 +145,7 @@ if(isset($_POST['deleteBtn'])){
                                         </div>
                                         <div class="form-group text-center">
                                             <button type="submit" name="deleteBtn" class="btn btn-info">Xoá</button>
-                                            <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
+                                            <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
                                         </div>
                                         <div class="form-group text-center">
                                             <?php echo $msg?>

@@ -17,17 +17,60 @@ $offset = ($_GET['page']-1) * $rowsPerPage;
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
-$sql = "SELECT 
-            user.id AS ID, 
-            user.username AS tenTaiKhoan, 
-            user.user_id AS maNV, 
-            nv.phanQuyen AS phanQuyen, 
-            CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
-        FROM user 
-        JOIN nhan_vien nv ON user.user_id = nv.id";
+// Kiểm tra xem có tìm kiếm hay không
+if (isset($_POST['btnTimKiem'])) {
+    $str = trim($_POST['searchtext']); // Lấy nội dung từ ô tìm kiếm
+    if (!empty($str)) {
+        // Nếu tìm kiếm không rỗng, chạy truy vấn tìm kiếm
+        $sql = "SELECT 
+                    user.id AS ID, 
+                    user.username AS tenTaiKhoan, 
+                    user.user_id AS maNV, 
+                    nv.phanQuyen AS phanQuyen, 
+                    CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+                FROM user 
+                JOIN nhan_vien nv ON user.user_id = nv.id 
+                WHERE LOWER(CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV)) LIKE '%$str%'
+                   OR LOWER(user.username) LIKE '%$str%'
+                   OR LOWER(user.user_id) LIKE '%$str%'
+                   OR LOWER(nv.phanQuyen) LIKE '%$str%'";
+        $result = mysqli_query($connect, $sql);
 
-// Gửi truy vấn đến cơ sở dữ liệu
-$result = mysqli_query($connect, $sql);
+        // Hiển thị thông báo
+        if (mysqli_num_rows($result) > 0) {
+            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả có từ khóa: '$str'</span>";
+        } else {
+            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khóa: '$str'</span>";
+        }
+    } else {
+        // Nếu ô tìm kiếm rỗng, sử dụng truy vấn phân trang
+        $_SESSION['msg'] = "<span class='text-warning font-weight-bold'>Vui lòng nhập từ khóa để tìm kiếm!</span>";
+        $sql = "SELECT 
+                    user.id AS ID, 
+                    user.username AS tenTaiKhoan, 
+                    user.user_id AS maNV, 
+                    nv.phanQuyen AS phanQuyen, 
+                    CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+                FROM user 
+                JOIN nhan_vien nv ON user.user_id = nv.id 
+                LIMIT $offset, $rowsPerPage";
+        $result = mysqli_query($connect, $sql);
+    }
+} else {
+    // Không nhấn nút tìm kiếm, sử dụng truy vấn phân trang mặc định
+    $sql = "SELECT 
+                user.id AS ID, 
+                user.username AS tenTaiKhoan, 
+                user.user_id AS maNV, 
+                nv.phanQuyen AS phanQuyen, 
+                CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+            FROM user 
+            JOIN nhan_vien nv ON user.user_id = nv.id 
+            LIMIT $offset, $rowsPerPage";
+    $result = mysqli_query($connect, $sql);
+}
+
+
 ?>
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
     <!DOCTYPE html>
@@ -77,7 +120,7 @@ $result = mysqli_query($connect, $sql);
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="page-title">Danh mục phân quyền</h4>
+                                <h4 class="page-title">Danh mục tài khoản</h4>
                             </div>
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
@@ -90,7 +133,7 @@ $result = mysqli_query($connect, $sql);
                                         <i class="flaticon-right-arrow"></i>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php">Danh sách nhân viên</a>
+                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh sách nhân viên</a>
                                     </li>
                                 </ul>
                             </div>
@@ -101,10 +144,18 @@ $result = mysqli_query($connect, $sql);
                     <div class="card h-100">
                         <div class="card-header">
                             <div class="row">
-                                <div class="col-md-4">
-                                    <div class="card-tools">
-                                        <a href="<?php echo $base_url?>/admin/dangky.php" class="btn btn-rounded btn-primary">Đăng ký tài khoản</a>
-                                    </div>
+                                <div class="col-md-6">
+
+                                </div>
+                                <div class="col-md-6">
+                                    <form action="" method="post">
+                                        <div class="input-group input-group-sm">
+                                            <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin tài khoản bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
+                                            <span class="input-group-append">
+                                            <button type="submit" name="btnTimKiem" class="btn btn-info btn-flat">Tìm kiếm</button>
+                                        </span>
+                                        </div>
+                                    </form>
                                 </div>
                             </div>
                         </div>
@@ -143,13 +194,10 @@ $result = mysqli_query($connect, $sql);
                                         echo "<td class='text-center'>{$row['hoTen']}</td>";
                                         // Kiểm tra phân quyền và hiển thị tương ứng
                                         $phanQuyen = $row['phanQuyen'];
-                                        if ($phanQuyen == 'ADMIN') {
+                                        if ($phanQuyen == 'ADMIN')
                                             $phanQuyenShow = 'Admin';
-                                        } elseif ($phanQuyen == 'NV') {
+                                        elseif ($phanQuyen == 'NV')
                                             $phanQuyenShow = 'Nhân viên';
-                                        } else {
-                                            $phanQuyenShow = 'Chưa thiết lập';
-                                        }
                                         echo "<td class='text-center'>$phanQuyenShow</td>";
                                         echo "<td class='text-center'>
                                             <a href='$base_url/admin/tai_khoan/chitiet.php?id={$row['ID']}' class='btn btn-xs btn-warning text-white'><i class='fa-solid fa-circle-info'></i></a>
@@ -162,46 +210,51 @@ $result = mysqli_query($connect, $sql);
                                     ?>
                                     </tbody>
                                 </table>
-                                <div class="pagination-container">
-                                    <div class="pagination">
-                                        <?php
-                                        $re = mysqli_query($connect, "SELECT user.id 
-                                            FROM user 
-                                            JOIN nhan_vien nv ON user.user_id = nv.id 
-                                            WHERE nv.phanQuyen != 'KH'");
-                                        $numRows = mysqli_num_rows($re);
-                                        $maxPage = ceil($numRows / $rowsPerPage);
-                                        $currentPage = $_GET['page'];
-                                        if ($currentPage > 1) {
-                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a>";
-                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "'>Trang trước</a>";
-                                        }
-                                        $pagesPerSet = 5;
-                                        $currentSet = ceil($_GET['page'] / $pagesPerSet);
-                                        $startPage = ($currentSet - 1) * $pagesPerSet + 1;
-                                        $endPage = min($startPage + $pagesPerSet - 1, $maxPage);
-                                        if ($startPage > 1) {
-                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($startPage - 1) . "'>...</a> ";
-                                        }
-                                        for ($i = $startPage; $i <= $endPage; $i++) {
-                                            if ($i == $currentPage) {
-                                                echo "<b>$i</b> ";
-                                            } else {
-                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $i . "'>$i</a> ";
+                                <?php if (!isset($_POST['btnTimKiem']) || empty($_POST['searchtext'])): ?>
+                                    <div class="pagination-container">
+                                        <div class="pagination">
+                                            <?php
+                                            $re = mysqli_query($connect, "SELECT user.id 
+                                                FROM user 
+                                                JOIN nhan_vien nv ON user.user_id = nv.id");
+                                            //$numRows: Số lượng bản ghi trong cơ sở dữ liệu (toàn bộ bản ghi từ bảng nhan_vien).
+                                            $numRows = mysqli_num_rows($re);
+                                            $maxPage = ceil($numRows / $rowsPerPage);
+                                            //Trang hiện tại mà người dùng đang xem, được lấy từ $_GET['page'].
+                                            $currentPage = $_GET['page'];
+                                            if ($currentPage > 1) {
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=1'>Trang đầu</a>";
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage - 1) . "'>Trang trước</a>";
                                             }
-                                        }
-                                        if ($endPage < $maxPage) {
-                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($endPage + 1) . "'>...</a> ";
-                                        }
+                                            $pagesPerSet = 5;
+                                            $currentSet = ceil($_GET['page'] / $pagesPerSet);
+                                            $startPage = ($currentSet - 1) * $pagesPerSet + 1;
+                                            $endPage = min($startPage + $pagesPerSet - 1, $maxPage);
+                                            if ($startPage > 1) {
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($startPage - 1) . "'>...</a> ";
+                                            }
+                                            for ($i = $startPage; $i <= $endPage; $i++) {
+                                                if ($i == $currentPage) {
+                                                    echo "<b>$i</b> ";
+                                                } else {
+                                                    echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . $i . "'>$i</a> ";
+                                                }
+                                            }
 
-                                        // Hiển thị "Trang sau" và "Trang cuối"
-                                        if ($currentPage < $maxPage) {
-                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "'>Trang sau</a>";
-                                            echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$maxPage'>Trang cuối</a>";
-                                        }
-                                        ?>
+                                            //$endPage < $maxPage: Nếu trang cuối cùng trong nhóm không phải là trang cuối cùng toàn cục, hiển thị dấu ... để người dùng biết có thêm trang phía sau.
+                                            if ($endPage < $maxPage) {
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($endPage + 1) . "'>...</a> ";
+                                            }
+
+                                            // Hiển thị "Trang sau" và "Trang cuối"
+                                            if ($currentPage < $maxPage) {
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=" . ($currentPage + 1) . "'>Trang sau</a>";
+                                                echo "<a href='" . $_SERVER['PHP_SELF'] . "?page=$maxPage'>Trang cuối</a>";
+                                            }
+                                            ?>
+                                        </div>
                                     </div>
-                                </div>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

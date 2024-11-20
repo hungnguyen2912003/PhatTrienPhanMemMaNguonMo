@@ -8,25 +8,22 @@ include('../includes/footer.html');
 //Kết nối cơ sở dữ liệu
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
 OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
-$result = "";
-//Mỗi trang hiển thị 5 dữ liệu
-$rowsPerPage = 5;
 
-//Nếu tham số page trong URL chưa được set, nó sẽ được gán giá trị mặc định là 1, tức là trang đầu tiên.
+//Phân trang
+$rowsPerPage = 5;
 if (!isset($_GET['page'])) {
     $_GET['page'] = 1;
 }
-//Xác định vị trí của bản ghi đầu tiên trong câu truy vấn SQL. Nó tính toán dựa trên số trang hiện tại và số bản ghi trên mỗi trang.
 $offset = ($_GET['page']-1) * $rowsPerPage;
 
 /////////////////////////////////////////////////////////////
 /// Xử lý tìm kiếm
-$searchResult = false; // Biến kiểm tra kết quả tìm kiếm
 // Nếu người dùng nhấn nút tìm kiếm
 if (isset($_POST['btnTimKiem'])) {
     $str = trim($_POST['searchtext']);
     if (empty($str)) {
         // Nếu input tìm kiếm rỗng, lấy tất cả nhân viên
+        $_SESSION['msg'] = "<span class='text-warning font-weight-bold'>Vui lòng nhập từ khóa để tìm kiếm!</span>";
         $sql = "SELECT *,CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTen 
                 FROM nhan_vien LIMIT $offset, $rowsPerPage";
         $result = mysqli_query($connect, $sql);
@@ -40,10 +37,8 @@ if (isset($_POST['btnTimKiem'])) {
         // Kiểm tra nếu không có kết quả tìm kiếm
         if (mysqli_num_rows($result) != 0) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả họ tên có từ khoá: '$str'</span>";
-            $searchResult = true; // Đặt biến kiểm tra kết quả tìm kiếm là true
         } else {
             $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khoá: '$str'</span>";
-            $searchResult = false; // Đảm bảo không hiển thị kết quả không hợp lệ
         }
     }
 }
@@ -192,7 +187,7 @@ else {
                                     ?>
                                     </tbody>
                                 </table>
-                                <?php if (!$searchResult) {?>
+                                <?php if (!isset($_POST['btnTimKiem']) || empty($_POST['searchtext'])): ?>
                                     <div class="pagination-container">
                                         <div class="pagination">
                                             <?php
@@ -234,7 +229,7 @@ else {
                                             ?>
                                         </div>
                                     </div>
-                                <?php } ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

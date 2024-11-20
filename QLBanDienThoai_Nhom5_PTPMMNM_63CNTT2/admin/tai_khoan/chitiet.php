@@ -9,33 +9,29 @@ include('../includes/footer.html');
 $connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 // Kiểm tra và lấy mã phân quyền từ URL
-if (!isset($_GET['id'])) {
-    echo "<h4>Không tìm thấy mã phân quyền.</h4>";
-    exit();
-}
-$mapq = $_GET['id'];
+$matk = $_GET['id'] ?? "";
+
 $msg = "";
 
-
-// Lấy thông tin tài khoản theo mã phân quyền
-
-// Lấy thông tin tài khoản theo mã phân quyền
-$sql = "SELECT user.id AS ID, 
+// Kiểm tra mã tài khoản
+if (empty($matk))
+    $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã tài khoản đang để trống</h2>";
+else{
+    $sql = "SELECT 
+            user.id AS ID, 
             user.username AS tenTaiKhoan, 
             user.user_id AS maNV, 
             nv.phanQuyen AS phanQuyen, 
-        CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
+            CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen 
         FROM user 
         JOIN nhan_vien nv ON user.user_id = nv.id
-        WHERE user.id = '$mapq'";
-
-// Gửi truy vấn đến cơ sở dữ liệu và kiểm tra kết quả
-$result = mysqli_query($connect, $sql);
-$phan_quyen = mysqli_fetch_assoc($result);
-
-if (!$phan_quyen) {
-    echo "<h4>Không tìm thấy thông tin phân quyền.</h4>";
-    exit();
+        WHERE user.id = '$matk'";
+    // Gửi truy vấn đến cơ sở dữ liệu và kiểm tra kết quả
+    $result = mysqli_query($connect, $sql);
+    $phan_quyen = mysqli_fetch_assoc($result);
+    if (!$phan_quyen) {
+        $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin tài khoản có mã: " . $matk . "</h2>";
+    }
 }
 ?>
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
@@ -53,7 +49,7 @@ if (!$phan_quyen) {
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="page-title">Chi tiết thông tin phân quyền: <?php echo $phan_quyen['tenTaiKhoan']; ?></h4>
+                                <h4 class="page-title">Chi tiết thông tin phân quyền: <?php echo $phan_quyen['tenTaiKhoan'] ?? 'Không xác định'; ?></h4>
                             </div>
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
@@ -66,7 +62,7 @@ if (!$phan_quyen) {
                                         <i class="flaticon-right-arrow"></i>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php">Danh mục phân quyền</a>
+                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh mục phân quyền</a>
                                     </li>
                                     <li class="separator">
                                         <i class="flaticon-right-arrow"></i>
@@ -82,7 +78,10 @@ if (!$phan_quyen) {
                 <div class="row">
                     <div class="col-md-12">
                         <div class="card h-100">
-                            <div class="card-body">
+                            <?php if (!empty($msg)): ?>
+                                <?php echo $msg; ?>
+                            <?php else: ?>
+                                <div class="card-body">
                                 <div id="logins-part" class="content active dstepper-block" role="tabpanel" aria-labelledby="logins-part-trigger">
                                     <div class="row">
                                         <div class="col-md-6">
@@ -114,8 +113,6 @@ if (!$phan_quyen) {
                                                             $phanQuyenShow = 'Admin';
                                                         } elseif ($phanQuyen == 'NV') {
                                                             $phanQuyenShow = 'Nhân viên';
-                                                        } else {
-                                                            $phanQuyenShow = 'Chưa thiết lập';
                                                         }
                                                         echo $phanQuyenShow;
                                                     }
@@ -126,10 +123,11 @@ if (!$phan_quyen) {
                                     </div>
                                 </div>
                                 <div class="form-group text-center">
-                                    <a href="<?php echo $base_url?>/admin/phan_quyen/chinhsua.php?id=<?php echo $phan_quyen['ID']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
-                                    <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
+                                    <a href="<?php echo $base_url?>/admin/tai_khoan/chinhsua.php?id=<?php echo $phan_quyen['ID']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                                    <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
                                 </div>
                             </div>
+                            <?php endif; ?>
                         </div>
                     </div>
                 </div>
