@@ -133,7 +133,11 @@ if (isset($_POST['btnTimKiem'])) {
                                         <i class="flaticon-right-arrow"></i>
                                     </li>
                                     <li class="nav-item">
+<<<<<<< HEAD
                                         <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh sách nhân viên</a>
+=======
+                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh mục tài khoản</a>
+>>>>>>> 0dd459305821ef80a4c26385d186a7f0d54d3220
                                     </li>
                                 </ul>
                             </div>
