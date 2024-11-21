@@ -79,12 +79,12 @@
                 <?php endif; ?>
 
                 <?php if(isset($_SESSION['phanQuyen']) && ($_SESSION['phanQuyen'] == 'ADMIN' || $_SESSION['phanQuyen'] == 'NV')): ?>
-<!--                <li class="nav-item">-->
-<!--                    <a href="<?php echo $base_url; ?>/admin/don_hang/trangchu.php">-->
-<!--                        <i class="fa-solid fa-file-invoice-dollar"></i>-->
-<!--                        <p>Đơn hàng</p>-->
-<!--                    </a>-->
-<!--                </li>-->
+                <li class="nav-item">
+                    <a href="#">
+                        <i class="fa-solid fa-file-invoice-dollar"></i>
+                        <p>Đơn hàng</p>
+                    </a>
+                </li>
                 <li class="nav-item">
                     <a href="<?php echo $base_url; ?>/admin/khach_hang/hienthi.php">
                         <i class="fa-solid fa-address-book"></i>
@@ -101,6 +101,24 @@
                     <a href="<?php echo $base_url; ?>/admin/san_pham/hienthi.php">
                         <i class="fa-solid fa-box"></i>
                         <p>Sản phẩm</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#">
+                        <i class="fa-solid fa-chart-line"></i>
+                        <p>Thống kê</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#">
+                        <i class="fa-solid fa-newspaper"></i>
+                        <p>Tin tức</p>
+                    </a>
+                </li>
+                <li class="nav-item">
+                    <a href="#">
+                        <i class="fa-solid fa-headset"></i>
+                        <p>Quảng cáo</p>
                     </a>
                 </li>
                 <?php endif; ?>

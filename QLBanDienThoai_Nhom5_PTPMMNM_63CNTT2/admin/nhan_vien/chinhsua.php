@@ -19,33 +19,32 @@ $msg = "";
 $error = "";
 
 // Kiểm tra mã nhân viên
-if (empty($manv)) {
+if (empty($manv))
     $error = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
-} else {
+else
+{
     // Truy vấn thông tin nhân viên trực tiếp
-    $sql = "SELECT nv.*,   CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
+    $sql = "SELECT 
+                nv.*, 
+                CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
             FROM nhan_vien nv
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);
-
-    if (!$nhanVien) {
+    if (!$nhanVien)
         $error = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
-    }
 }
-
-
 if (isset($_POST['capNhat']))
 {
-    $hoNV = $_POST["hoNV"];
-    $tenlot = $_POST["tenlot"];
-    $tenNV = $_POST["tenNV"];
-    $ngaySinh = $_POST["ngaySinh"];
-    $gioiTinh = $_POST["gioiTinh"];
-    $diaChi = $_POST["diaChi"];
-    $email = $_POST["email"];
-    $soDienThoai = $_POST["soDienThoai"];
-    $phanquyen = $_POST["phanQuyen"];
+    $hoNV = mysqli_real_escape_string($connect, $_POST["hoNV"]);
+    $tenlot = mysqli_real_escape_string($connect,$_POST["tenlot"]);
+    $tenNV = mysqli_real_escape_string($connect,$_POST["tenNV"]);
+    $ngaySinh = mysqli_real_escape_string($connect,$_POST["ngaySinh"]);
+    $gioiTinh = mysqli_real_escape_string($connect,$_POST["gioiTinh"]);
+    $diaChi = mysqli_real_escape_string($connect,$_POST["diaChi"]);
+    $email = mysqli_real_escape_string($connect,$_POST["email"]);
+    $soDienThoai = mysqli_real_escape_string($connect,$_POST["soDienThoai"]);
+    $phanQuyen = mysqli_real_escape_string($connect,$_POST["phanQuyen"]);
     //Kiểm tra nhập liệu
     if(empty($hoNV)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ</span>";
@@ -108,12 +107,11 @@ if (isset($_POST['capNhat']))
             }
         }
         //Nếu không còn báo lỗi gì nữa thì tiến hành cập nhật nhân viên
-
         if (empty($msg)) {
             // Cập nhật thông tin nhân viên
-            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email',phanQuyen ='$phanquyen', Images='$hinhAnh' WHERE id='$manv'";
+            $sql = "UPDATE nhan_vien SET hoNV='$hoNV',tenlot = '$tenlot',tenNV = '$tenNV', ngaySinh='$ngaySinh', gioiTinh='$gioiTinh', soDienThoai='$soDienThoai', diaChi='$diaChi', email='$email',phanQuyen ='$phanQuyen', Images='$hinhAnh' WHERE id='$manv'";
             if (mysqli_query($connect, $sql)) {
-                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên $hoNV thành công!</span>";
+                $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Cập nhật thông tin nhân viên " . $nhanVien['hoTen'] . " thành công!</span>";
                 echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
             } else {
                 $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi cập nhật!</span>";
@@ -124,6 +122,8 @@ if (isset($_POST['capNhat']))
 // Đóng kết nối sau khi hoàn tất
 mysqli_close($connect);
 ?>
+
+
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
     <!DOCTYPE html>
     <html lang="en">
@@ -140,6 +140,12 @@ mysqli_close($connect);
                 }
             }
         </script>
+        <style>
+            input[type="date"]::-webkit-calendar-picker-indicator {
+                display: none;
+                -webkit-appearance: none;
+            }
+        </style>
     </head>
     <body>
     <div class="main-panel">
@@ -213,7 +219,7 @@ mysqli_close($connect);
                                                 <div class="col-md-6">
                                                     <div class="form-group form-group-default">
                                                         <label>Ngày sinh <span class="text-danger">*</span></label>
-                                                        <input type="text" name="ngaySinh" class="form-control picker" placeholder="yyyy/mm/dd" autocomplete="off" value="<?php echo $_POST['ngaySinh'] ?? $nhanVien['ngaySinh']; ?>"/>
+                                                        <input type="date" name="ngaySinh" class="form-control picker" autocomplete="off" value="<?php echo $_POST['ngaySinh'] ?? $nhanVien['ngaySinh']; ?>"/>
                                                     </div>
                                                 </div>
                                                 <div class="col-md-6">

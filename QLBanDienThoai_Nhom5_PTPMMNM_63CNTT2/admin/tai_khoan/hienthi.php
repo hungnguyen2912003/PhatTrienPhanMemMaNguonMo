@@ -7,7 +7,7 @@ include('../menu.html');
 include('../includes/footer.html');
 
 //Phân trang
-$rowsPerPage = 5;
+$rowsPerPage = 10;
 if (!isset($_GET['page'])) {
     $_GET['page'] = 1;
 }

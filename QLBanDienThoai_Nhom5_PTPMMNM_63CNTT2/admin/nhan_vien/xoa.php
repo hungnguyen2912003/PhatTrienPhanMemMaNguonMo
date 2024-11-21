@@ -16,39 +16,39 @@ $manv = $_GET['manv'] ?? "";
 $msg = "";
 
 // Kiểm tra mã nhân viên
-if (empty($manv)) {
+if (empty($manv))
     $msg = "<h2 class='text-center font-weight-bold text-danger'>Mã nhân viên bị để trống</h2>";
-} else {
+else
+{
     // Truy vấn thông tin nhân viên trực tiếp
-    $sql = "SELECT nv.*, user.username AS username, CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
+    $sql = "SELECT 
+                nv.*, user.username AS username, 
+                CONCAT(nv.hoNV, ' ', nv.tenlot, ' ', nv.tenNV) AS hoTen
             FROM nhan_vien nv 
             LEFT JOIN user ON nv.id = user.user_id 
             WHERE nv.id = '$manv'";
     $result = mysqli_query($connect, $sql);
     $nhanVien = mysqli_fetch_assoc($result);
-    if (!$nhanVien) {
+    if (!$nhanVien)
         $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
-    }
 }
-
 
 if(isset($_POST['deleteBtn'])){
     // Xóa nhân viên theo mã nhân viên
     $sqlDelete = "DELETE FROM nhan_vien WHERE id = '$manv'";
-
-    if (mysqli_query($connect, $sqlDelete)) {
-        // Lưu thông báo thành công vào session
-        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công nhân viên có mã $manv</span>";
-        echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
-    } else {
-        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
-    }
-
     //Đồng thời xóa tài khoản của nhân viên đó
     $sqlDeleteAcc = "DELETE FROM user WHERE user_id = '$manv'";
-    mysqli_query($connect, $sqlDeleteAcc);
+    if (mysqli_query($connect, $sqlDelete)) {
+        //Thực thi xóa tài khoản
+        mysqli_query($connect, $sqlDeleteAcc);
+        // Lưu thông báo thành công vào session
+        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công nhân viên " . $nhanVien['hoTen'] . "</span>";
+        echo "<script>window.location.href = '$base_url/admin/nhan_vien/hienthi.php';</script>";
+    } else
+        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
 }
-
+// Đóng kết nối sau khi hoàn tất
+mysqli_close($connect);
 ?>
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
     <!DOCTYPE html>

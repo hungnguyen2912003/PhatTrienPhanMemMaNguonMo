@@ -21,12 +21,14 @@ $offset = ($_GET['page']-1) * $rowsPerPage;
 
 /////////////////////////////////////////////////////////////
 /// Xử lý tìm kiếm
-$searchResult = false; // Biến kiểm tra kết quả tìm kiếm
 // Nếu người dùng nhấn nút tìm kiếm
 if (isset($_POST['btnTimKiem'])) {
     $str = trim($_POST['searchtext']);
     if (empty($str)) {
-        $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Họ tên khách hàng cần tìm kiếm không được bỏ trống</span>";
+        $_SESSION['msg'] = "<span class='text-warning font-weight-bold'>Họ tên khách hàng cần tìm kiếm không được bỏ trống</span>";
+        // Nếu không tìm kiếm thì lấy toàn bộ danh sách
+        $sql = "SELECT * FROM khach_hang LIMIT $offset, $rowsPerPage";
+        $result = mysqli_query($connect, $sql);
     } else {
         // Truy vấn tìm kiếm
         $sql = "SELECT * FROM khach_hang WHERE LOWER(ten_khach_hang) LIKE LOWER('%$str%')";
@@ -35,7 +37,6 @@ if (isset($_POST['btnTimKiem'])) {
         // Kiểm tra nếu không có kết quả tìm kiếm
         if (mysqli_num_rows($result) > 0) {
             $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả họ tên có từ khoá: '$str'</span>";
-            $searchResult = true; // Đặt biến kiểm tra kết quả tìm kiếm là true
         } else {
             $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khoá: '$str'</span>";
         }
@@ -133,6 +134,17 @@ else {
                             </div>
                         </div>
                         <div class="card-body">
+                            <div class="message-container text-center">
+                                <!-- Hiển thị dòng thông báo -->
+                                <?php
+                                if (isset($_SESSION['msg']))
+                                {
+                                    echo $_SESSION['msg'];
+                                    // Sau khi hiển thị, xóa thông báo để không hiển thị lại sau khi tải lại trang
+                                    unset($_SESSION['msg']);
+                                }
+                                ?>
+                            </div>
                             <div class="table-responsive">
                                 <table id="multi-filter-select" class="display table table-striped table-hover table-bordered">
                                     <thead>
@@ -164,7 +176,7 @@ else {
                                     ?>
                                     </tbody>
                                 </table>
-                                <?php if (!$searchResult) { // Ẩn phân trang nếu có kết quả tìm kiếm ?>
+                                <?php if (!isset($_POST['btnTimKiem']) || empty($_POST['searchtext'])): ?>
                                     <div class="pagination-container">
                                         <div class="pagination">
                                             <?php
@@ -202,7 +214,7 @@ else {
                                             ?>
                                         </div>
                                     </div>
-                                <?php } ?>
+                                <?php endif; ?>
                             </div>
                         </div>
                     </div>

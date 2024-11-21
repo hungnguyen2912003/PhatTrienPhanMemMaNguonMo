@@ -47,6 +47,7 @@ else {
     $sql = "SELECT *, CONCAT(nhan_vien.hoNV, ' ', nhan_vien.tenlot, ' ', nhan_vien.tenNV) AS hoTen FROM nhan_vien LIMIT $offset, $rowsPerPage";
     $result = mysqli_query($connect, $sql);
 }
+
 ?>
 
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>

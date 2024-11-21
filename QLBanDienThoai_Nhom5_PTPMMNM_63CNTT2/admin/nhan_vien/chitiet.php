@@ -29,6 +29,9 @@ else {
     if (!$nhanVien)
         $msg = "<h2 class='text-center font-weight-bold text-danger'>Không tìm thấy thông tin nhân viên có mã: " . $manv . "</h2>";
 }
+
+// Đóng kết nối sau khi hoàn tất
+mysqli_close($connect);
 ?>
 
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN' || isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'NV'):?>

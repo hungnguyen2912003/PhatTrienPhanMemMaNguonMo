@@ -137,6 +137,12 @@ mysqli_close($connect);
             }
         }
     </script>
+    <style>
+        input[type="date"]::-webkit-calendar-picker-indicator {
+            display: none;
+            -webkit-appearance: none;
+        }
+    </style>
 </head>
 <body>
 <div class="main-panel">
@@ -214,7 +220,7 @@ mysqli_close($connect);
                                             <div class="col-md-6">
                                                 <div class="form-group form-group-default">
                                                     <label>Ngày sinh <span class="text-danger">*</span></label>
-                                                    <input type="text" name="ngaySinh" class="form-control picker" placeholder="yyyy-mm-dd" autocomplete="off" value="<?php if(isset($_POST['ngaySinh'])) echo $ngaySinh; ?>"/>
+                                                    <input type="date" name="ngaySinh" class="form-control picker" autocomplete="off" value="<?php if(isset($_POST['ngaySinh'])) echo $ngaySinh; ?>"/>
                                                 </div>
                                             </div>
                                             <div class="col-md-6">
