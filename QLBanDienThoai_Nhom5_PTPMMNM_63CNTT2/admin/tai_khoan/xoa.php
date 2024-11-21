@@ -141,7 +141,7 @@ if(isset($_POST['deleteBtn'])){
                                         </div>
                                         <div class="form-group text-center">
                                             <button type="submit" name="deleteBtn" class="btn btn-info">Xoá</button>
-                                            <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
+                                            <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
                                         </div>
                                         <div class="form-group text-center">
                                             <?php echo $msg?>

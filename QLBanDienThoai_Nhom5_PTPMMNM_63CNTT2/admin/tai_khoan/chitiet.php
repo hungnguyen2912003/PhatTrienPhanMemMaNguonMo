@@ -126,8 +126,8 @@ if (!$phan_quyen) {
                                     </div>
                                 </div>
                                 <div class="form-group text-center">
-                                    <a href="<?php echo $base_url?>/admin/phan_quyen/chinhsua.php?id=<?php echo $phan_quyen['ID']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
-                                    <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
+                                    <a href="<?php echo $base_url?>/admin/tai_khoan/chinhsua.php?id=<?php echo $phan_quyen['ID']; ?>" class="btn btn-primary">Vào trang chỉnh sửa</a>
+                                    <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php" class="btn btn-danger btnBack">Quay lại</a>
                                 </div>
                             </div>
                         </div>
