@@ -5,8 +5,9 @@ include('../includes/header.html');
 include('../menu.html');
 include('../includes/footer.html');
 
-// Kết nối vào cơ sở dữ liệu và hiển thị thông báo lỗi nếu không kết nối được
-$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai") OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
+// Kết nối cơ sở dữ liệu
+$connect = mysqli_connect("localhost", "root", "", "qlbandienthoai")
+OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 
 // Kiểm tra và lấy mã phân quyền từ URL
 if (!isset($_GET['id'])) {
@@ -35,22 +36,29 @@ if (!$phan_quyen) {
     echo "<h4>Không tìm thấy thông tin phân quyền.</h4>";
     exit();
 }
+
 if(isset($_POST['deleteBtn'])){
-    $sqlDelete = "DELETE FROM user WHERE id = '$mapq'";
+    // Lấy mã nhân viên từ thông tin tài khoản
+    $maNV = $phan_quyen['maNV'];
 
-    //Đồng thời xóa nhân viên
-    $manv = $row['maNV'];
-    $sql_del_nv = "DELETE FROM nhan_vien WHERE ";
-
-    if (mysqli_query($connect, $sqlDelete)) {
-        // Lưu thông báo thành công vào session
-        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công  $mapq  </span>";
-        echo "<script>window.location.href = '$base_url/admin/tai_khoan/hienthi.php';</script>";
+    // Xóa tài khoản trước
+    $sqlDeleteUser = "DELETE FROM user WHERE id = '$mapq'";
+    if(mysqli_query($connect, $sqlDeleteUser)){
+        // Đồng thời xóa nhân viên
+        $sqlDeleteNV = "DELETE FROM nhan_vien WHERE id = '$maNV'";
+        if (mysqli_query($connect, $sqlDeleteNV)) {
+            // Lưu thông báo thành công vào session
+            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công tài khoản và nhân viên có mã $maNV</span>";
+            echo "<script>window.location.href = '$base_url/admin/tai_khoan/hienthi.php';</script>";
+        } else {
+            // Nếu có lỗi khi xóa nhân viên
+            $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá nhân viên!</span>";
+        }
     } else {
-        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá!</span>";
+        // Nếu có lỗi khi xóa tài khoản
+        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá tài khoản!</span>";
     }
 }
-
 ?>
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
     <!DOCTYPE html>
@@ -80,11 +88,7 @@ if(isset($_POST['deleteBtn'])){
                                         <i class="flaticon-right-arrow"></i>
                                     </li>
                                     <li class="nav-item">
-<<<<<<< HEAD
-                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh mục phân quyền</a>
-=======
                                         <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh mục tài khoản</a>
->>>>>>> 0dd459305821ef80a4c26385d186a7f0d54d3220
                                     </li>
                                     <li class="separator">
                                         <i class="flaticon-right-arrow"></i>

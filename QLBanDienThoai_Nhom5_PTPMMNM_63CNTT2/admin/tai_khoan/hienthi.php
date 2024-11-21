@@ -133,11 +133,7 @@ if (isset($_POST['btnTimKiem'])) {
                                         <i class="flaticon-right-arrow"></i>
                                     </li>
                                     <li class="nav-item">
-<<<<<<< HEAD
-                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh sách nhân viên</a>
-=======
                                         <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh mục tài khoản</a>
->>>>>>> 0dd459305821ef80a4c26385d186a7f0d54d3220
                                     </li>
                                 </ul>
                             </div>
@@ -151,7 +147,7 @@ if (isset($_POST['btnTimKiem'])) {
                                 <div class="col-md-6">
 
                                 </div>
-                                <div class="col-md-6">
+                                <div class="offset-3 col-md-6">
                                     <form action="" method="post">
                                         <div class="input-group input-group-sm">
                                             <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin tài khoản bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
