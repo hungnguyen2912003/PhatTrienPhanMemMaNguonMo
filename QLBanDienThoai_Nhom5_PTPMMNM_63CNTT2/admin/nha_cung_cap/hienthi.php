@@ -18,23 +18,31 @@ $sql = "SELECT * FROM nha_cung_cap WHERE tenNCC LIKE '%$searchText%'";
 // Gửi truy vấn đến cơ sở dữ liệu
 $result = mysqli_query($connect, $sql);
 
-// Kiểm tra kết quả tìm kiếm
+// Xử lý tìm kiếm
+$searchResult = false; // Biến kiểm tra kết quả tìm kiếm
 if(isset($_POST['timKiem'])){
-    if (!empty($searchText)) {
-        if (mysqli_num_rows($result) > 0) {
-            // Nếu người dùng đã nhập từ khóa vào ô tìm kiếm và có kết quả tìm kiếm
-            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả có từ khóa: '$searchText'</span>";
+    $str = trim($_POST['searchtext']);
+    if (empty($str)) {
+        // Nếu input tìm kiếm rỗng, lấy tất cả sản phẩm
+        $sql = "SELECT * FROM nha_cung_cap";
+        $result = mysqli_query($connect, $sql);
+    } else {
+        // Truy vấn tìm kiếm
+        $sql = "SELECT * FROM nha_cung_cap WHERE LOWER(tenNCC) LIKE LOWER('%$str%') ";
+        $result = mysqli_query($connect, $sql);
+
+        // Kiểm tra nếu câu truy vấn thành công và có kết quả
+        if ($result && mysqli_num_rows($result) > 0) {
+            $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Tìm thấy kết quả tên có từ khoá: '$str'</span>";
+            $searchResult = true; // Đặt biến kiểm tra kết quả tìm kiếm là true
         } else {
-            // Nếu người dùng đã nhập từ khóa vào ô tìm kiếm nhưng không có kết quả
-            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả có từ khóa: '$searchText'</span>";
+            $_SESSION['msg'] = "<span class='text-danger font-weight-bold'>Không tìm thấy kết quả cho từ khoá: '$str'</span>";
+            $searchResult = false; // Đảm bảo không hiển thị kết quả không hợp lệ
         }
     }
-    else{
-        $_SESSION['msg'] = "";
-    }
 }
-
 ?>
+
 
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN' || isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'NV'):?>
 <!DOCTYPE html>
@@ -87,9 +95,9 @@ if(isset($_POST['timKiem'])){
                                 </div>
                             </div>
                             <div class="col-md-5">
-                                <form method="GET" action="">
+                                <form action="" method="post">
                                     <div class="input-group input-group-sm">
-                                        <input type="text" name="Searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhà cung cấp bạn muốn tìm kiếm" value="<?php echo isset($_GET['Searchtext']) ? $_GET['Searchtext'] : ''; ?>">
+                                        <input type="text" name="searchtext" class="form-control custom-textbox" placeholder="Nhập thông tin nhà cung cấp bạn muốn tìm kiếm" value="<?php if(isset($_POST['searchtext'])) echo $_POST['searchtext'];?>"/>
                                         <span class="input-group-append">
                                             <button type="submit" name="timKiem" class="btn btn-info btn-flat">Tìm kiếm</button>
                                         </span>
