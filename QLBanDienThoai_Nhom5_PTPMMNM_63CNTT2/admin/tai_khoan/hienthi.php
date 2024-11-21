@@ -77,7 +77,7 @@ $result = mysqli_query($connect, $sql);
                     <div class="col-md-12">
                         <div class="row">
                             <div class="col-md-6">
-                                <h4 class="page-title">Danh mục phân quyền</h4>
+                                <h4 class="page-title">Danh mục tài khoản</h4>
                             </div>
                             <div class="col-md-6 text-right">
                                 <ul class="breadcrumbs">
@@ -90,7 +90,7 @@ $result = mysqli_query($connect, $sql);
                                         <i class="flaticon-right-arrow"></i>
                                     </li>
                                     <li class="nav-item">
-                                        <a href="<?php echo $base_url?>/admin/phan_quyen/hienthi.php">Danh sách nhân viên</a>
+                                        <a href="<?php echo $base_url?>/admin/tai_khoan/hienthi.php">Danh mục tài khoản</a>
                                     </li>
                                 </ul>
                             </div>
