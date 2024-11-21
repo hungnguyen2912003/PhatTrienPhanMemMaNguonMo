@@ -28,6 +28,7 @@ $result = mysqli_query($connect, $sql);
 $searchResult = false; // Biến kiểm tra kết quả tìm kiếm
 if (isset($_POST['btnTimKiem'])) {
     $str = trim($_POST['searchtext']);
+    $_SESSION['msg'] = "<span class='text-warning font-weight-bold'>Vui lòng nhập từ khóa để tìm kiếm!</span>";
     if (empty($str)) {
         // Nếu input tìm kiếm rỗng, lấy tất cả sản phẩm
         $sql = "SELECT * FROM san_pham LIMIT $offset, $rowsPerPage";
