@@ -37,16 +37,16 @@ if (isset($_POST["themMoi"])) {
     $soLuong = $_POST["soLuong"];
     $giaBan = $_POST["giaBan"];
     $moTa = $_POST["moTa"];
-
-    // Check if file input is properly set
-    if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
-        $hinhAnh = $_FILES['fileInput']['name'];
-    } else {
-        $hinhAnh = ""; // Default value if no file uploaded
-    }
+    $hinhAnh = $_FILES['hinhAnh']['name'];
+//    // Check if file input is properly set
+//    if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
+//        $hinhAnh = $_FILES['fileInput']['name'];
+//    } else {
+//        $hinhAnh = ""; // Default value if no file uploaded
+//    }
 
     // Kiểm tra các trường bắt buộc và điều kiện số lượng và giá bán
-    if (!empty($tenSP) && !empty($supplierID) && !empty($mauSac)&& !empty($kichThuoc)&& !empty($trongLuong)&& !empty($Pin) && !empty($congSac)&& !empty($RAM) && !empty($boNho) && !empty($soLuong) && !empty($giaBan) && !empty($moTa)) {
+    if (!empty($tenSP) && !empty($supplierID) && !empty($mauSac)&& !empty($kichThuoc)&& !empty($trongLuong)&& !empty($Pin) && !empty($congSac)&& !empty($RAM) && !empty($boNho) && !empty($soLuong) && !empty($giaBan) && !empty($moTa) && !empty($hinhAnh)) {
         if (!(is_numeric($trongLuong) && $trongLuong > 0))
             $msg = "<span class='text-danger font-weight-bold'>Trọng lượng sản phẩm phải lớn hơn 0. Vui lòng nhập lại!</span>";
         elseif (!(ctype_digit($RAM) && $RAM > 0))
@@ -59,39 +59,55 @@ if (isset($_POST["themMoi"])) {
             $msg = "<span class='text-danger font-weight-bold'>Giá bán phải là số lớn hơn 0. Vui lòng nhập lại!</span>";
         }
 
-        // Kiểm tra hình ảnh mới
-        if (!empty($hinhAnh)) {
-            $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
-            $file = $dir . basename($hinhAnh);
-            $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-
-            // Kiểm tra kích thước file
-            if ($_FILES["fileInput"]["size"] > 2097152) {
-                $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
-            } elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
-                $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG.</span>";
-            } else {
-                // Tải file lên server
-                if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
-                    // File uploaded successfully
-                } else {
-                    $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
-                }
-            }
-        }
+//        // Kiểm tra hình ảnh mới
+//        if (!empty($hinhAnh)) {
+//            $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
+//            $file = $dir . basename($hinhAnh);
+//            $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
+//
+//            // Kiểm tra kích thước file
+//            if ($_FILES["fileInput"]["size"] > 2097152) {
+//                $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
+//            } elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+//                $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG.</span>";
+//            } else {
+//                // Tải file lên server
+//                if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
+//                    // File uploaded successfully
+//                } else {
+//                    $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
+//                }
+//            }
+//        }
         if (empty($msg)) {
             // Kiểm tra mã nhân viên đã tồn tại
             $check_maSP = mysqli_query($connect, "SELECT * FROM san_pham WHERE ma_sp = '$maSP'");
             if (mysqli_num_rows($check_maSP) != 0) {
                 $msg = "<span class='text-danger font-weight-bold'>Đã có mã sản phẩm này rồi. Vui lòng thử lại.</span>";
             } else {
-                // Thực hiện thêm mới
-                $sql = "INSERT INTO san_pham (ma_sp, ma_ncc, ten_sp, mauSac, kichThuoc, trongLuong, Pin, congSac, RAM, boNho, hinhAnh, moTa, soLuong, giaBan) VALUES ('$maSP', '$supplierID', '$tenSP','$mauSac','$kichThuoc','$trongLuong','$Pin','$congSac','$RAM','$boNho','$hinhAnh', '$moTa', '$soLuong', '$giaBan')";
-                if (mysqli_query($connect, $sql)) {
-                    $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới sản phẩm $tenSP thành công!</span>";
-                    echo "<script>window.location.href = '$base_url/admin/san_pham/hienthi.php';</script>";
+                // Kiểm tra hình ảnh
+                // Lấy tên file, kích thước, đường dẫn tạm
+                $file_name = $_FILES['hinhAnh']['name'];
+                $file_size = $_FILES['hinhAnh']['size'];
+                $file_tmp = $_FILES['hinhAnh']['tmp_name'];
+                $array = explode('.', $file_name); // Tách tên file để lấy phần đuôi.
+                $file_ext = strtolower(end($array)); // Lấy phần đuôi file và chuyển về chữ thường.
+                $expensions = array("jpeg", "jpg", "png"); // Các đuôi file hình ảnh hợp lệ.
+
+                if (!in_array($file_ext, $expensions)) { // Kiểm tra nếu đuôi file không hợp lệ.
+                    $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận cái đuôi file: jpeg, jpg, png</span>"; // Thông báo lỗi.
+                } elseif ($file_size > 2097152) { // Kiểm tra nếu kích thước file lớn hơn 2MB.
+                    $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>"; // Thông báo lỗi.
                 } else {
-                    $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+                    move_uploaded_file($file_tmp, $_SERVER['DOCUMENT_ROOT'] . "\\QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2\\Images\\" . $file_name);// Di chuyển file hình ảnh đến thư mục lưu trữ.
+                    // Thực hiện thêm mới
+                    $sql = "INSERT INTO san_pham (ma_sp, ma_ncc, ten_sp, mauSac, kichThuoc, trongLuong, Pin, congSac, RAM, boNho, hinhAnh, moTa, soLuong, giaBan) VALUES ('$maSP', '$supplierID', '$tenSP','$mauSac','$kichThuoc','$trongLuong','$Pin','$congSac','$RAM','$boNho','$hinhAnh', '$moTa', '$soLuong', '$giaBan')";
+                    if (mysqli_query($connect, $sql)) {
+                        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Thêm mới sản phẩm $tenSP thành công!</span>";
+                        echo "<script>window.location.href = '$base_url/admin/san_pham/hienthi.php';</script>";
+                    } else {
+                        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi thêm mới!</span>";
+                    }
                 }
             }
             // Giải phóng kết quả sau khi kiểm tra
@@ -257,10 +273,11 @@ mysqli_close($connect);
                                                         <div class="col-md-12">
                                                             <div class="row">
                                                                 <div class="col-md-9">
-                                                                    <input type="text" name="hinhAnh" id="hinhAnh" class="form-control" style="text-align: center;" readonly value="<?php if (isset($_FILES['fileInput'])) echo $_FILES['fileInput']['name']; else echo 'Chưa thêm hình ảnh'; ?>"/>
+                                                                    <input type="text" name="hinhAnh" id="hinhAnh" class="form-control"
+                                                                    value="<?php if (isset($_FILES['hinhAnh']) && $_FILES['hinhAnh']['error'] == 0) echo $_FILES['hinhAnh']['name']; else echo 'Chưa thêm hình ảnh'; ?>" style="text-align: center;" readonly />
                                                                 </div>
                                                                 <div class="col-md-3">
-                                                                    <input type="file" name="fileInput" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
+                                                                    <input type="file" name="hinhAnh" id="fileInput" accept="image/*" onchange="layAnh(event)" style="display: none;"/>
                                                                     <button type="button" class="btn btn-secondary" onclick="document.getElementById('fileInput').click()">Chọn ảnh</button>
                                                                 </div>
                                                             </div>
