@@ -57,7 +57,7 @@ if (isset($_POST['dangKy'])) {
                 $sql_Insert_KH = "INSERT INTO khach_hang (ma_khach_hang, ten_khach_hang, gioiTinh, dia_chi, so_dien_thoai, email) VALUES ('$maKH', '$hoTen', '$gioitinh', '$diachi', '$sodienthoai', '$email')";
                 mysqli_query($connect, $sql_Insert_KH);
                 //Thêm mới tài khoản
-                $sql = "INSERT INTO user (username, password, user_id, phanQuyen) VALUES ('$username', '$pass', '$maKH', '$phanQuyen')";
+                $sql = "INSERT INTO user (username, password, user_id) VALUES ('$username', '$pass', '$maKH')";
                 if (mysqli_query($connect, $sql)){
                     echo "<script>
                         alert('Đăng ký tài khoản thành công');

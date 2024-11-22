@@ -113,9 +113,9 @@ if (isset($_POST['dangNhap'])) {
                 <fieldset>
                     <div class="form-group form-group-default">
                         <label>Tên tài khoản <span class="text-danger">*</span></label>
-                        <label>
-                            <input class="form-control" placeholder="Tên đăng nhập" name="username" type="text" autofocus value="<?php echo $_POST['username'] ?? ''; ?>"/>
-                        </label>
+                        <div class="input-group">
+                            <input class="form-control" placeholder="Tên đăng nhập" name="username" type="text" value="<?php echo $_POST['username'] ?? ''; ?>"/>
+                        </div>
                     </div>
                     <div class="form-group form-group-default">
                         <label>Mật khẩu <span class="text-danger">*</span></label>

@@ -24,29 +24,38 @@ if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
 /// Kiểm tra thông tin đăng nhập
 if (isset($_POST['dangNhap'])) {
     // Gán giá trị từ sticky form vào các biến $user và $pass
-    $username = $_POST['username'];
-    $pass = $_POST['password'];
+    $username = trim($_POST['username']);
+    $pass = trim($_POST['password']);
 
     // Kiểm tra tên đăng nhập và mật khẩu không được để trống
     if(empty($username))
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập tên tài khoản</span>";
     elseif(empty($pass))
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập mật khẩu</span>";
-    else {
-        // Kiểm tra tài khỏan, mật khẩu
-        $sql_check_account = "SELECT * FROM user WHERE username = '$username' AND password = '$pass'";
-        $result_check_account = mysqli_query($connect, $sql_check_account);
-        if(mysqli_num_rows($result_check_account) == 0) {
-            $msg = "<span class='text-danger font-weight-bold'>Tên tài khoản hoặc mật khẩu không hợp lệ</span>";
-        }
-        // Kiểm tra quyền của nhân viên
+    else
+    {
+        // Truy vấn tài khoản có tồn tại trong CSDL
+        $sql_check_user = "SELECT * FROM user WHERE username = '$username'";
+        $result_check_user = mysqli_query($connect, $sql_check_user);
+        // Truy vấn tài khỏan, mật khẩu
+        $sql_check_info = "SELECT * FROM user WHERE username = '$username' AND password = '$pass'";
+        $result_check_info = mysqli_query($connect, $sql_check_info);
+        // Truy vấn quyền của nhân viên
         $sql_check_quyen = "SELECT * FROM user JOIN nhan_vien ON user.user_id = nhan_vien.id WHERE user.username = '$username' AND nhan_vien.phanQuyen IN ('ADMIN', 'NV')";
         $result_check_quyen = mysqli_query($connect, $sql_check_quyen);
-        if (mysqli_num_rows($result_check_quyen) == 0) {
-            $msg = "<span class='text-danger font-weight-bold'>Bạn không có quyền đăng nhập</span>";
-        }
+
+        //Kiểm tra tên tài khoản có tồn tại trong CSDL
+        if (mysqli_num_rows($result_check_user) == 0)
+            $msg = "<span class='text-danger font-weight-bold'>Tài khoản không tồn tại. Vui lòng liên hệ quản trị viên</span>";
+        //Kiểm tra tên tài khoản và mật khẩu
+        elseif(mysqli_num_rows($result_check_info) == 0)
+            $msg = "<span class='text-danger font-weight-bold'>Tên tài khoản hoặc mật khẩu không hợp lệ</span>";
+        //Kiểm tra quyền của nhân viên
+        elseif (mysqli_num_rows($result_check_quyen) == 0)
+            $msg = "<span class='text-danger font-weight-bold'>Bạn không có quyền đăng nhập. Vui lòng liên hệ quản trị viên</span>";
         // Tên đăng nhập và mật khẩu trùng khớp với tên đăng nhập và mật khẩu trong CSDL.
-        if(empty($msg)){
+        if(empty($msg))
+        {
             // Gán vào phiên $_SESSION['logged'] là true
             $_SESSION['logged'] = true;
             // Truy vấn thông tin người dùng tài khoản
@@ -159,11 +168,6 @@ if (isset($_POST['dangNhap'])) {
                     <!-- /.col -->
                 </fieldset>
             </form>
-            <!-- /.col -->
-            <div class="col-12 mt-3 text-center">
-                <span>Bạn chưa có tài khoản?</span>
-                <a href="<?php echo $base_url; ?>/admin/dangky.php" type="submit">Đăng ký ngay</a>
-            </div>
             <!-- /.col -->
         </div>
         <!-- /.login-card-body -->
