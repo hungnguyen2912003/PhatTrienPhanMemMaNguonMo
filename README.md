@@ -39,3 +39,19 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
 - Password: 123456
 
 5. Sử dụng các Phần mềm IDE để viết code (Visual Studio Code, Sublime Text, Notepad++, PHPStorm, ...)
+
+## MỘT SỐ GIAO DIỆN CỦA WEBSITE
+
+<div align="center"> <img src="./img/giaodiendangnhap.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien1.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien2.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien3.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien6.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien4.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien5.png" /> </div>
