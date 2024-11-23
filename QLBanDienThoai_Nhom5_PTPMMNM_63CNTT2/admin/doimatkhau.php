@@ -29,8 +29,8 @@ if (isset($_POST['doiMK'])) {
             $msg = "<span class='text-danger font-weight-bold'>Mật khẩu hiện tại của tài khoản không hợp lệ!</span>";
         else {
             // Kiểm tra mật khẩu mới có đúng định dạng không
-            if (strlen($new_password) < 6 || strlen($new_password) > 10 || !preg_match('/[A-Z]/', $new_password) || !preg_match('/[0-9]/', $new_password) || !preg_match('/[\W_]/', $new_password))
-                $msg = "<span class='text-danger font-weight-bold'>Mật khẩu mới phải có độ dài từ 6 đến 10 ký tự, bao gồm chữ cái in hoa, chữ số và ký tự đặc biệt</span>";
+            if (strlen($new_password) < 6 || !preg_match('/[A-Z]/', $new_password) || !preg_match('/[0-9]/', $new_password) || !preg_match('/[\W_]/', $new_password))
+                $msg = "<span class='text-danger font-weight-bold'>Mật khẩu mới phải có độ dài từ 6 ký tự trở lên, bao gồm chữ cái in hoa, chữ số và ký tự đặc biệt</span>";
             elseif ($new_password !== $confirm_new_pass)
                 // Kiểm tra mật khẩu xác nhận có khớp với mật khẩu không
                 $msg = "<span class='text-danger font-weight-bold'>Mật khẩu xác nhận không khớp</span>";
@@ -114,6 +114,7 @@ if (isset($_POST['doiMK'])) {
                                 <i class="fas fa-eye"></i>
                                 </span>
                             </div>
+
                         </div>
                     </div>
                     <div class="form-group form-group-default">
@@ -138,9 +139,6 @@ if (isset($_POST['doiMK'])) {
                 </fieldset>
             </form>
             <!-- /.col -->
-            <div class="col-12 mt-3 text-center">
-                <a href="javascript:window.history.back(-1);">Quay lại</a>
-            </div>
             <!-- /.col -->
         </div>
         <!-- /.login-card-body -->

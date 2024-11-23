@@ -13,10 +13,8 @@ OR die ('Không thể kết nối MySQL: ' . mysqli_connect_error());
 /// Kiểm tra biến Session đăng nhập
 /// Kiểm tra xem biến phiên $_SESSION['logged'] đã tồn tại và có giá trị true hay chưa
 if (isset($_SESSION['logged']) && $_SESSION['logged'] === true) {
-    $redirect_url = $_SESSION['redirect_to'] ?? $base_url . '/admin/trangchu.php';
-    // Xóa redirect_to để tránh bị lặp lại khi chuyển hướng
-    unset($_SESSION['redirect_to']);
-    header("Location: $redirect_url");
+    $url = $base_url . '/admin/trangchu.php';
+    header("Location: $url");
     exit;
 }
 
@@ -69,10 +67,8 @@ if (isset($_POST['dangNhap'])) {
             $_SESSION['phanQuyen'] = $row['phanQuyen'];
             $_SESSION['id'] = $row['USERID'];
             // Chuyển hướng về trang yêu cầu sau khi đăng nhập thành công
-            $redirect_url = $_SESSION['redirect_to'] ?? $base_url . '/admin/trangchu.php';
-            // Xóa redirect_to để tránh vòng lặp
-            unset($_SESSION['redirect_to']);
-            header("Location: $redirect_url");
+            $url = $base_url . '/admin/trangchu.php';
+            header("Location: $url");
             exit;
         }
     }

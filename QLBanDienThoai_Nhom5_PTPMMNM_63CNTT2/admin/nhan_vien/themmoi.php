@@ -104,9 +104,10 @@ if (isset($_POST["themMoi"])) {
                 //Thông báo thêm thành công
                 if (mysqli_query($connect, $sql_nv)) {
                     mysqli_query($connect, $sql_tk);
+                    $hoTen = $hoNV . ' ' . $tenlot . ' ' . $tenNV;
                     $_SESSION['msg'] =
                     "<span class='text-success font-weight-bold'>
-                        Thêm mới nhân viên $tenNV thành công!<br>
+                        Thêm mới nhân viên $hoTen thành công!<br>
                         Tài khoản: $username<br>
                         Mật khẩu mặc định: $password<br>
                         Vui lòng truy cập vào trang đổi mật khẩu để đổi: <a class='text-info font-weight-bold' href='$base_url/admin/doimatkhau.php'>Nhấp vào đây</a>
