@@ -11,6 +11,9 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
    ```bash
    git clone https://github.com/hungnguyen2912003/PhatTrienPhanMemMaNguonMo.git
    ```
+- Đưa source code vào mục htdocs của XAMPP
+
+<div align="center"> <img src="./img/screen4.png" /> </div>
 
 2. Khởi động XAMPP và truy cập vào trang http://localhost/phpmyadmin/ hoặc nhấn vào nút Admin bên cạnh nút Start của MySQL.
 
@@ -21,3 +24,6 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
 <div align="center"> <img src="./img/screen2.png" /> </div>
 
 - Import cơ sở dữ liệu trong folder Database của source code (file qlbandienthoai.sql).
+  
+<div align="center"> <img src="./img/screen3.png" /> </div>
+
