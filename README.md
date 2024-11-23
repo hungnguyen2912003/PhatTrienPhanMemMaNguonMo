@@ -9,7 +9,7 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
 1. Tải source code chương trình về máy:
    
    ```bash
-   git clone https://github.com/hgbaodev/QuanLyKhoDienThoai.git
+   git clone https://github.com/hungnguyen2912003/PhatTrienPhanMemMaNguonMo.git
    ```
 
 2. Khởi động XAMPP và truy cập vào trang http://localhost/phpmyadmin/ hoặc nhấn vào nút Admin bên cạnh nút Start của MySQL.
@@ -21,5 +21,3 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
 <div align="center"> <img src="./img/screen2.png" /> </div>
 
 - Import cơ sở dữ liệu trong folder Database của source code (file qlbandienthoai.sql).
-
-<div align="center"> <img src="./img/screen3.png" /> </div>
