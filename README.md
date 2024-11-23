@@ -11,11 +11,11 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
    ```bash
    git clone https://github.com/hungnguyen2912003/PhatTrienPhanMemMaNguonMo.git
    ```
-- Đưa source code vào mục htdocs của XAMPP (Nếu thay đổi thư mục gốc (Web Root) thì hãy đến đường dẫn đã thay đổi đó)
+- Đưa source code vào mục htdocs của XAMPP (Nếu thay đổi thư mục gốc (Web Root) thì hãy đến đường dẫn đã thay đổi đó). Đổi tên thư mục của source code là PhatTrienPhanMemMaNguonMo
 
 <div align="center"> <img src="./img/screen4.png" /> </div>
 
-2. Khởi động XAMPP và truy cập vào trang http://localhost/phpmyadmin/ hoặc nhấn vào nút Admin bên cạnh nút Start của MySQL.
+2. Khởi động XAMPP và truy cập vào trang http://localhost/phpmyadmin/ hoặc nhấn vào nút Admin bên cạnh nút Start/Stop của MySQL.
 
 <div align="center"> <img src="./img/screen1.png" /> </div>
 
@@ -27,7 +27,7 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
   
 <div align="center"> <img src="./img/screen3.png" /> </div>
 
-3. Trên trình duyệt, truy cập vào link để truy cập Website
+3. Trên trình duyệt, dán đường link dưới đây để truy cập Website
 
    ```bash
    http://localhost/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/admin/trangchu.php
@@ -39,3 +39,19 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
 - Password: 123456
 
 5. Sử dụng các Phần mềm IDE để viết code (Visual Studio Code, Sublime Text, Notepad++, PHPStorm, ...)
+
+## MỘT SỐ GIAO DIỆN CỦA WEBSITE
+
+<div align="center"> <img src="./img/giaodiendangnhap.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien1.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien2.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien3.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien6.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien4.png" /> </div>
+
+<div align="center"> <img src="./img/giaodien5.png" /> </div>
