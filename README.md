@@ -27,7 +27,7 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
   
 <div align="center"> <img src="./img/screen3.png" /> </div>
 
-3. Trên trình duyệt, truy cập vào link để truy cập Website
+3. Trên trình duyệt, dán đường link dưới đây để truy cập Website
 
    ```bash
    http://localhost/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/admin/trangchu.php
