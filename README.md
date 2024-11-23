@@ -11,7 +11,7 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
    ```bash
    git clone https://github.com/hungnguyen2912003/PhatTrienPhanMemMaNguonMo.git
    ```
-- Đưa source code vào mục htdocs của XAMPP
+- Đưa source code vào mục htdocs của XAMPP (Nếu thay đổi thư mục gốc (Web Root) thì hãy đến đường dẫn đã thay đổi đó)
 
 <div align="center"> <img src="./img/screen4.png" /> </div>
 
