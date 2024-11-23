@@ -38,13 +38,6 @@ if (isset($_POST["themMoi"])) {
     $giaBan = $_POST["giaBan"];
     $moTa = $_POST["moTa"];
     $hinhAnh = $_FILES['hinhAnh']['name'];
-//    // Check if file input is properly set
-//    if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
-//        $hinhAnh = $_FILES['fileInput']['name'];
-//    } else {
-//        $hinhAnh = ""; // Default value if no file uploaded
-//    }
-
     // Kiểm tra các trường bắt buộc và điều kiện số lượng và giá bán
     if (!empty($tenSP) && !empty($supplierID) && !empty($mauSac)&& !empty($kichThuoc)&& !empty($trongLuong)&& !empty($Pin) && !empty($congSac)&& !empty($RAM) && !empty($boNho) && !empty($soLuong) && !empty($giaBan) && !empty($moTa) && !empty($hinhAnh)) {
         if (!(is_numeric($trongLuong) && $trongLuong > 0))
