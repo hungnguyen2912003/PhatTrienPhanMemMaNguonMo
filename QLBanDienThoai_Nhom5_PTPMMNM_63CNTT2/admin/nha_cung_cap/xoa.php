@@ -29,7 +29,7 @@ if(isset($_POST['deleteBtn']) && !empty($maNCC)){
 
     if (mysqli_query($connect, $sqlDelete)) {
         // Lưu thông báo thành công vào session và chuyển hướng
-        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công nhà cung cấp có mã $maNCC</span>";
+        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công nhà cung cấp $nhacungcap[tenNCC]</span>";
         echo "<script>window.location.href = '$base_url/admin/nha_cung_cap/hienthi.php';</script>";
         exit();
     } else {

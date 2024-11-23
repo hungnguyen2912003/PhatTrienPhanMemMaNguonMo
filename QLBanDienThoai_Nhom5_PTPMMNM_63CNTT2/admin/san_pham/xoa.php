@@ -12,19 +12,6 @@ OR die('Không thể kết nối MySQL: ' . mysqli_connect_error());
 // Lấy mã sản phẩm từ URL và kiểm tra
 $masp = isset($_GET['ma_sp']) ? $_GET['ma_sp'] : '';
 $msg = "";
-
-if (isset($_POST['deleteBtn']) && !empty($masp)) {
-    // Xóa sản phẩm theo mã sản phẩm
-    $sqlDelete = "DELETE FROM san_pham WHERE ma_sp = '$masp'";
-
-    if (mysqli_query($connect, $sqlDelete)) {
-        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công sản phẩm có mã $masp</span>";
-        echo "<script>window.location.href = '$base_url/admin/san_pham/hienthi.php';</script>";
-    } else {
-        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá: " . mysqli_error($connect) . "</span>";
-    }
-}
-
 // Truy vấn chi tiết sản phẩm để hiển thị thông tin
 $sql = "
     SELECT sp.*, ncc.tenNCC 
@@ -34,6 +21,18 @@ $sql = "
 ";
 $result = mysqli_query($connect, $sql);
 $sanpham = mysqli_fetch_assoc($result);
+if (isset($_POST['deleteBtn']) && !empty($masp)) {
+    // Xóa sản phẩm theo mã sản phẩm
+    $sqlDelete = "DELETE FROM san_pham WHERE ma_sp = '$masp'";
+
+    if (mysqli_query($connect, $sqlDelete)) {
+        $_SESSION['msg'] = "<span class='text-success font-weight-bold'>Xoá thành công sản phẩm $sanpham[ten_sp]</span>";
+        echo "<script>window.location.href = '$base_url/admin/san_pham/hienthi.php';</script>";
+    } else {
+        $msg = "<span class='text-danger font-weight-bold'>Đã xảy ra lỗi khi xoá: " . mysqli_error($connect) . "</span>";
+    }
+}
+
 ?>
 <?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
 <!DOCTYPE html>

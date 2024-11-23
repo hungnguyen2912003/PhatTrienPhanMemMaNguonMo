@@ -46,7 +46,10 @@ if (isset($_POST["themMoi"])) {
 //    }
 
     // Kiểm tra các trường bắt buộc và điều kiện số lượng và giá bán
-    if (!empty($tenSP) && !empty($supplierID) && !empty($mauSac)&& !empty($kichThuoc)&& !empty($trongLuong)&& !empty($Pin) && !empty($congSac)&& !empty($RAM) && !empty($boNho) && !empty($soLuong) && !empty($giaBan) && !empty($moTa) && !empty($hinhAnh)) {
+    if (empty($tenSP) && empty($supplierID) && empty($mauSac)&& empty($kichThuoc)&& empty($trongLuong)&& empty($Pin) && empty($congSac)&& empty($RAM) && empty($boNho) && empty($soLuong) && empty($giaBan) && empty($moTa) && empty($hinhAnh)) {
+        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
+    }
+    else {
         if (!(is_numeric($trongLuong) && $trongLuong > 0))
             $msg = "<span class='text-danger font-weight-bold'>Trọng lượng sản phẩm phải lớn hơn 0. Vui lòng nhập lại!</span>";
         elseif (!(ctype_digit($RAM) && $RAM > 0))
@@ -58,27 +61,6 @@ if (isset($_POST["themMoi"])) {
         elseif (!(is_numeric($giaBan) && $giaBan > 0)) {
             $msg = "<span class='text-danger font-weight-bold'>Giá bán phải là số lớn hơn 0. Vui lòng nhập lại!</span>";
         }
-
-//        // Kiểm tra hình ảnh mới
-//        if (!empty($hinhAnh)) {
-//            $dir = $_SERVER['DOCUMENT_ROOT'] . "/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/Images/";
-//            $file = $dir . basename($hinhAnh);
-//            $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
-//
-//            // Kiểm tra kích thước file
-//            if ($_FILES["fileInput"]["size"] > 2097152) {
-//                $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
-//            } elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
-//                $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG.</span>";
-//            } else {
-//                // Tải file lên server
-//                if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {
-//                    // File uploaded successfully
-//                } else {
-//                    $msg = "<span class='text-danger font-weight-bold'>Có lỗi xảy ra khi tải ảnh lên.</span>";
-//                }
-//            }
-//        }
         if (empty($msg)) {
             // Kiểm tra mã nhân viên đã tồn tại
             $check_maSP = mysqli_query($connect, "SELECT * FROM san_pham WHERE ma_sp = '$maSP'");
@@ -113,9 +95,6 @@ if (isset($_POST["themMoi"])) {
             // Giải phóng kết quả sau khi kiểm tra
             mysqli_free_result($check_maSP);
         }
-    }
-    else {
-        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
     }
 }
 // Đóng kết nối sau khi hoàn tất
