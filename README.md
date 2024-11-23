@@ -27,3 +27,10 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
   
 <div align="center"> <img src="./img/screen3.png" /> </div>
 
+3. Trên trình duyệt, truy cập vào link để truy cập Website
+
+   ```bash
+   http://localhost/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/admin/trangchu.php
+   ```
+
+4. Sử dụng các Phần mềm IDE để viết code (Visual Studio Code, Sublime Text, Notepad++, PHPStorm, ...)
