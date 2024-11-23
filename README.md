@@ -33,4 +33,9 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
    http://localhost/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2/admin/trangchu.php
    ```
 
-4. Sử dụng các Phần mềm IDE để viết code (Visual Studio Code, Sublime Text, Notepad++, PHPStorm, ...)
+4. Tài khoản Admin để đăng nhập
+   
+- Username: admin
+- Password: 123456
+
+5. Sử dụng các Phần mềm IDE để viết code (Visual Studio Code, Sublime Text, Notepad++, PHPStorm, ...)
