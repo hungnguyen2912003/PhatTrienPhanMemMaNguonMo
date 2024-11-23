@@ -15,7 +15,7 @@ Bài tập lớn của học phần Phát triển phần mềm mã nguồn mở 
 
 <div align="center"> <img src="./img/screen4.png" /> </div>
 
-2. Khởi động XAMPP và truy cập vào trang http://localhost/phpmyadmin/ hoặc nhấn vào nút Admin bên cạnh nút Start của MySQL.
+2. Khởi động XAMPP và truy cập vào trang http://localhost/phpmyadmin/ hoặc nhấn vào nút Admin bên cạnh nút Start/Stop của MySQL.
 
 <div align="center"> <img src="./img/screen1.png" /> </div>
 
