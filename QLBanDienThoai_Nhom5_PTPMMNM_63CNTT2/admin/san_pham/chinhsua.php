@@ -69,10 +69,10 @@ if (isset($_POST["capNhat"])) {
                 $imageFileType = strtolower(pathinfo($file, PATHINFO_EXTENSION));
 
                 // Kiểm tra kích thước file
-                if ($_FILES["fileInput"]["size"] > 2097152) {
-                    $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
-                } elseif ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
+                if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg") {
                     $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG.</span>";
+                } elseif (($_FILES["fileInput"]["size"] > 2097152)) {
+                $msg = "<span class='text-danger font-weight-bold'>Kích thước ảnh quá lớn 2MB.</span>";
                 } else {
                     // Tải file lên server
                     if (move_uploaded_file($_FILES["fileInput"]["tmp_name"], $file)) {

@@ -39,10 +39,7 @@ if (isset($_POST["themMoi"])) {
     $moTa = $_POST["moTa"];
     $hinhAnh = $_FILES['hinhAnh']['name'];
     // Kiểm tra các trường bắt buộc và điều kiện số lượng và giá bán
-    if (empty($tenSP) && empty($supplierID) && empty($mauSac)&& empty($kichThuoc)&& empty($trongLuong)&& empty($Pin) && empty($congSac)&& empty($RAM) && empty($boNho) && empty($soLuong) && empty($giaBan) && empty($moTa) && empty($hinhAnh)) {
-        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
-    }
-    else {
+    if (!empty($tenSP) && !empty($supplierID) && !empty($mauSac)&& !empty($kichThuoc)&& !empty($trongLuong)&& !empty($Pin) && !empty($congSac)&& !empty($RAM) && !empty($boNho) && !empty($soLuong) && !empty($giaBan) && !empty($moTa) && !empty($hinhAnh)) {
         if (!(is_numeric($trongLuong) && $trongLuong > 0))
             $msg = "<span class='text-danger font-weight-bold'>Trọng lượng sản phẩm phải lớn hơn 0. Vui lòng nhập lại!</span>";
         elseif (!(ctype_digit($RAM) && $RAM > 0))
@@ -88,6 +85,10 @@ if (isset($_POST["themMoi"])) {
             // Giải phóng kết quả sau khi kiểm tra
             mysqli_free_result($check_maSP);
         }
+    }
+    else {
+
+        $msg = "<span class='text-danger font-weight-bold'>Các trường bắt buộc không được để trống. Vui lòng nhập đầy đủ thông tin!</span>";
     }
 }
 // Đóng kết nối sau khi hoàn tất

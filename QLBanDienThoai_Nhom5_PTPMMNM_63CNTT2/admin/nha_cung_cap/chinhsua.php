@@ -58,7 +58,7 @@ if (isset($_POST["capNhat"])) {
         //Hình ảnh mới
         if (!empty($_FILES['fileInput']['name'])) {
             // Kiểm tra loại file ảnh
-            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg")
+            if ($imageFileType != "jpg" && $imageFileType != "png" && $imageFileType != "jpeg" && $imageFileType != "gif" )
                 $msg = "<span class='text-danger font-weight-bold'>Chỉ chấp nhận các định dạng JPG, JPEG, PNG & GIF.</span>";
             // Kiểm tra kích thước file
             elseif ($_FILES["fileInput"]["size"] > 2097152)

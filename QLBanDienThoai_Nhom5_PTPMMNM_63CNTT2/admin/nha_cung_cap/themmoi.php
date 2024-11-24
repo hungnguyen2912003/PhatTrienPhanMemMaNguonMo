@@ -47,7 +47,7 @@ if (isset($_POST["themMoi"])) { // Kiểm tra nếu form được gửi với n�
                 $expensions = array("jpeg", "jpg", "png"); // Các đuôi file hình ảnh hợp lệ.
 
                 if (!in_array($file_ext, $expensions)) { // Kiểm tra nếu đuôi file không hợp lệ.
-                    $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận cái đuôi file: jpeg, jpg, png</span>"; // Thông báo lỗi.
+                    $msg = "<span class='text-danger font-weight-bold'>Đuôi file hình ảnh không hợp lệ. Chỉ chấp nhận cái đuôi file: jpeg, jpg, png, gif</span>"; // Thông báo lỗi.
                 } elseif ($file_size > 2097152) { // Kiểm tra nếu kích thước file lớn hơn 2MB.
                     $msg = "<span class='text-danger font-weight-bold'>Hình ảnh không được quá 2MB!</span>"; // Thông báo lỗi.
                 } else {
