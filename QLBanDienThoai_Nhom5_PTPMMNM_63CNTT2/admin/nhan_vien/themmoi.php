@@ -13,15 +13,15 @@ $msg = "";
 $maNV = rand(10000000, 99999999);
 
 if (isset($_POST["themMoi"])) {
-    $hoNV = mysqli_real_escape_string($connect, $_POST["hoNV"]);
-    $tenlot = mysqli_real_escape_string($connect,$_POST["tenlot"]);
-    $tenNV = mysqli_real_escape_string($connect,$_POST["tenNV"]);
-    $ngaySinh = mysqli_real_escape_string($connect,$_POST["ngaySinh"]);
-    $gioiTinh = mysqli_real_escape_string($connect,$_POST["gioiTinh"]);
-    $diaChi = mysqli_real_escape_string($connect,$_POST["diaChi"]);
-    $email = mysqli_real_escape_string($connect,$_POST["email"]);
-    $soDienThoai = mysqli_real_escape_string($connect,$_POST["soDienThoai"]);
-    $phanQuyen = mysqli_real_escape_string($connect,$_POST["phanQuyen"]);
+    $hoNV = trim($_POST["hoNV"]);
+    $tenlot = trim($_POST["tenlot"]);
+    $tenNV = trim($_POST["tenNV"]);
+    $ngaySinh = trim($_POST["ngaySinh"]);
+    $gioiTinh = trim($_POST["gioiTinh"]);
+    $diaChi = trim($_POST["diaChi"]);
+    $email = trim($_POST["email"]);
+    $soDienThoai = trim($_POST["soDienThoai"]);
+    $phanQuyen = trim($_POST["phanQuyen"]);
     //Kiểm tra nhập liệu
     if(empty($hoNV)){
         $msg = "<span class='text-danger font-weight-bold'>Vui lòng nhập họ</span>";
@@ -55,9 +55,10 @@ if (isset($_POST["themMoi"])) {
     }
     //Khi không có ô nhập liệu nào trống thì tiến hành kiểm tra định dạng
     else{
-        // Định dạng ngày sinh
-        if (!preg_match("/^\d{4}-\d{2}-\d{2}$/", $ngaySinh))
-            $msg = "<span class='text-danger font-weight-bold'>Ngày sinh phải đúng định dạng YYYY-MM-DD.</span>";
+        // Định dạng họ tên nhân viên
+        if (!preg_match("/^[a-zA-Z\s]+$/", $hoNV) || !preg_match("/^[a-zA-Z\s]+$/", $tenlot) || !preg_match("/^[a-zA-Z\s]+$/", $tenNV)) {
+            $msg = "<span class='text-danger font-weight-bold'>Họ, tên lót và tên chỉ được chứa các ký tự chữ, không bao gồm chữ số và ký tự đặc biệt</span>";
+        }
         // Định dạng số điện thoại
         elseif (!preg_match("/^\d{10,11}$/", $soDienThoai))
             $msg = "<span class='text-danger font-weight-bold'>Số điện thoại phải bao gồm từ 10 đến 11 chữ số.</span>";
@@ -120,8 +121,7 @@ if (isset($_POST["themMoi"])) {
         }
     }
 }
-// Đóng kết nối sau khi hoàn tất
-mysqli_close($connect);
+
 ?>
 <!DOCTYPE html>
 <html lang="en">

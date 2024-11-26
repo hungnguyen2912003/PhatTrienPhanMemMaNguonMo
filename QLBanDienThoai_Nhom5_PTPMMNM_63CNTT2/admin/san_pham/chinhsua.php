@@ -30,18 +30,18 @@ if (!$sanpham) {
 // Xử lý form chỉnh sửa sản phẩm
 if (isset($_POST["capNhat"])) {
     // Duy trì giá trị cũ trong trường hợp không có thay đổi
-    $ten_sp = $_POST['ten_sp'] ?? $sanpham['ten_sp'];
-    $ma_ncc = $_POST['ma_ncc'] ?? $sanpham['ma_ncc'];
-    $mauSac = $_POST["mauSac"] ?? $sanpham['mauSac'];
-    $kichThuoc = $_POST["kichThuoc"] ?? $sanpham['kichThuoc'];
-    $trongLuong = $_POST["trongLuong"] ?? $sanpham['trongLuong'];
-    $Pin = $_POST["Pin"] ?? $sanpham['Pin'];
-    $congSac = $_POST["congSac"] ?? $sanpham['congSac'];
-    $RAM = $_POST["RAM"] ?? $sanpham['RAM'];
-    $boNho = $_POST["boNho"] ?? $sanpham['boNho'];
-    $soLuong = $_POST['soLuong'] ?? $sanpham['soLuong'];
-    $giaBan = $_POST['giaBan'] ?? $sanpham['giaBan'];
-    $moTa = $_POST['moTa'] ?? $sanpham['moTa'];
+    $ten_sp = trim($_POST['ten_sp']) ?? $sanpham['ten_sp'];
+    $ma_ncc = trim($_POST['ma_ncc']) ?? $sanpham['ma_ncc'];
+    $mauSac = trim($_POST["mauSac"]) ?? $sanpham['mauSac'];
+    $kichThuoc = trim($_POST["kichThuoc"]) ?? $sanpham['kichThuoc'];
+    $trongLuong = trim($_POST["trongLuong"]) ?? $sanpham['trongLuong'];
+    $Pin = trim($_POST["Pin"]) ?? $sanpham['Pin'];
+    $congSac = trim($_POST["congSac"]) ?? $sanpham['congSac'];
+    $RAM = trim($_POST["RAM"]) ?? $sanpham['RAM'];
+    $boNho = trim($_POST["boNho"]) ?? $sanpham['boNho'];
+    $soLuong = trim($_POST['soLuong']) ?? $sanpham['soLuong'];
+    $giaBan = trim($_POST['giaBan']) ?? $sanpham['giaBan'];
+    $moTa = trim($_POST['moTa']) ?? $sanpham['moTa'];
 
     // Giữ nguyên hình ảnh cũ nếu không có hình ảnh mới được tải lên
     if (isset($_FILES['fileInput']) && $_FILES['fileInput']['error'] === UPLOAD_ERR_OK) {
@@ -102,7 +102,7 @@ if (isset($_POST["capNhat"])) {
 $suppliers = mysqli_query($connect, "SELECT * FROM nha_cung_cap");
 // Truy vấn thông tin nhà cung cấp theo mã
 ?>
-<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
+<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN' || isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'NV'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

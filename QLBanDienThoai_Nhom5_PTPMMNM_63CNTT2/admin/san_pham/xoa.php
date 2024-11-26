@@ -34,7 +34,7 @@ if (isset($_POST['deleteBtn']) && !empty($masp)) {
 }
 
 ?>
-<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
+<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN' || isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'NV'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

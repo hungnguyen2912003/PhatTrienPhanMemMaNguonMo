@@ -25,18 +25,18 @@ $hinhAnh = "";
 $moTa = "";
 $maSP = rand(10000000, 99999999);
 if (isset($_POST["themMoi"])) {
-    $tenSP = $_POST["ten_sp"];
-    $supplierID = $_POST["ma_ncc"];
-    $mauSac = $_POST["mauSac"];
-    $kichThuoc = $_POST["kichThuoc"];
-    $trongLuong = $_POST["trongLuong"];
-    $Pin = $_POST["Pin"];
-    $congSac = $_POST["congSac"];
-    $RAM = $_POST["RAM"];
-    $boNho = $_POST["boNho"];
-    $soLuong = $_POST["soLuong"];
-    $giaBan = $_POST["giaBan"];
-    $moTa = $_POST["moTa"];
+    $tenSP = trim($_POST["ten_sp"]);
+    $supplierID = trim($_POST["ma_ncc"]);
+    $mauSac = trim($_POST["mauSac"]);
+    $kichThuoc = trim($_POST["kichThuoc"]);
+    $trongLuong = trim($_POST["trongLuong"]);
+    $Pin = trim($_POST["Pin"]);
+    $congSac = trim($_POST["congSac"]);
+    $RAM = trim($_POST["RAM"]);
+    $boNho = trim($_POST["boNho"]);
+    $soLuong = trim($_POST["soLuong"]);
+    $giaBan = trim($_POST["giaBan"]);
+    $moTa = trim($_POST["moTa"]);
     $hinhAnh = $_FILES['hinhAnh']['name'];
     // Kiểm tra các trường bắt buộc và điều kiện số lượng và giá bán
     if (!empty($tenSP) && !empty($supplierID) && !empty($mauSac)&& !empty($kichThuoc)&& !empty($trongLuong)&& !empty($Pin) && !empty($congSac)&& !empty($RAM) && !empty($boNho) && !empty($soLuong) && !empty($giaBan) && !empty($moTa) && !empty($hinhAnh)) {
@@ -95,7 +95,7 @@ if (isset($_POST["themMoi"])) {
 mysqli_close($connect);
 ?>
 
-<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN'):?>
+<?php if(isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'ADMIN' || isset($_SESSION['phanQuyen']) && $_SESSION['phanQuyen'] == 'NV'):?>
 <!DOCTYPE html>
 <html lang="en">
 <head>

@@ -37,11 +37,11 @@ if (!$row) {
 // Kiểm tra nếu form được gửi với nút "Cập nhật" được nhấn.
 if (isset($_POST["capNhat"])) {
     // Lấy tên ncc, email, sdt, từ form.
-    $tenNCC = $_POST["tenNCC"];
-    $email = $_POST["email"];
-    $diaChi = $_POST["diaChi"];
-    $soDienThoai = $_POST["soDienThoai"];
-    $webSite = $_POST["webSite"];
+    $tenNCC = trim($_POST["tenNCC"]);
+    $email = trim($_POST["email"]);
+    $diaChi = trim($_POST["diaChi"]);
+    $soDienThoai = trim($_POST["soDienThoai"]);
+    $webSite = trim($_POST["webSite"]);
     //Hình ảnh cũ
     $hinhAnh = basename($_POST['hinhAnh']);
     // Kiểm tra các trường bắt buộc

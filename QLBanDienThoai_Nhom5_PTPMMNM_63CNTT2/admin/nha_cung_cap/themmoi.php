@@ -22,11 +22,11 @@ $maNCC = rand(10000000, 99999999); // Tạo mã nhà cung cấp ngẫu nhiên t�
 
 if (isset($_POST["themMoi"])) { // Kiểm tra nếu form được gửi với nút "Thêm mới" được nhấn.
     // Lấy tên ncc, email, sdt, tên file hình ảnh từ form.
-    $tenNCC = $_POST["tenNhaCungCap"];
-    $email = $_POST["email"];
-    $soDienThoai = $_POST["soDienThoai"];
-    $diaChi = $_POST["diaChi"];
-    $webSite = $_POST["webSite"];
+    $tenNCC = trim($_POST["tenNhaCungCap"]);
+    $email = trim($_POST["email"]);
+    $soDienThoai = trim($_POST["soDienThoai"]);
+    $diaChi = trim($_POST["diaChi"]);
+    $webSite = trim($_POST["webSite"]);
     $hinhAnh = $_FILES['Images']['name'];
     // Kiểm tra nếu các trường thông tin không trống.
     if (!empty($tenNCC) && !empty($email) && !empty($soDienThoai) && !empty($diaChi) && !empty($webSite) && !empty($hinhAnh)) {
