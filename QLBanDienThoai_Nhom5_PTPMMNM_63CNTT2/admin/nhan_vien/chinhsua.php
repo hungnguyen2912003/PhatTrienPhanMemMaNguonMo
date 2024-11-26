@@ -76,7 +76,7 @@ if (isset($_POST['capNhat']))
     //Khi không có ô nhập liệu nào trống thì tiến hành kiểm tra định dạng
     else{
         // Định dạng ngày sinh
-        if (!preg_match("/^[a-zA-Z\s]+$/", $hoNV) || !preg_match("/^[a-zA-Z\s]+$/", $tenlot) || !preg_match("/^[a-zA-Z\s]+$/", $tenNV)) {
+        if (!preg_match("/^[a-zA-ZÀ-ỹ\s]+$/u", $hoNV) || !preg_match("/^[a-zA-ZÀ-ỹ\s]+$/u", $tenlot) || !preg_match("/^[a-zA-ZÀ-ỹ\s]+$/u", $tenNV)) {
             $msg = "<span class='text-danger font-weight-bold'>Họ, tên lót và tên chỉ được chứa các ký tự chữ, không bao gồm chữ số và ký tự đặc biệt</span>";
         }
         // Định dạng số điện thoại
