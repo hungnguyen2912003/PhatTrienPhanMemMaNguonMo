@@ -1,5 +1,6 @@
 <?php
 $base_url = "/PhatTrienPhanMemMaNguonMo/QLBanDienThoai_Nhom5_PTPMMNM_63CNTT2";
+
 include('thoihanSession.php');
 
 if (!isset($_SESSION['logged']) || !$_SESSION['logged']) {
